@@ -1,9 +1,14 @@
 package com.example.newswave.di
 
+import android.content.Context
+import androidx.room.Room
+import com.example.newswave.data.datasource.local.NewsDao
+import com.example.newswave.data.datasource.local.NewsDatabase
 import com.example.newswave.data.datasource.network.NewsApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -22,5 +27,21 @@ object AppModule {
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(NewsApi::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsDao(newsDatabase: NewsDatabase): NewsDao {
+        return newsDatabase.newsDao()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsDatabase(@ApplicationContext context: Context): NewsDatabase {
+        return Room.databaseBuilder(
+            context,
+            NewsDatabase::class.java,
+            "news_database"
+        ).build()
     }
 }
