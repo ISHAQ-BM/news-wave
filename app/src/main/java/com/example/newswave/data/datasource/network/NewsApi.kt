@@ -12,7 +12,13 @@ interface NewsApi {
         @Query("apiKey")
         apiKey: String = API_KEY,
         @Query("language")
-        language: String = "en"
+        language: String = "en",
+        @Query("timeframe")
+        timeframe:String="24",
+        @Query("image")
+        image:String="1",
+        @Query("timezone")
+        timeZone:String="America/New_york"
     ): Resource<NewsData>
 
 
@@ -23,6 +29,10 @@ interface NewsApi {
         @Query("apiKey")
         apiKey: String = API_KEY,
         @Query("language")
-        language: String = "en"
+        language: String = "en",
+        @Query("timeframe")
+        timeframe:String="24",
+        @Query("timezone")
+        timeZone:String="America/New_york"
     ): Resource<NewsData>
 }

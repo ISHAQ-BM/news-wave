@@ -9,8 +9,8 @@ data class Article (
     @PrimaryKey
     val title:String,
     val link:String,
-    val creator:String?,
-    val imageUrl:String?,
-    val category:String,
+    val creator:String,
+    val imageUrl:String,
+    val category:List<String>,
     var isSaved:Boolean
 )
