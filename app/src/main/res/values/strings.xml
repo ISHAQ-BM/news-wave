@@ -12,4 +12,5 @@
     <string name="notification">notification</string>
     <string name="logo">Logo</string>
     <string name="bookmarked">Bookmarked</string>
+    <string name="share">share</string>
 </resources>
