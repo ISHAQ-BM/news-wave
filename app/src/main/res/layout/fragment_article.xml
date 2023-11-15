@@ -32,7 +32,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="@dimen/_12sdp"
                 android:contentDescription="@string/bookmark"
-                android:src="@drawable/ic_bookmark"
+                android:src="@drawable/ic_outline_bookmark"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/share"
                 app:layout_constraintTop_toTopOf="parent" />
