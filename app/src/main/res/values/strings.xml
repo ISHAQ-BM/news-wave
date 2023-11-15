@@ -6,9 +6,10 @@
     <string name="news_wave">Newswave</string>
     <string name="navigate_previous">navigate previous</string>
     <string name="search">Search</string>
-    <string name="home">home</string>
-    <string name="saved">saved</string>
+    <string name="home">Home</string>
+    <string name="bookmark">Bookmark</string>
     <string name="news_image">news image</string>
     <string name="notification">notification</string>
     <string name="logo">Logo</string>
+    <string name="bookmarked">Bookmarked</string>
 </resources>

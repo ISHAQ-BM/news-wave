@@ -16,9 +16,9 @@
     </fragment>
     <fragment
         android:id="@+id/savedNewsFragment"
-        android:name="com.example.newswave.presentation.ui.fragments.SavedNewsFragment"
+        android:name="com.example.newswave.presentation.ui.fragments.BookmarkedNewsFragment"
         android:label="fragment_saved_news"
-        tools:layout="@layout/fragment_saved_news" >
+        tools:layout="@layout/fragment_bookmarked_news" >
         <action
             android:id="@+id/action_savedNewsFragment_to_articleFragment"
             app:destination="@id/articleFragment" />
