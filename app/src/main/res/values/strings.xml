@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">NewsWave</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="news_wave_logo">NewsWave logo</string>
+    <string name="news_wave">Newswave</string>
+    <string name="navigate_previous">navigate previous</string>
+    <string name="search">Search</string>
+    <string name="home">home</string>
+    <string name="saved">saved</string>
+    <string name="news_image">news image</string>
+    <string name="notification">notification</string>
+    <string name="logo">Logo</string>
 </resources>

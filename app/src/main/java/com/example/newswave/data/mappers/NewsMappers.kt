@@ -16,7 +16,7 @@ fun NewsData.toValidArticles():List<Article> {
             it.link,
             it.creators?.get(0) ?: "",
             it.imageUrl ?: "",
-            it.category,
+            it.category[0],
             false,
         )
     }

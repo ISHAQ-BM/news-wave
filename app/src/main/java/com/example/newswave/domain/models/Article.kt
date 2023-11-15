@@ -11,6 +11,6 @@ data class Article (
     val link:String,
     val creator:String,
     val imageUrl:String,
-    val category:List<String>,
+    val category:String,
     var isSaved:Boolean
 )
