@@ -13,4 +13,5 @@
     <string name="logo">Logo</string>
     <string name="bookmarked">Bookmarked</string>
     <string name="share">share</string>
+    <string name="settings">Settings</string>
 </resources>
