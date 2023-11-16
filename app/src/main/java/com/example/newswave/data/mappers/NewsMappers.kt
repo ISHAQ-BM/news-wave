@@ -1,15 +1,15 @@
 package com.example.newswave.data.mappers
 
-import com.example.newswave.data.datasource.network.models.News
-import com.example.newswave.data.datasource.network.models.NewsData
+import com.example.newswave.data.datasource.network.models.NewsDataDto
+import com.example.newswave.data.datasource.network.models.NewsDto
 import com.example.newswave.domain.models.Article
 
-fun List<News>.toValidNews():List<News> {
+fun List<NewsDataDto>.toValidNews():List<NewsDataDto> {
     return this.filter { !it.imageUrl.isNullOrEmpty() && !it.creators.isNullOrEmpty() }
 }
 
-fun NewsData.toValidArticles():List<Article> {
-    return news.toValidNews().map {
+fun NewsDto.toValidArticles():List<Article> {
+    return articles.toValidNews().map {
         Article(
             it.pubDate.split(" ")[1],
             it.title,
@@ -20,4 +20,8 @@ fun NewsData.toValidArticles():List<Article> {
             false,
         )
     }
+}
+
+fun List<Article>.getCategories():List<String>{
+    return this.map { it.category }
 }

@@ -1,8 +1,8 @@
 package com.example.newswave.data.datasource.network
 
-import com.example.newswave.data.datasource.network.models.NewsData
-import com.example.newswave.utils.API_KEY
-import com.example.newswave.utils.Resource
+import com.example.newswave.data.datasource.network.models.NewsDto
+import com.example.newswave.domain.utils.API_KEY
+import com.example.newswave.domain.utils.Resource
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -18,8 +18,10 @@ interface NewsApi {
         @Query("image")
         image:String="1",
         @Query("timezone")
-        timeZone:String="America/New_york"
-    ): Resource<NewsData>
+        timeZone:String="America/New_york",
+        @Query("page")
+        pageNumber :Int= 1
+    ): NewsDto
 
 
     @GET("news?")
@@ -33,6 +35,8 @@ interface NewsApi {
         @Query("timeframe")
         timeframe:String="24",
         @Query("timezone")
-        timeZone:String="America/New_york"
-    ): Resource<NewsData>
+        timeZone:String="America/New_york",
+        @Query("page")
+        pageNumber :Int= 1
+    ): NewsDto
 }

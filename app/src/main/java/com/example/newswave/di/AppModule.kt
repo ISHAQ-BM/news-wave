@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.newswave.data.datasource.local.NewsDao
 import com.example.newswave.data.datasource.local.NewsDatabase
 import com.example.newswave.data.datasource.network.NewsApi
+import com.example.newswave.domain.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -23,7 +24,7 @@ object AppModule {
     @Singleton
     fun provideNewsApi(): NewsApi {
         return Retrofit.Builder()
-            .baseUrl("https://newsdata.io/api/1/news")
+            .baseUrl(BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
             .create(NewsApi::class.java)

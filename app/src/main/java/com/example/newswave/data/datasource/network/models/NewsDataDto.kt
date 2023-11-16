@@ -2,7 +2,7 @@ package com.example.newswave.data.datasource.network.models
 
 import com.squareup.moshi.Json
 
-data class News(
+data class NewsDataDto(
     @field:Json(name = "title")
     val title:String,
     @field:Json(name = "link")
