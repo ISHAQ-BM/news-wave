@@ -1,4 +1,30 @@
 package com.example.newswave.presentation.adapters
 
-class PagerAdapter {
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.viewpager2.adapter.FragmentStateAdapter
+import com.example.newswave.presentation.ui.fragments.ViewPagerFragment
+
+class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+    override fun getItemCount()=categories.size
+
+    override fun createFragment(position: Int): Fragment {
+        // Return a NEW fragment instance in createFragment(int)
+        val fragment = ViewPagerFragment()
+        fragment.arguments = Bundle().apply {
+            // Our object is just an integer :-P
+            putString("category", categories[position])
+
+        }
+        return fragment
+    }
+
+
+
+    private var categories:List<String> = listOf()
+
+    fun setCategories(categories :List<String>){
+        this.categories =categories
+    }
 }
