@@ -37,7 +37,11 @@
         android:id="@+id/articleFragment"
         android:name="com.example.newswave.presentation.ui.fragments.ArticleFragment"
         android:label="fragment_article"
-        tools:layout="@layout/fragment_article" />
+        tools:layout="@layout/fragment_article" >
+        <argument
+            android:name="articleLink"
+            app:argType="string" />
+    </fragment>
     <fragment
         android:id="@+id/settingsFragment"
         android:name="com.example.newswave.presentation.ui.fragments.SettingsFragment"
