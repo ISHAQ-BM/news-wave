@@ -16,8 +16,10 @@
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/image"
-        app:layout_constraintTop_toTopOf="@id/image" />
-
+        app:layout_constraintTop_toTopOf="@id/image"
+        android:maxLines="3"
+        android:ellipsize="end"
+        />
     <TextView
         android:id="@+id/author"
         android:layout_width="wrap_content"
@@ -68,14 +70,18 @@
         app:layout_constraintStart_toEndOf="@id/view_circle"
         app:layout_constraintTop_toTopOf="@id/view_circle" />
 
-    <View
-        android:id="@+id/menu"
-        android:layout_width="@dimen/_20sdp"
-        android:layout_height="@dimen/_20sdp"
-        android:background="@drawable/ic_menu"
+
+    <ImageButton
+        android:id="@+id/dropdown_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/published_time"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/published_time" />
+        app:layout_constraintTop_toTopOf="@id/published_time"
+        android:background="@color/white"
+
+        android:src="@drawable/ic_menu"
+        android:contentDescription="@string/pop_up_menu" />
 
 
     <ImageView

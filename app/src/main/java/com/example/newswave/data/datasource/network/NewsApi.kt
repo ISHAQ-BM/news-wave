@@ -7,8 +7,22 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 interface NewsApi {
-    @GET("news")
+    @GET("news?")
     suspend fun getLatestNews(
+        @Query("apiKey")
+        apiKey: String = API_KEY,
+        @Query("language")
+        language: String = "en",
+        @Query("timeframe")
+        timeframe:String="24",
+        @Query("image")
+        image:String="1",
+        @Query("timezone")
+        timeZone:String="America/New_york"
+    ): NewsDto
+
+    @GET("news?")
+    suspend fun getLatestNewsByPage(
         @Query("apiKey")
         apiKey: String = API_KEY,
         @Query("language")
@@ -20,7 +34,7 @@ interface NewsApi {
         @Query("timezone")
         timeZone:String="America/New_york",
         @Query("page")
-        pageNumber :Int= 1
+        pageNumber:String
     ): NewsDto
 
 
@@ -35,8 +49,22 @@ interface NewsApi {
         @Query("timeframe")
         timeframe:String="24",
         @Query("timezone")
+        timeZone:String="America/New_york"
+    ): NewsDto
+
+    @GET("news?")
+    suspend fun searchForNewsByPage(
+        @Query("q")
+        searchQuery: String,
+        @Query("apiKey")
+        apiKey: String = API_KEY,
+        @Query("language")
+        language: String = "en",
+        @Query("timeframe")
+        timeframe:String="24",
+        @Query("timezone")
         timeZone:String="America/New_york",
         @Query("page")
-        pageNumber :Int= 1
+        pageNumber:String
     ): NewsDto
 }

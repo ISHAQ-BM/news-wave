@@ -12,6 +12,8 @@
     <string name="notification">notification</string>
     <string name="logo">Logo</string>
     <string name="bookmarked">Bookmarked</string>
-    <string name="share">share</string>
+    <string name="share">Share</string>
     <string name="settings">Settings</string>
+    <string name="pop_up_menu">pop up menu</string>
+    <string name="remove_bookmark">Remove Bookmark</string>
 </resources>

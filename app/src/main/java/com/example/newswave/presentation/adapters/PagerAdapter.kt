@@ -6,7 +6,10 @@ import androidx.fragment.app.FragmentActivity
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.example.newswave.presentation.ui.fragments.ViewPagerFragment
 
-class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fragmentActivity) {
+class PagerAdapter(
+    fragmentActivity: FragmentActivity,
+    private val categories:Set<String>
+) : FragmentStateAdapter(fragmentActivity) {
     override fun getItemCount()=categories.size
 
     override fun createFragment(position: Int): Fragment {
@@ -14,17 +17,9 @@ class PagerAdapter(fragmentActivity: FragmentActivity) : FragmentStateAdapter(fr
         val fragment = ViewPagerFragment()
         fragment.arguments = Bundle().apply {
             // Our object is just an integer :-P
-            putString("category", categories[position])
-
+            putString("category", categories.toList()[position])
         }
         return fragment
     }
 
-
-
-    private var categories:List<String> = listOf()
-
-    fun setCategories(categories :List<String>){
-        this.categories =categories
-    }
 }

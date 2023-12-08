@@ -1,6 +1,7 @@
 package com.example.newswave.presentation.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 
 import android.view.ViewGroup
 import androidx.core.net.toUri
@@ -12,30 +13,33 @@ import com.example.newswave.R
 import com.example.newswave.databinding.NewsListItemBinding
 import com.example.newswave.domain.models.Article
 
-class NewsAdapter : ListAdapter<Article, NewsAdapter.ViewHolder>(DiffCallback) {
+class NewsAdapter(
+    private val onItemClick: (Article) -> Unit,
+    private var optionsMenuClickListener: OptionsMenuClickListener
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
-        return ViewHolder(
-            NewsListItemBinding.inflate(
-                LayoutInflater.from(parent.context),
-                parent,
-                false
-            )
-        )
+) : ListAdapter<Article, NewsAdapter.ViewHolder>(DiffCallback) {
+
+
+    interface OptionsMenuClickListener {
+        fun onOptionsMenuClicked(article: Article, view: View)
     }
 
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val article = getItem(position)
-        holder.bind(article)
-        holder.itemView.setOnClickListener {
-            onItemClickListener?.let { it(article) }
-        }
-    }
-
-
-    inner class ViewHolder(private val binding: NewsListItemBinding) :
+    inner class ViewHolder(
+        private val binding: NewsListItemBinding,
+        onItemClicked: (Int) -> Unit) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            itemView.setOnClickListener {
+                onItemClicked(adapterPosition)
+            }
+            binding.dropdownMenu.setOnClickListener {
+                optionsMenuClickListener.onOptionsMenuClicked(getItem(adapterPosition),it)
+
+            }
+        }
+
         fun bind(article: Article?) {
             binding.newsTitle.text = article?.title
             "by ${article?.creator}".also { binding.author.text = it }
@@ -51,6 +55,30 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.ViewHolder>(DiffCallback) {
 
     }
 
+
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+
+        return ViewHolder(
+            NewsListItemBinding.inflate(
+                LayoutInflater.from(parent.context),
+                parent,
+                false
+            )
+        ){
+            onItemClick(getItem(it))
+        }
+    }
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        val article = getItem(position)
+        holder.bind(article)
+    }
+
+
+
+
     object DiffCallback : DiffUtil.ItemCallback<Article>() {
         override fun areItemsTheSame(oldItem: Article, newItem: Article): Boolean {
             return oldItem == newItem
@@ -61,10 +89,5 @@ class NewsAdapter : ListAdapter<Article, NewsAdapter.ViewHolder>(DiffCallback) {
         }
 
     }
-
-    private var onItemClickListener :((Article) -> Unit )? = null
-
-    fun setOnItemClickListener(listener : (Article) -> Unit ){
-        onItemClickListener =listener
-    }
 }
+

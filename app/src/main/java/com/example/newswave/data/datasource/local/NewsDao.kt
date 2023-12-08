@@ -1,5 +1,6 @@
 package com.example.newswave.data.datasource.local
 
+import android.icu.text.CaseMap.Title
 import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Delete
@@ -13,7 +14,7 @@ import com.example.newswave.domain.models.Article
 interface NewsDao {
 
     //  implement a method to retrieve all articles from the database
-    @Query("SELECT * FROM news")
+    @Query("SELECT * FROM articles")
     fun getNews(): LiveData<List<Article>>
 
     //  implement a method to insert a Article into the database
@@ -24,4 +25,5 @@ interface NewsDao {
     //  implement a method to delete a Articles from the database.
     @Delete
     fun delete(article: Article)
+
 }

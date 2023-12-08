@@ -62,7 +62,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
         app:tabBackground="@drawable/tab_bg_inset"
-        app:tabGravity="center"
+
         app:tabIndicator="@drawable/tab_active_bg"
         app:tabIndicatorColor="@android:color/transparent"
         app:tabIndicatorFullWidth="true"
@@ -79,8 +79,9 @@
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tab_layout" />
 
