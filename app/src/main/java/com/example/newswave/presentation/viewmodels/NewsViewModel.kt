@@ -44,6 +44,7 @@ class NewsViewModel @Inject constructor(
     fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
         _latestNews.postValue(newsRepository.getLatestNews(category))
+        Log.d("init block","${_latestNews.value?.data?.toValidArticles()}")
 
 
     }

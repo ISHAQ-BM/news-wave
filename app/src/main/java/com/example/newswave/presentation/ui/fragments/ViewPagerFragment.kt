@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Build
 
 import android.os.Bundle
+import android.util.Log
 
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,6 +15,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newswave.R
 import com.example.newswave.data.mappers.toValidArticles
@@ -30,7 +32,6 @@ class ViewPagerFragment : Fragment() {
 
 
     private val viewModel: NewsViewModel by activityViewModels()
-    var bundle:Bundle?=null
 
 
 
@@ -40,9 +41,6 @@ class ViewPagerFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentViewPagerBinding.inflate(inflater, container, false)
-        bundle=arguments
-        bundle?.getString("category")?.let { viewModel.setCategory(it) }
-        viewModel.loadNewsData(bundle?.getString("category")!!)
         return binding?.root
        }
 
@@ -51,7 +49,7 @@ class ViewPagerFragment : Fragment() {
 
         binding?.recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         val adapter=NewsAdapter(
-            {},
+            {article -> displayArticle(article.link) },
             object : NewsAdapter.OptionsMenuClickListener{
                 // implement the required method
                 @RequiresApi(Build.VERSION_CODES.Q)
@@ -119,6 +117,11 @@ class ViewPagerFragment : Fragment() {
         popupMenu.setForceShowIcon(true)
         popupMenu.show()
 
+    }
+
+    private fun displayArticle(link: String) {
+        val action=HomeFragmentDirections.actionHomeFragmentToArticleFragment(link)
+        findNavController().navigate(action)
     }
 
     private fun shareArticle(link: String) {

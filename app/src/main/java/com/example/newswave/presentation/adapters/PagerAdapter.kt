@@ -19,6 +19,7 @@ class PagerAdapter(
         fragment.arguments = Bundle().apply {
             // Our object is just an integer :-P
             putString("category", categories[position])
+
         }
         return fragment
     }
