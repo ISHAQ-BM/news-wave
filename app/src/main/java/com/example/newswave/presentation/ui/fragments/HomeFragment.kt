@@ -10,6 +10,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.newswave.R
 import com.example.newswave.databinding.FragmentHomeBinding
+import com.example.newswave.domain.utils.categories
 import com.example.newswave.presentation.adapters.PagerAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import com.google.android.material.tabs.TabLayoutMediator
@@ -40,21 +41,17 @@ class HomeFragment : Fragment() {
 
 
 
+        val pagerAdapter=PagerAdapter(requireActivity())
+        binding?.viewPager?.adapter = pagerAdapter
 
-
-        viewModel.latestNews.observe(viewLifecycleOwner) { it ->
-            val pagerAdapter=PagerAdapter(this.requireActivity(), it.data?.results?.map { it.category[0] }?.toSet() ?: setOf())
-            binding?.viewPager?.adapter = pagerAdapter
-            binding?.tabLayout?.let {
-                binding?.viewPager?.let { it1 ->
-                    TabLayoutMediator(it, it1) { tab, position ->
-                        tab.text = viewModel.latestNews.value?.data?.results?.map { it.category[0] }?.toSet()?.toList()
-                            ?.get(position)
-                    }.attach()
-                }
-
+        binding?.tabLayout?.let {
+            binding?.viewPager?.let { it1 ->
+                TabLayoutMediator(it, it1){ tab, position ->
+                    tab.text= categories[position]
+                }.attach()
             }
         }
+
 
 
 

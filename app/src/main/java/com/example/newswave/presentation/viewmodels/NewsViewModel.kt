@@ -23,9 +23,9 @@ class NewsViewModel @Inject constructor(
     private val _latestNews= MutableLiveData<Resource<NewsDto>>()
     val latestNews: LiveData<Resource<NewsDto>> = _latestNews
 
-    var latestNewsPage=""
+    private val _category = MutableLiveData<String>()
+    val category:LiveData<String> = _category
 
-    var latestNewsResponse:NewsDto?=null
 
 
 
@@ -35,12 +35,16 @@ class NewsViewModel @Inject constructor(
 
 
     init {
-        loadNewsData()
+        loadNewsData(category.value?:"top")
+        Log.d("init block","${category.value}")
     }
 
-    private fun loadNewsData() =viewModelScope.launch {
+
+
+    fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
-        _latestNews.postValue(newsRepository.getLatestNews())
+        _latestNews.postValue(newsRepository.getLatestNews(category))
+
 
     }
 
@@ -48,8 +52,8 @@ class NewsViewModel @Inject constructor(
 
 
     fun bookmarkArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
-        _latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)?.isBookmarked = true
-        Log.d("articles","$article")
+        Log.d("articles","${_latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)}")
+        _latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)?.isBookmarked =true
         newsRepository.insertArticle(article)
     }
 
@@ -59,6 +63,10 @@ class NewsViewModel @Inject constructor(
         newsRepository.deleteArticle(article)
     }
 
+    fun setCategory(shownCategory: String) {
+        Log.d("shown category","$shownCategory")
+        _category.value=shownCategory
+    }
 
 
 }

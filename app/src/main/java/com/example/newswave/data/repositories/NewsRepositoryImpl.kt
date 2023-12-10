@@ -13,10 +13,10 @@ class NewsRepositoryImpl @Inject constructor (
     private val api : NewsApi,
     private val newsDao: NewsDao
 ): BaseRepository(),NewsRepository{
-    override suspend fun getLatestNews(): Resource<NewsDto> = safeApiCall { api.getLatestNews() }
+    override suspend fun getLatestNews(category:String): Resource<NewsDto> = safeApiCall { api.getLatestNews(category=category) }
 
 
-    override suspend fun getLatestNewsByPage(page:String): Resource<NewsDto> = safeApiCall { api.getLatestNewsByPage(pageNumber = page) }
+    override suspend fun getLatestNewsByPage(category:String,page:String): Resource<NewsDto> = safeApiCall { api.getLatestNewsByPage(category = category,pageNumber = page) }
 
 
     override suspend fun searchNews(searchQuery: String): Resource<NewsDto>  = safeApiCall { api.searchForNews(searchQuery) }

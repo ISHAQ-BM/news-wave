@@ -6,8 +6,8 @@ import com.example.newswave.domain.models.Article
 import com.example.newswave.domain.utils.Resource
 
 interface NewsRepository {
-    suspend fun getLatestNews(): Resource<NewsDto>
-    suspend fun getLatestNewsByPage(page:String): Resource<NewsDto>
+    suspend fun getLatestNews(category:String): Resource<NewsDto>
+    suspend fun getLatestNewsByPage(category:String,page:String): Resource<NewsDto>
     suspend fun searchNews(searchQuery: String): Resource<NewsDto>
     suspend fun searchNewsByPage(searchQuery: String,page:String): Resource<NewsDto>
     fun getBookmarkedNews(): LiveData<List<Article>>

@@ -2,13 +2,15 @@ package com.example.newswave.presentation.ui.fragments
 
 import android.content.Intent
 import android.os.Build
+
 import android.os.Bundle
+
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupMenu
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 
 import androidx.fragment.app.activityViewModels
@@ -28,6 +30,8 @@ class ViewPagerFragment : Fragment() {
 
 
     private val viewModel: NewsViewModel by activityViewModels()
+    var bundle:Bundle?=null
+
 
 
     override fun onCreateView(
@@ -36,6 +40,9 @@ class ViewPagerFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding=FragmentViewPagerBinding.inflate(inflater, container, false)
+        bundle=arguments
+        bundle?.getString("category")?.let { viewModel.setCategory(it) }
+        viewModel.loadNewsData(bundle?.getString("category")!!)
         return binding?.root
        }
 
@@ -57,9 +64,8 @@ class ViewPagerFragment : Fragment() {
         )
 
         binding?.recyclerView?.adapter=adapter
-        val bundle=arguments
-        viewModel.latestNews.observe(viewLifecycleOwner) {
-            adapter.submitList(viewModel.latestNews.value?.data?.toValidArticles()?.filter { it.category == bundle?.getString("category") })
+        viewModel.latestNews.observe(viewLifecycleOwner){
+            adapter.submitList(it.data?.toValidArticles())
         }
 
     }
@@ -67,33 +73,49 @@ class ViewPagerFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.Q)
     private fun performOptionsMenuClick(article: Article, view: View) {
         val popupMenu = PopupMenu(requireContext() , view)
-        if (article.isBookmarked){
+        if (article.isBookmarked) {
             popupMenu.inflate(R.menu.popup_menu_baseline_bookmark)
-        }
-        else{
-            popupMenu.inflate(R.menu.popup_menu_outline_bookmark)
-        }
-        popupMenu.setOnMenuItemClickListener(object :PopupMenu.OnMenuItemClickListener{
-            override fun onMenuItemClick(item: MenuItem?): Boolean {
-                when(item?.itemId){
-                    R.id.bookmark -> {
-                        if (article.isBookmarked){
-                            viewModel.deleteArticle(article)
-                        }
-                        else{
-                            viewModel.bookmarkArticle(article)
-                        }
-                        return true
-                    }
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
                     R.id.share -> {
                         shareArticle(article.link)
-                        return true
+                        true
                     }
 
+                    R.id.bookmark -> {
+                        viewModel.deleteArticle(article)
+                        Toast.makeText(requireContext(), "article unsaved", Toast.LENGTH_LONG)
+                            .show()
+                        true
+                    }
+
+                    else -> {
+                        false
+                    }
                 }
-                return false
             }
-        })
+        } else {
+            popupMenu.inflate(R.menu.popup_menu_outline_bookmark)
+            popupMenu.setOnMenuItemClickListener { item ->
+                when (item.itemId) {
+                    R.id.share -> {
+                        shareArticle(article.link)
+                        true
+                    }
+
+                    R.id.bookmark -> {
+                        viewModel.bookmarkArticle(article)
+                        Toast.makeText(requireContext(), "article saved", Toast.LENGTH_LONG).show()
+                        true
+                    }
+
+                    else -> {
+                        false
+                    }
+                }
+
+            }
+        }
         popupMenu.setForceShowIcon(true)
         popupMenu.show()
 

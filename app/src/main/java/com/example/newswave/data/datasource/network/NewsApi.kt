@@ -18,7 +18,9 @@ interface NewsApi {
         @Query("image")
         image:String="1",
         @Query("timezone")
-        timeZone:String="America/New_york"
+        timeZone:String="America/New_york",
+        @Query("category")
+        category:String
     ): NewsDto
 
     @GET("news?")
@@ -33,6 +35,8 @@ interface NewsApi {
         image:String="1",
         @Query("timezone")
         timeZone:String="America/New_york",
+        @Query("category")
+        category:String,
         @Query("page")
         pageNumber:String
     ): NewsDto
