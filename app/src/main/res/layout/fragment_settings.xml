@@ -1,14 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
     tools:context=".presentation.ui.fragments.SettingsFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?actionBarSize"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/settings"
+            android:textAppearance="@style/TextAppearance.AppCompat.Widget.ActionMode.Title"
+            android:textStyle="bold"/>
+    </androidx.appcompat.widget.Toolbar>
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="@dimen/_12sdp"
+        android:paddingHorizontal="@dimen/_20sdp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintEnd_toEndOf="parent">
+        <TextView
+            android:id="@+id/interests"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/interests"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            app:drawableStartCompat="@drawable/ic_interests"
+            app:drawableEndCompat="@drawable/ic_chevron_next" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#EEEEEE"/>
+        <TextView
+            android:id="@+id/notifications"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/notifications"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            app:drawableStartCompat="@drawable/ic_notification"
+            app:drawableEndCompat="@drawable/ic_chevron_next" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#EEEEEE"/>
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/dark_mode"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:text="@string/dark_mode"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            app:drawableStartCompat="@drawable/ic_dark_mode"
+            app:drawableEndCompat="@drawable/ic_chevron_next" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_1sdp"
+            android:background="#EEEEEE"/>
+        <TextView
+            android:id="@+id/about"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/about"
+            android:textColor="@color/black"
+            android:textSize="@dimen/_14ssp"
+            android:paddingVertical="@dimen/_16sdp"
+            android:drawablePadding="@dimen/_8sdp"
+            app:drawableStartCompat="@drawable/ic_about"
+            app:drawableEndCompat="@drawable/ic_chevron_next" />
 
-</FrameLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
