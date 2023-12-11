@@ -1,23 +1,25 @@
 package com.example.newswave.data.repositories
 
-import com.example.newswave.data.datasource.local.NewsDao
 import com.example.newswave.data.datasource.network.models.NewsDto
+import com.example.newswave.data.mapper.NewsDtoMapper
+import com.example.newswave.domain.models.News
 import com.example.newswave.domain.utils.Resource
-import com.squareup.moshi.Moshi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.ResponseBody
 import okio.IOException
 import retrofit2.HttpException
-import retrofit2.Response
+import javax.inject.Inject
 
-abstract class BaseRepository {
-    suspend fun safeApiCall(apiToBeCalled: suspend () -> NewsDto): Resource<NewsDto> {
+abstract class BaseRepository @Inject constructor(
+    private val newsDtoMapper:NewsDtoMapper
+){
+    suspend fun safeApiCall(apiToBeCalled: suspend () -> NewsDto): Resource<News> {
 
         return withContext(Dispatchers.IO) {
             try {
                 val response  = apiToBeCalled()
-                Resource.Success(response)
+
+                Resource.Success(newsDtoMapper.mapNewsDto(response))
             } catch (e: HttpException) {
                 Resource.Error(message = e.message ?: "Something went wrong")
             } catch (e: IOException) {

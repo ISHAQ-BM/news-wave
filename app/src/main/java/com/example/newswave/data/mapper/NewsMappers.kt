@@ -1,4 +1,4 @@
-package com.example.newswave.domain.mapper
+package com.example.newswave.data.mapper
 
 import com.example.newswave.data.datasource.network.models.ArticleDataDto
 import com.example.newswave.data.datasource.network.models.NewsDto

@@ -17,7 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newswave.R
-import com.example.newswave.domain.mapper.toValidArticles
+import com.example.newswave.data.mapper.toValidArticles
 import com.example.newswave.databinding.FragmentViewPagerBinding
 import com.example.newswave.domain.models.Article
 import com.example.newswave.presentation.adapters.NewsAdapter

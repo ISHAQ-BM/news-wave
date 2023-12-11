@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.example.newswave.data.datasource.local.NewsDao
 import com.example.newswave.data.datasource.local.NewsDatabase
 import com.example.newswave.data.datasource.network.NewsApi
+import com.example.newswave.data.mapper.NewsDtoMapper
 import com.example.newswave.domain.utils.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -44,5 +45,11 @@ object AppModule {
             NewsDatabase::class.java,
             "news_database"
         ).build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideNewsDtoMapper():NewsDtoMapper{
+        return NewsDtoMapper()
     }
 }

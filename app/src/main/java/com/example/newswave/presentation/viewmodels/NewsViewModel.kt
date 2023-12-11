@@ -6,8 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.data.datasource.network.models.NewsDto
-import com.example.newswave.domain.mapper.toValidArticles
+import com.example.newswave.data.mapper.toValidArticles
 import com.example.newswave.domain.models.Article
+import com.example.newswave.domain.models.News
 import com.example.newswave.domain.repositories.NewsRepository
 import com.example.newswave.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,8 +22,8 @@ class NewsViewModel @Inject constructor(
     private val newsRepository: NewsRepository
 ) :ViewModel() {
 
-    private val _latestNews= MutableLiveData<Resource<NewsDto>>()
-    val latestNews: LiveData<Resource<NewsDto>> = _latestNews
+    private val _latestNews= MutableLiveData<Resource<News>>()
+    val latestNews: LiveData<Resource<News>> = _latestNews
 
     private val _category = MutableLiveData<String>()
     val category:LiveData<String> = _category
@@ -46,20 +47,13 @@ class NewsViewModel @Inject constructor(
 
     private fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
-        val response=async { newsRepository.getLatestNews(category) }
-        _latestNews.postValue(response.await())
-        Log.d("load news","${response.await().data?.toValidArticles()}")
-
-
+        _latestNews.postValue(newsRepository.getLatestNews(category))
     }
 
 
 
 
     fun bookmarkArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
-        Log.d("articles","${_latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)}")
-        _latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)?.isBookmarked =true
-        Log.d("articles","${_latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)}")
 
         newsRepository.insertArticle(article)
     }

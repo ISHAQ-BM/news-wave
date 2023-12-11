@@ -1,10 +1,10 @@
-package com.example.newswave.domain.mapper
+package com.example.newswave.data.mapper
 
 import com.example.newswave.data.datasource.network.models.NewsDto
 import com.example.newswave.domain.models.News
 
-class NewsMapperDto ():Mapper<NewsDto,News>{
-    override fun map(input: NewsDto): News {
+class NewsDtoMapper(): Mapper<NewsDto, News> {
+    override fun mapNewsDto(input: NewsDto): News {
         return News(
             input.toValidArticles(),
             input.nextPage
