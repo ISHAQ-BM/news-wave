@@ -1,10 +1,10 @@
-package com.example.newswave.data.mappers
+package com.example.newswave.domain.mapper
 
-import com.example.newswave.data.datasource.network.models.NewsDataDto
+import com.example.newswave.data.datasource.network.models.ArticleDataDto
 import com.example.newswave.data.datasource.network.models.NewsDto
 import com.example.newswave.domain.models.Article
 
-fun List<NewsDataDto>.toValidNews():List<NewsDataDto> {
+fun List<ArticleDataDto>.toValidNews():List<ArticleDataDto> {
     return this.filter { !it.imageUrl.isNullOrEmpty() && !it.creator.isNullOrEmpty() }
 }
 
@@ -22,7 +22,3 @@ fun NewsDto.toValidArticles():List<Article> {
     }
 }
 
-
-fun List<Article>.getCategories():List<String>{
-    return this.map { it.category }
-}

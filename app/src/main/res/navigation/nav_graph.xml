@@ -39,8 +39,8 @@
         android:label="fragment_article"
         tools:layout="@layout/fragment_article" >
         <argument
-            android:name="articleLink"
-            app:argType="string" />
+            android:name="article"
+            app:argType="com.example.newswave.domain.models.Article" />
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"

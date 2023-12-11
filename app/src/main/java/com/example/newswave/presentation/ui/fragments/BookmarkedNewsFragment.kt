@@ -43,7 +43,7 @@ class BookmarkedNewsFragment : Fragment() {
 
         binding?.savedRv?.layoutManager= LinearLayoutManager(requireContext())
         val adapter=NewsAdapter(
-            {article -> displayArticle(article.link) },
+            {article -> displayArticle(article) },
             object : NewsAdapter.OptionsMenuClickListener{
                 // implement the required method
                 override fun onOptionsMenuClicked(article: Article, view: View) {
@@ -88,8 +88,8 @@ class BookmarkedNewsFragment : Fragment() {
         popUpMenu.show()
     }
 
-    private fun displayArticle(link: String) {
-        val action=BookmarkedNewsFragmentDirections.actionBookmarkedNewsFragmentToArticleFragment(link)
+    private fun displayArticle(article: Article) {
+        val action=BookmarkedNewsFragmentDirections.actionBookmarkedNewsFragmentToArticleFragment(article)
         findNavController().navigate(action)
     }
 

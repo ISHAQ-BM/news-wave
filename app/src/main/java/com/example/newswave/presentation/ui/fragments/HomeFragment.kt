@@ -56,15 +56,15 @@ class HomeFragment : Fragment() {
 
         binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewModel.loadNewsData(tab?.text.toString())
+                viewModel.setCategory(tab?.text.toString())
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
-                Toast.makeText(requireContext(),"wwww",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"",Toast.LENGTH_SHORT).show()
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
-                Toast.makeText(requireContext(),"wwww",Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(),"",Toast.LENGTH_SHORT).show()
             }
         })
 

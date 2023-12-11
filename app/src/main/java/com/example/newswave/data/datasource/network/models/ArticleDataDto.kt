@@ -2,7 +2,7 @@ package com.example.newswave.data.datasource.network.models
 
 import com.squareup.moshi.Json
 
-data class NewsDataDto(
+data class ArticleDataDto(
     @field:Json(name ="category")
     val category: List<String>,
     @field:Json(name ="creator")

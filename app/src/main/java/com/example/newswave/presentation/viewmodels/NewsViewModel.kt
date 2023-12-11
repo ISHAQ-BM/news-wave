@@ -6,12 +6,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.data.datasource.network.models.NewsDto
-import com.example.newswave.data.mappers.toValidArticles
+import com.example.newswave.domain.mapper.toValidArticles
 import com.example.newswave.domain.models.Article
 import com.example.newswave.domain.repositories.NewsRepository
 import com.example.newswave.domain.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -26,25 +27,28 @@ class NewsViewModel @Inject constructor(
     private val _category = MutableLiveData<String>()
     val category:LiveData<String> = _category
 
-
-
-
-
-
-
-
-
     init {
-        loadNewsData(category.value?:"top")
-        Log.d("init block","${category.value}")
+        loadNewsData("top")
+        Log.d("init block","hello")
     }
 
 
 
-    fun loadNewsData(category:String) =viewModelScope.launch {
+
+
+
+
+
+
+
+
+
+
+    private fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
-        _latestNews.postValue(newsRepository.getLatestNews(category))
-        Log.d("init block","${_latestNews.value?.data?.toValidArticles()}")
+        val response=async { newsRepository.getLatestNews(category) }
+        _latestNews.postValue(response.await())
+        Log.d("load news","${response.await().data?.toValidArticles()}")
 
 
     }
@@ -55,6 +59,8 @@ class NewsViewModel @Inject constructor(
     fun bookmarkArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
         Log.d("articles","${_latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)}")
         _latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)?.isBookmarked =true
+        Log.d("articles","${_latestNews.value?.data?.toValidArticles()?.get(_latestNews.value?.data?.toValidArticles()?.indexOf(article)!!)}")
+
         newsRepository.insertArticle(article)
     }
 
@@ -65,8 +71,9 @@ class NewsViewModel @Inject constructor(
     }
 
     fun setCategory(shownCategory: String) {
-        Log.d("shown category","$shownCategory")
         _category.value=shownCategory
+        Log.d("shown category","${_category.value}")
+        loadNewsData(shownCategory)
     }
 
 

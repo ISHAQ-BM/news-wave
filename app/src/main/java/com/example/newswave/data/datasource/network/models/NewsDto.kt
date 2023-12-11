@@ -7,6 +7,6 @@ data class NewsDto(
     @field:Json(name = "nextPage")
     val nextPage: String,
     @field:Json(name = "results")
-    val results: List<NewsDataDto>
+    val results: List<ArticleDataDto>
 
 )

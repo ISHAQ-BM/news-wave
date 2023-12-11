@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 
 import android.os.Bundle
-import android.util.Log
 
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,7 +17,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newswave.R
-import com.example.newswave.data.mappers.toValidArticles
+import com.example.newswave.domain.mapper.toValidArticles
 import com.example.newswave.databinding.FragmentViewPagerBinding
 import com.example.newswave.domain.models.Article
 import com.example.newswave.presentation.adapters.NewsAdapter
@@ -49,7 +48,7 @@ class ViewPagerFragment : Fragment() {
 
         binding?.recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         val adapter=NewsAdapter(
-            {article -> displayArticle(article.link) },
+            {article -> displayArticle(article) },
             object : NewsAdapter.OptionsMenuClickListener{
                 // implement the required method
                 @RequiresApi(Build.VERSION_CODES.Q)
@@ -119,8 +118,8 @@ class ViewPagerFragment : Fragment() {
 
     }
 
-    private fun displayArticle(link: String) {
-        val action=HomeFragmentDirections.actionHomeFragmentToArticleFragment(link)
+    private fun displayArticle(article: Article) {
+        val action=HomeFragmentDirections.actionHomeFragmentToArticleFragment(article)
         findNavController().navigate(action)
     }
 

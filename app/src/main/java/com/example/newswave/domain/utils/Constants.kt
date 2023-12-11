@@ -8,9 +8,6 @@ val categories= listOf(
         "sports",
         "science",
         "business",
-        "crime",
-        "domestic",
-        "education",
         "entertainment",
         "environment",
         "food",
@@ -18,5 +15,4 @@ val categories= listOf(
         "politics",
         "tourism",
         "world",
-        "other"
     )
