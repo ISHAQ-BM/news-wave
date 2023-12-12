@@ -6,6 +6,9 @@ import android.net.ConnectivityManager
 import android.net.ConnectivityManager.TYPE_ETHERNET
 import android.net.ConnectivityManager.TYPE_MOBILE
 import android.net.ConnectivityManager.TYPE_WIFI
+import android.net.LinkProperties
+import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.NetworkCapabilities.TRANSPORT_CELLULAR
 import android.net.NetworkCapabilities.TRANSPORT_ETHERNET
 import android.net.NetworkCapabilities.TRANSPORT_WIFI
@@ -39,11 +42,11 @@ class NewsViewModel @Inject constructor(
     private val _latestNews= MutableLiveData<Resource<News>>()
     val latestNews: LiveData<Resource<News>> = _latestNews
 
-    private val _category = MutableLiveData<String>()
+    private val _category = MutableLiveData<String>("top")
     val category:LiveData<String> = _category
 
     init {
-        loadNewsData("top")
+        readNetworkState()
         Log.d("init block","hello")
     }
 
@@ -61,11 +64,9 @@ class NewsViewModel @Inject constructor(
 
     private fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
-        if (isInternetAvailable()){
-            _latestNews.postValue(newsRepository.getLatestNews(category))
-        }else{
-            _latestNews.postValue(Resource.Error("No internet connection"))
-        }
+        _latestNews.postValue(newsRepository.getLatestNews(category))
+
+
 
     }
 
@@ -80,6 +81,7 @@ class NewsViewModel @Inject constructor(
     fun getBookmarkedArticles()=newsRepository.getBookmarkedNews()
 
     fun deleteArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
+
         newsRepository.deleteArticle(article)
     }
 
@@ -88,29 +90,30 @@ class NewsViewModel @Inject constructor(
         loadNewsData(shownCategory)
     }
 
-    private fun isInternetAvailable():Boolean{
+    private fun readNetworkState(){
         val connectivityManager = getApplication<NewsWaveApp>()
-            .getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            val activeNetwork = connectivityManager.activeNetwork ?: return false
-            val capabilities = connectivityManager.getNetworkCapabilities(activeNetwork) ?: return false
-            return when {
-                capabilities.hasTransport(TRANSPORT_WIFI) -> true
-                capabilities.hasTransport(TRANSPORT_CELLULAR) -> true
-                capabilities.hasTransport(TRANSPORT_ETHERNET) -> true
-                else -> false
+            .getSystemService(ConnectivityManager::class.java)
+        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
+            override fun onAvailable(network : Network) {
+                Log.e("TAG", "The default network is now: $network")
+                loadNewsData(_category.value!!)
             }
-        }else{
-            connectivityManager.activeNetworkInfo?.run {
-                return when(type) {
-                    TYPE_WIFI -> true
-                    TYPE_MOBILE -> true
-                    TYPE_ETHERNET -> true
-                    else -> false
-                }
+
+            override fun onLost(network : Network) {
+                _latestNews.postValue(Resource.Error("No internet connection"))
+                Log.e("TAG",
+                    "The application no longer has a default network. The last default network was $network"
+                )
             }
-        }
-        return false
+
+            override fun onCapabilitiesChanged(network : Network, networkCapabilities : NetworkCapabilities) {
+                Log.e("TAG", "The default network changed capabilities: $networkCapabilities")
+            }
+
+            override fun onLinkPropertiesChanged(network : Network, linkProperties : LinkProperties) {
+                Log.e("TAG", "The default network changed link properties: $linkProperties")
+            }
+        })
 
     }
 
