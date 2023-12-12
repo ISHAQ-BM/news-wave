@@ -62,7 +62,7 @@ class ViewPagerFragment : Fragment() {
 
         binding?.recyclerView?.adapter=adapter
         viewModel.latestNews.observe(viewLifecycleOwner){
-            adapter.submitList(it.data?.toValidArticles())
+            adapter.submitList(it.data?.articles)
         }
 
     }

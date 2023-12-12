@@ -10,7 +10,7 @@ import okio.IOException
 import retrofit2.HttpException
 import javax.inject.Inject
 
-abstract class BaseRepository @Inject constructor(
+abstract class BaseRepository (
     private val newsDtoMapper:NewsDtoMapper
 ){
     suspend fun safeApiCall(apiToBeCalled: suspend () -> NewsDto): Resource<News> {
