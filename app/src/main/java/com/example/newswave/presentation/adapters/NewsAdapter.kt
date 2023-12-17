@@ -48,6 +48,7 @@ class NewsAdapter(
             val imgUri = article?.imageUrl?.toUri()?.buildUpon()?.scheme("https")?.build()
             binding.image.load(imgUri) {
                 placeholder(R.drawable.loading_animation)
+                error(R.drawable.ic_broken_image)
             }
 
         }

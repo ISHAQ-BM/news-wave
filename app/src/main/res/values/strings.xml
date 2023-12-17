@@ -20,4 +20,5 @@
     <string name="notifications">Notifications</string>
     <string name="about">About</string>
     <string name="dark_mode">Dark Mode</string>
+    <string name="no_internet_connection">no internet connection</string>
 </resources>

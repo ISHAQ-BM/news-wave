@@ -42,6 +42,9 @@ class NewsViewModel @Inject constructor(
     private val _latestNews= MutableLiveData<Resource<News>>()
     val latestNews: LiveData<Resource<News>> = _latestNews
 
+    private val _searchNews= MutableLiveData<Resource<News>>()
+    val searchNews: LiveData<Resource<News>> = _searchNews
+
     private val _category = MutableLiveData<String>("top")
     val category:LiveData<String> = _category
 
@@ -65,10 +68,15 @@ class NewsViewModel @Inject constructor(
     private fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
         _latestNews.postValue(newsRepository.getLatestNews(category))
-
-
-
     }
+
+
+    fun searchNews(searchQuery:String?) =viewModelScope.launch {
+        _searchNews.postValue(Resource.Loading())
+        _searchNews.postValue(newsRepository.searchNews(searchQuery))
+    }
+
+
 
 
 
@@ -86,8 +94,8 @@ class NewsViewModel @Inject constructor(
     }
 
     fun setCategory(shownCategory: String) {
-        _category.value=shownCategory
         loadNewsData(shownCategory)
+        _category.value=shownCategory
     }
 
     private fun readNetworkState(){

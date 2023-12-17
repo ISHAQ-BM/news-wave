@@ -17,9 +17,10 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newswave.R
-import com.example.newswave.data.mapper.toValidArticles
 import com.example.newswave.databinding.FragmentViewPagerBinding
+
 import com.example.newswave.domain.models.Article
+import com.example.newswave.domain.utils.Resource
 import com.example.newswave.presentation.adapters.NewsAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class ViewPagerFragment : Fragment() {
 
-    private var binding:FragmentViewPagerBinding ? = null
+    private var binding: FragmentViewPagerBinding? = null
 
 
     private val viewModel: NewsViewModel by activityViewModels()
@@ -39,7 +40,7 @@ class ViewPagerFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding=FragmentViewPagerBinding.inflate(inflater, container, false)
+        binding= FragmentViewPagerBinding.inflate(inflater, container, false)
         return binding?.root
        }
 
@@ -61,8 +62,23 @@ class ViewPagerFragment : Fragment() {
         )
 
         binding?.recyclerView?.adapter=adapter
-        viewModel.latestNews.observe(viewLifecycleOwner){
-            adapter.submitList(it.data?.articles)
+
+        viewModel.latestNews.observe(viewLifecycleOwner) {
+            when(it){
+                is Resource.Loading -> {
+                    binding?.statusImage?.visibility =View.INVISIBLE
+                    binding?.progressbar?.visibility = View.VISIBLE
+                }
+                is Resource.Success ->  {
+                    binding?.statusImage?.visibility =View.INVISIBLE
+                    binding?.progressbar?.visibility=View.INVISIBLE
+                    adapter.submitList(it.data?.articles)
+                }
+                else -> {
+                    binding?.progressbar?.visibility = View.INVISIBLE
+                    binding?.statusImage?.visibility =View.VISIBLE
+                }
+            }
         }
 
     }

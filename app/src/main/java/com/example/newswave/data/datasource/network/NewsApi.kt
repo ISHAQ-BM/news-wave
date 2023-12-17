@@ -45,7 +45,7 @@ interface NewsApi {
     @GET("news?")
     suspend fun searchForNews(
         @Query("q")
-        searchQuery: String,
+        searchQuery: String?,
         @Query("apiKey")
         apiKey: String = API_KEY,
         @Query("language")

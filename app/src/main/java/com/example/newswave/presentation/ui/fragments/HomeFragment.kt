@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import com.example.newswave.R
 import com.example.newswave.databinding.FragmentHomeBinding
+import com.example.newswave.domain.utils.Resource
 import com.example.newswave.domain.utils.categories
 import com.example.newswave.presentation.adapters.PagerAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
@@ -53,6 +54,7 @@ class HomeFragment : Fragment() {
                 }.attach()
             }
         }
+
 
         binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

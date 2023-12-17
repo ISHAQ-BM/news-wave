@@ -22,7 +22,7 @@ class NewsRepositoryImpl @Inject constructor (
     override suspend fun getLatestNewsByPage(category:String,page:String): Resource<News> = safeApiCall { api.getLatestNewsByPage(category = category,pageNumber = page) }
 
 
-    override suspend fun searchNews(searchQuery: String): Resource<News>  = safeApiCall { api.searchForNews(searchQuery) }
+    override suspend fun searchNews(searchQuery: String?): Resource<News>  = safeApiCall { api.searchForNews(searchQuery) }
 
 
     override suspend fun searchNewsByPage(searchQuery: String,page:String): Resource<News> = safeApiCall { api.searchForNewsByPage(searchQuery, pageNumber = page) }

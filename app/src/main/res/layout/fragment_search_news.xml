@@ -6,15 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".presentation.ui.fragments.SearchNewsFragment">
 
-    <SearchView
+    <androidx.appcompat.widget.SearchView
         android:id="@+id/search_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:queryHint="@string/search"
-        android:iconifiedByDefault="false"
-        android:queryBackground="@android:color/transparent"
+        app:queryHint="@string/search"
+        app:iconifiedByDefault="false"
+        app:queryBackground="@android:color/transparent"
         android:background="@drawable/search_box_bg"
         android:imeOptions="actionSearch"
         app:layout_constraintStart_toStartOf="parent"
