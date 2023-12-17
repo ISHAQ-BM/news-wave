@@ -58,7 +58,7 @@ class HomeFragment : Fragment() {
 
         binding?.tabLayout?.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                viewModel.setCategory(tab?.text.toString())
+                viewModel.readNetworkState(tab?.text.toString())
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {

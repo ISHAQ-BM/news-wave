@@ -45,12 +45,14 @@ class NewsViewModel @Inject constructor(
     private val _searchNews= MutableLiveData<Resource<News>>()
     val searchNews: LiveData<Resource<News>> = _searchNews
 
-    private val _category = MutableLiveData<String>("top")
-    val category:LiveData<String> = _category
 
     init {
-        readNetworkState()
-        Log.d("init block","hello")
+        if (isNetworkAvailable())
+            readNetworkState("top")
+        else{
+            _latestNews.postValue(Resource.Error("No internet connection"))
+            readNetworkState("top")
+        }
     }
 
 
@@ -65,10 +67,10 @@ class NewsViewModel @Inject constructor(
 
 
 
-    private fun loadNewsData(category:String) =viewModelScope.launch {
+    fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
         _latestNews.postValue(newsRepository.getLatestNews(category))
-    }
+        }
 
 
     fun searchNews(searchQuery:String?) =viewModelScope.launch {
@@ -93,36 +95,32 @@ class NewsViewModel @Inject constructor(
         newsRepository.deleteArticle(article)
     }
 
-    fun setCategory(shownCategory: String) {
-        loadNewsData(shownCategory)
-        _category.value=shownCategory
-    }
 
-    private fun readNetworkState(){
+    fun readNetworkState(category:String){
         val connectivityManager = getApplication<NewsWaveApp>()
             .getSystemService(ConnectivityManager::class.java)
         connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
             override fun onAvailable(network : Network) {
                 Log.e("TAG", "The default network is now: $network")
-                loadNewsData(_category.value!!)
+                loadNewsData(category)
             }
 
             override fun onLost(network : Network) {
-                _latestNews.postValue(Resource.Error("No internet connection"))
                 Log.e("TAG",
                     "The application no longer has a default network. The last default network was $network"
                 )
+                loadNewsData(category)
             }
 
-            override fun onCapabilitiesChanged(network : Network, networkCapabilities : NetworkCapabilities) {
-                Log.e("TAG", "The default network changed capabilities: $networkCapabilities")
-            }
-
-            override fun onLinkPropertiesChanged(network : Network, linkProperties : LinkProperties) {
-                Log.e("TAG", "The default network changed link properties: $linkProperties")
-            }
         })
 
+    }
+
+    fun isNetworkAvailable(): Boolean {
+        val connectivityManager = getApplication<NewsWaveApp>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+        return networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))
     }
 
 
