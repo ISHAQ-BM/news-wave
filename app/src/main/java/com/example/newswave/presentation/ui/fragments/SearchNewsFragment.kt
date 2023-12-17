@@ -18,6 +18,7 @@ import com.example.newswave.R
 import com.example.newswave.databinding.FragmentHomeBinding
 import com.example.newswave.databinding.FragmentSearchNewsBinding
 import com.example.newswave.domain.models.Article
+import com.example.newswave.domain.utils.Resource
 import com.example.newswave.presentation.adapters.NewsAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -71,7 +72,24 @@ class SearchNewsFragment : Fragment() {
         })
 
         viewModel.searchNews.observe(viewLifecycleOwner) {
-            adapter.submitList(it.data?.articles)
+            when(it){
+                is Resource.Loading ->{
+                    binding?.statusImage?.visibility = View.GONE
+                    binding?.progressbar?.visibility=View.VISIBLE
+                }
+                is Resource.Success ->{
+                    binding?.statusImage?.visibility = View.GONE
+                    binding?.progressbar?.visibility=View.INVISIBLE
+                    adapter.submitList(it.data?.articles)
+                }
+                is Resource.Error ->{
+                    binding?.progressbar?.visibility=View.INVISIBLE
+                    if (it.message == "Please check your network connection"){
+                        binding?.statusImage?.visibility = View.VISIBLE
+                    }
+
+                }
+            }
         }
 
     }

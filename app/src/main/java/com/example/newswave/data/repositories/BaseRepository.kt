@@ -23,7 +23,7 @@ abstract class BaseRepository (
             } catch (e: HttpException) {
                 Resource.Error(message = e.message ?: "Something went wrong")
             } catch (e: IOException) {
-                Resource.Error("Please check your network connection")
+                Resource.Error("No internet connection")
             } catch (e: Exception) {
                 Resource.Error(message  = "Something went wrong")
             }
