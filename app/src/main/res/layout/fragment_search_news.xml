@@ -15,7 +15,7 @@
         app:queryHint="@string/search"
         app:iconifiedByDefault="false"
         app:queryBackground="@android:color/transparent"
-        android:background="@drawable/search_box_bg"
+        style="@style/Theme.NewsWave.SearchBox"
         android:imeOptions="actionSearch"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="@dimen/_12sdp"/>

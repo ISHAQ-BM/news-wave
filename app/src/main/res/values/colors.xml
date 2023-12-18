@@ -4,4 +4,5 @@
     <color name="white">#FFFFFFFF</color>
     <color name="blue_800">#FF1565C0</color>
     <color name="orange_500">#FFFF9800</color>
+    <color name="tab_bg_night">#20909090</color>
 </resources>

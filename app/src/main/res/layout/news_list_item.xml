@@ -71,16 +71,15 @@
         app:layout_constraintTop_toTopOf="@id/view_circle" />
 
 
-    <ImageButton
+    <ImageView
         android:id="@+id/dropdown_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="@id/published_time"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/published_time"
-        android:background="@color/white"
-
         android:src="@drawable/ic_menu"
+        style="@style/Theme.NewsWave.Tint"
         android:contentDescription="@string/pop_up_menu" />
 
 

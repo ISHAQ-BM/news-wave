@@ -47,9 +47,6 @@ class ViewPagerFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("ishaq","${viewModel.isNetworkAvailable()}")
-
-
         binding?.recyclerView?.layoutManager = LinearLayoutManager(requireContext())
         val adapter=NewsAdapter(
             {article -> displayArticle(article) },

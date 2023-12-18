@@ -116,7 +116,7 @@ class NewsViewModel @Inject constructor(
 
     }
 
-    fun isNetworkAvailable(): Boolean {
+    private fun isNetworkAvailable(): Boolean {
         val connectivityManager = getApplication<NewsWaveApp>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network)

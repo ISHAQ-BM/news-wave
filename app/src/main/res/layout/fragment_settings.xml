@@ -37,7 +37,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/interests"
-            android:textColor="@color/black"
+            style="@style/Theme.NewsWave.Tint"
             android:textSize="@dimen/_14ssp"
             android:paddingVertical="@dimen/_16sdp"
             android:drawablePadding="@dimen/_8sdp"
@@ -52,7 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/notifications"
-            android:textColor="@color/black"
+            style="@style/Theme.NewsWave.Tint"
             android:textSize="@dimen/_14ssp"
             android:paddingVertical="@dimen/_16sdp"
             android:drawablePadding="@dimen/_8sdp"
@@ -66,14 +66,14 @@
             android:id="@+id/dark_mode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            style="@style/Theme.NewsWave.Tint"
             android:text="@string/dark_mode"
             android:textSize="@dimen/_14ssp"
             android:paddingVertical="@dimen/_16sdp"
             android:drawablePadding="@dimen/_8sdp"
             app:drawableStartCompat="@drawable/ic_dark_mode"
-            app:drawableEndCompat="@drawable/ic_chevron_next" />
-        <View
+            />
+            <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/_1sdp"
             android:background="#EEEEEE"/>
@@ -82,7 +82,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/about"
-            android:textColor="@color/black"
+            style="@style/Theme.NewsWave.Tint"
             android:textSize="@dimen/_14ssp"
             android:paddingVertical="@dimen/_16sdp"
             android:drawablePadding="@dimen/_8sdp"

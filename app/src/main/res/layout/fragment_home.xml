@@ -61,8 +61,7 @@
         android:layout_marginTop="@dimen/_12sdp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:tabBackground="@drawable/tab_bg_inset"
-
+        style="@style/Theme.NewsWave.Tint"
         app:tabIndicator="@drawable/tab_active_bg"
         app:tabIndicatorColor="@android:color/transparent"
         app:tabIndicatorFullWidth="true"
@@ -72,8 +71,7 @@
         app:tabPaddingEnd="20dp"
         app:tabPaddingStart="20dp"
         app:tabRippleColor="@android:color/transparent"
-        app:tabSelectedTextColor="@color/white"
-        app:tabTextColor="@color/black">
+        >
     </com.google.android.material.tabs.TabLayout>
 
     <androidx.viewpager2.widget.ViewPager2

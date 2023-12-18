@@ -11,6 +11,8 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,9 +86,9 @@ class SearchNewsFragment : Fragment() {
                 }
                 is Resource.Error ->{
                     binding?.progressbar?.visibility=View.INVISIBLE
-                    if (it.message == "Please check your network connection"){
+                    if (it.message == "No internet connection")
                         binding?.statusImage?.visibility = View.VISIBLE
-                    }
+
 
                 }
             }
