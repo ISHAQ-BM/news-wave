@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AbsListView
 import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -17,6 +18,8 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.newswave.R
 import com.example.newswave.databinding.FragmentViewPagerBinding
 
@@ -33,6 +36,36 @@ class ViewPagerFragment : Fragment() {
 
 
     private val viewModel: NewsViewModel by activityViewModels()
+
+    var isLoading=false
+    var isScrolling=false
+    var isLastPage=false
+    val scrollListener = object : RecyclerView.OnScrollListener() {
+        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+            super.onScrolled(recyclerView, dx, dy)
+            val layoutManager=recyclerView.layoutManager as LinearLayoutManager
+            val firstVisibleItemPosition=layoutManager.findFirstVisibleItemPosition()
+            val visibleItemCount=layoutManager.childCount
+            val totalItemCount=layoutManager.itemCount
+
+            val isNotLoadingAndNotLastPage= !isLoading && !isLastPage
+            val isAtLastItem =firstVisibleItemPosition + visibleItemCount >= totalItemCount
+            val isNotAtBeginning=firstVisibleItemPosition >=0
+
+            val shouldPaging= isNotLoadingAndNotLastPage && isAtLastItem && isNotAtBeginning && isScrolling
+            if (shouldPaging){
+                viewModel.loadMoreNews(viewModel.latestNews.value!!.data!!.articles[0].category)
+                isScrolling=false
+            }
+        }
+
+        override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+            super.onScrollStateChanged(recyclerView, newState)
+            if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL)
+                isScrolling=true
+        }
+
+    }
 
 
 
@@ -62,6 +95,7 @@ class ViewPagerFragment : Fragment() {
         )
 
         binding?.recyclerView?.adapter=adapter
+        binding?.recyclerView?.addOnScrollListener(scrollListener)
 
         viewModel.latestNews.observe(viewLifecycleOwner) {
             when(it){

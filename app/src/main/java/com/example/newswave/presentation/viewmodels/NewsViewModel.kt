@@ -41,9 +41,12 @@ class NewsViewModel @Inject constructor(
 
     private val _latestNews= MutableLiveData<Resource<News>>()
     val latestNews: LiveData<Resource<News>> = _latestNews
+    private var latestNewsPage:String?=null
+    var latestNewsResponse:News?=null
 
     private val _searchNews= MutableLiveData<Resource<News>>()
     val searchNews: LiveData<Resource<News>> = _searchNews
+
 
 
     init {
@@ -71,7 +74,21 @@ class NewsViewModel @Inject constructor(
     fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
         _latestNews.postValue(newsRepository.getLatestNews(category))
+
+    }
+
+    fun loadMoreNews(category:String){
+        viewModelScope.launch {
+            if (_latestNews.value?.data?.nextPage != null)
+                latestNewsResponse = newsRepository.getLatestNewsByPage(
+                    category = category,
+                    _latestNews.value?.data?.nextPage!!
+                ).data
+            _latestNews.value?.data?.nextPage=latestNewsResponse?.nextPage
+            latestNewsResponse?.articles?.let { _latestNews.value?.data?.articles?.addAll(it) }
+
         }
+    }
 
 
     fun searchNews(searchQuery:String?) =viewModelScope.launch {
