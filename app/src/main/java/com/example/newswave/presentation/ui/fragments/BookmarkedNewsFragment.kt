@@ -18,6 +18,9 @@ import com.example.newswave.domain.models.Article
 import com.example.newswave.presentation.adapters.NewsAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 
@@ -54,7 +57,9 @@ class BookmarkedNewsFragment : Fragment() {
             }
         )
         binding?.savedRv?.adapter=adapter
-        viewModel.getBookmarkedArticles().observe(viewLifecycleOwner) {adapter.submitList(it)}
+        viewModel.getBookmarkedArticles().observe(viewLifecycleOwner) {
+            adapter.submitList(it)
+        }
 
     }
 
@@ -72,7 +77,6 @@ class BookmarkedNewsFragment : Fragment() {
                 R.id.bookmark ->{
                     Log.d("article to delete","$article")
                     viewModel.deleteArticle(article)
-
                     true
                 }
 

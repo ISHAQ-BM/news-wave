@@ -1,5 +1,6 @@
 package com.example.newswave.presentation.ui.fragments
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -42,16 +43,39 @@ class ArticleFragment : Fragment() {
             findNavController().popBackStack()
         }
 
+        binding?.share?.setOnClickListener {
+            shareArticle(args.article.link)
+        }
+
         if (args.article.isBookmarked){
             binding?.bookmark?.setImageResource(R.drawable.ic_baseline_bookmark)
+            binding?.bookmark?.setOnClickListener {
+                viewModel.deleteArticle(args.article)
+                binding?.bookmark?.setImageResource(R.drawable.ic_outline_bookmark)
+            }
+        }
+        else{
+            binding?.bookmark?.setImageResource(R.drawable.ic_outline_bookmark)
+            binding?.bookmark?.setOnClickListener {
+                viewModel.bookmarkArticle(args.article)
+                binding?.bookmark?.setImageResource(R.drawable.ic_baseline_bookmark)
+            }
         }
 
-        binding?.bookmark?.setOnClickListener {
 
+
+
+
+    }
+
+    private fun shareArticle(link: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, link)
+            type = "text/plain"
         }
-
-
-
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
     }
 
     override fun onDestroyView() {

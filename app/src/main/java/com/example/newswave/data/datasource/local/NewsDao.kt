@@ -17,6 +17,8 @@ interface NewsDao {
     @Query("SELECT * FROM articles")
     fun getNews(): LiveData<List<Article>>
 
+
+
     //  implement a method to insert a Article into the database
     //  (use OnConflictStrategy.REPLACE)
     @Insert(onConflict = OnConflictStrategy.REPLACE)

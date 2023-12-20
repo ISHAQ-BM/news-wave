@@ -47,6 +47,7 @@ class NewsViewModel @Inject constructor(
 
 
     init {
+
         if (isNetworkAvailable())
             readNetworkState("top")
         else{
@@ -91,9 +92,14 @@ class NewsViewModel @Inject constructor(
     fun getBookmarkedArticles()=newsRepository.getBookmarkedNews()
 
     fun deleteArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
-
+        if (_latestNews.value?.data?.articles?.indexOf(article) != -1){
+            _latestNews.value?.data?.articles?.get(_latestNews.value?.data?.articles?.indexOf(article)!!)?.isBookmarked=false
+        }
         newsRepository.deleteArticle(article)
     }
+
+
+
 
 
     fun readNetworkState(category:String){
