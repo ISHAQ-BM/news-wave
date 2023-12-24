@@ -6,7 +6,7 @@ import com.example.newswave.domain.models.News
 class NewsDtoMapper(): Mapper<NewsDto, News> {
     override fun mapNewsDto(input: NewsDto): News {
         return News(
-            input.toValidArticles().toMutableList(),
+            input.toValidArticles(),
             input.nextPage
         )
     }

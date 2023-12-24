@@ -43,7 +43,7 @@ class NewsAdapter(
         fun bind(article: Article?) {
             binding.newsTitle.text = article?.title
             "by ${article?.creator}".also { binding.author.text = it }
-            binding.publishedTime.text = article?.pubTime
+            binding.publishedTime.text = "${article?.pubTime} ago"
             binding.category.text = article?.category
             val imgUri = article?.imageUrl?.toUri()?.buildUpon()?.scheme("https")?.build()
             binding.image.load(imgUri) {
