@@ -12,7 +12,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.newswave.R
 import com.example.newswave.databinding.FragmentArticleBinding
-import com.example.newswave.domain.models.Article
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 

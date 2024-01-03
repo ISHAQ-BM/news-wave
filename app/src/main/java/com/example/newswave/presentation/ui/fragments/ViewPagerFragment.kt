@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Build
 
 import android.os.Bundle
-import android.util.Log
 
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -19,12 +18,11 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.LayoutManager
 import com.example.newswave.R
 import com.example.newswave.databinding.FragmentViewPagerBinding
 
 import com.example.newswave.domain.models.Article
-import com.example.newswave.domain.utils.Resource
+import com.example.newswave.core.Resource
 import com.example.newswave.presentation.adapters.NewsAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint

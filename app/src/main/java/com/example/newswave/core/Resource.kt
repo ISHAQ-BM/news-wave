@@ -1,4 +1,4 @@
-package com.example.newswave.domain.utils
+package com.example.newswave.core
 
 sealed class Resource<T>(
     val data: T? =null,

@@ -6,7 +6,7 @@ import com.example.newswave.data.datasource.local.NewsDao
 import com.example.newswave.data.datasource.local.NewsDatabase
 import com.example.newswave.data.datasource.network.NewsApi
 import com.example.newswave.data.mapper.NewsDtoMapper
-import com.example.newswave.domain.utils.BASE_URL
+import com.example.newswave.core.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,4 +52,7 @@ object AppModule {
     fun provideNewsDtoMapper():NewsDtoMapper{
         return NewsDtoMapper()
     }
+
+
+
 }

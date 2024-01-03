@@ -1,24 +1,19 @@
 package com.example.newswave.presentation.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
-import com.example.newswave.R
 import com.example.newswave.databinding.FragmentHomeBinding
-import com.example.newswave.domain.utils.Resource
-import com.example.newswave.domain.utils.categories
+import com.example.newswave.core.categories
 import com.example.newswave.presentation.adapters.PagerAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
 import dagger.hilt.android.AndroidEntryPoint
-import kotlin.math.log
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {

@@ -11,16 +11,13 @@ import android.widget.PopupMenu
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.widget.SearchView
-import androidx.core.content.ContentProviderCompat.requireContext
-import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newswave.R
-import com.example.newswave.databinding.FragmentHomeBinding
 import com.example.newswave.databinding.FragmentSearchNewsBinding
 import com.example.newswave.domain.models.Article
-import com.example.newswave.domain.utils.Resource
+import com.example.newswave.core.Resource
 import com.example.newswave.presentation.adapters.NewsAdapter
 import com.example.newswave.presentation.viewmodels.NewsViewModel
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,10 +1,9 @@
 package com.example.newswave.domain.repositories
 
 import androidx.lifecycle.LiveData
-import com.example.newswave.data.datasource.network.models.NewsDto
 import com.example.newswave.domain.models.Article
 import com.example.newswave.domain.models.News
-import com.example.newswave.domain.utils.Resource
+import com.example.newswave.core.Resource
 
 interface NewsRepository {
     suspend fun getLatestNews(category:String): Resource<News>

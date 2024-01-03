@@ -1,8 +1,7 @@
 package com.example.newswave.data.datasource.network
 
 import com.example.newswave.data.datasource.network.models.NewsDto
-import com.example.newswave.domain.utils.API_KEY
-import com.example.newswave.domain.utils.Resource
+import com.example.newswave.core.API_KEY
 import retrofit2.http.GET
 import retrofit2.http.Query
 
