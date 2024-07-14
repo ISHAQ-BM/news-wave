@@ -45,9 +45,6 @@ class NewsRemoteDataSource @Inject constructor(
             } catch (e: IOException) {
                 emit(Result.Error(Error.Network.NO_INTERNET))
             } catch (e: Exception) {
-                Log.d("response exceptione","${e.message}")
-                Log.d("response exceptione","${e.printStackTrace()}")
-                Log.d("response exceptione","${e.localizedMessage}")
                 emit(Result.Error(Error.Network.UNKNOWN))
             }
         }

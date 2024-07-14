@@ -226,21 +226,22 @@ class NewsFragment : Fragment() {
 
 
 
-//
-//    @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-//    @Composable
-//    fun NewsItemPreview() {
-//        NewsWaveTheme {
-//            NewsListItem(newsItem = NewsItemUiState("qw","eszrhrh","","ishaq bm","https://images.unsplash.com/photo-1613323593608-abc90fec84ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aW1hZ2V8ZW58MHx8MHx8fDA%3D","5h ago","Top") )
-//        }
-//    }
-//    @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
-//    @Composable
-//    fun NewsListPreview() {
-//        NewsWaveTheme {
-//            NewsList()
-//        }
-//    }
+
+    @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+    @Composable
+    fun NewsItemPreview() {
+        NewsWaveTheme {
+            NewsListItem(newsItem = NewsItemUiState("qw","eszrhrh","","ishaq bm","https://images.unsplash.com/photo-1613323593608-abc90fec84ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aW1hZ2V8ZW58MHx8MHx8fDA%3D","5h ago","Top") , navigateToDetail = {})
+        }
+    }
+    @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
+    @Composable
+    fun NewsListPreview() {
+        NewsWaveTheme {
+            NewsList(newsListItems = listOf(NewsItemUiState("qw","eszrhrh","","ishaq bm","https://images.unsplash.com/photo-1613323593608-abc90fec84ff?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8aW1hZ2V8ZW58MHx8MHx8fDA%3D","5h ago","Top") ))
+
+        }
+    }
 
 
 
