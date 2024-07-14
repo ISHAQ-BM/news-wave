@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.ui.fragments.ViewPagerFragment">
+    tools:context="com.example.newswave.news.presentation.ui.fragment.NewsFragment">
 
     <!-- TODO: Update blank fragment layout -->
     <ImageView
@@ -19,7 +19,7 @@
         android:src="@drawable/ic_connection_error"
         android:contentDescription="@string/no_internet_connection" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <!--<androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -27,7 +27,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        />
+        />-->
+    <androidx.compose.ui.platform.ComposeView
+        android:id="@+id/compose_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
 
 

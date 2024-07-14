@@ -1,8 +1,7 @@
-package com.example.newswave.news.data.source.remote.model
+package com.example.newswave.core.data.source.remote.model
 
 
 import com.squareup.moshi.Json
-import com.squareup.moshi.JsonClass
 
 data class Result(
     @Json(name = "article_id")

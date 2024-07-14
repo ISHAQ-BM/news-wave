@@ -1,4 +1,4 @@
-package com.example.newswave.news.domain.model
+package com.example.newswave.core.domain.model
 
 
 
