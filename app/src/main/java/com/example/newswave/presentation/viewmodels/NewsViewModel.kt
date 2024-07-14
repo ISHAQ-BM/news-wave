@@ -15,6 +15,7 @@ import com.example.newswave.domain.models.Article
 import com.example.newswave.domain.models.News
 import com.example.newswave.domain.repositories.NewsRepository
 import com.example.newswave.core.Resource
+import com.example.newswave.news.presentation.ui.state.NewsItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,8 +27,8 @@ class NewsViewModel @Inject constructor(
     application: Application
 ) :AndroidViewModel(application) {
 
-    private val _latestNews= MutableLiveData<Resource<News>>()
-    val latestNews: LiveData<Resource<News>> = _latestNews
+    private val _latestNews= MutableLiveData<Resource<List<NewsItemUiState>>>()
+    val latestNews: LiveData<Resource<List<NewsItemUiState>>> = _latestNews
     private var latestNewsPage:String?=null
     var latestNewsResponse:News?=null
 
@@ -60,21 +61,34 @@ class NewsViewModel @Inject constructor(
 
     fun loadNewsData(category:String) =viewModelScope.launch {
         _latestNews.postValue(Resource.Loading())
-        _latestNews.postValue(newsRepository.getLatestNews(category))
+        newsRepository.getLatestNews(category).data?.articles?.map {
+
+        }
+        _latestNews.postValue(Resource.Success(newsRepository.getLatestNews(category).data?.articles!!.map {
+            NewsItemUiState(
+                id = it.link,
+                author = it.creator,
+                category = it.category,
+                imageUrl = it.imageUrl,
+                title = it.title,
+                publishDate = it.pubTime,
+                link = it.link
+            )
+        }))
 
     }
 
     fun loadMoreNews(category:String){
-        viewModelScope.launch {
-            if (_latestNews.value?.data?.nextPage != null)
-                latestNewsResponse = newsRepository.getLatestNewsByPage(
-                    category = category,
-                    _latestNews.value?.data?.nextPage!!
-                ).data
-            _latestNews.value?.data?.nextPage=latestNewsResponse?.nextPage
-            latestNewsResponse?.articles?.let { _latestNews.value?.data?.articles?.addAll(it) }
-
-        }
+//        viewModelScope.launch {
+//            if (_latestNews.value?.data?.nextPage != null)
+//                latestNewsResponse = newsRepository.getLatestNewsByPage(
+//                    category = category,
+//                    _latestNews.value?.data?.nextPage!!
+//                ).data
+//            _latestNews.value?.data?.nextPage=latestNewsResponse?.nextPage
+//            latestNewsResponse?.articles?.let { _latestNews.value?.data?.articles?.addAll(it) }
+//
+//        }
     }
 
 
@@ -89,17 +103,17 @@ class NewsViewModel @Inject constructor(
 
 
     fun bookmarkArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
-        _latestNews.value?.data?.articles?.get(_latestNews.value?.data?.articles?.indexOf(article)!!)?.isBookmarked=true
-        newsRepository.insertArticle(article)
+//        _latestNews.value?.data?.articles?.get(_latestNews.value?.data?.articles?.indexOf(article)!!)?.isBookmarked=true
+//        newsRepository.insertArticle(article)
     }
 
     fun getBookmarkedArticles()=newsRepository.getBookmarkedNews()
 
     fun deleteArticle(article: Article)=viewModelScope.launch (Dispatchers.IO){
-        if (_latestNews.value?.data?.articles?.indexOf(article) != -1){
-            _latestNews.value?.data?.articles?.get(_latestNews.value?.data?.articles?.indexOf(article)!!)?.isBookmarked=false
-        }
-        newsRepository.deleteArticle(article)
+//        if (_latestNews.value?.data?.articles?.indexOf(article) != -1){
+//            _latestNews.value?.data?.articles?.get(_latestNews.value?.data?.articles?.indexOf(article)!!)?.isBookmarked=false
+//        }
+//        newsRepository.deleteArticle(article)
     }
 
 

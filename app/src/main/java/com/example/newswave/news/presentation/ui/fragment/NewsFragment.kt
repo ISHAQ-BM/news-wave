@@ -52,6 +52,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -61,6 +62,8 @@ import com.example.newswave.domain.models.Article
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.databinding.FragmentNewsBinding
 import com.example.newswave.home.presentation.ui.fragment.HomeFragmentDirections
+import com.example.newswave.news.presentation.ui.components.NewsList
+import com.example.newswave.news.presentation.ui.components.NewsListItem
 import com.example.newswave.news.presentation.ui.event.NewsEvent
 import com.example.newswave.news.presentation.ui.state.NewsItemUiState
 //import com.example.newswave.presentation.viewmodels.NewsViewModel
@@ -73,7 +76,7 @@ class NewsFragment : Fragment() {
     private var binding: FragmentNewsBinding? = null
 
 
-    private val viewModel: NewsViewModel by activityViewModels()
+    //private val viewModel: NewsViewModel by activityViewModels()
 
 
 
@@ -89,8 +92,7 @@ class NewsFragment : Fragment() {
         ).apply {
             composeView.setContent {
                 MaterialTheme {
-
-                    NewsList()
+                    News()
                 }
             }
         }
@@ -137,6 +139,16 @@ class NewsFragment : Fragment() {
 //                }
 //            }
 //        }
+
+    }
+
+    @Composable
+    fun News(
+        newsViewsModel :NewsViewModel = viewModel()
+    ){
+        val uiState by newsViewsModel.uiState.collectAsState()
+        newsViewsModel.onEvent(NewsEvent.CategoryChanged(arguments?.getString("category") ?: "top"))
+        NewsList(newsListItems = uiState.articles)
 
     }
 
@@ -212,134 +224,8 @@ class NewsFragment : Fragment() {
 
     }
 
-    @Composable
-    fun NewsList(
-        modifier: Modifier = Modifier,
-        newsViewModel: NewsViewModel = viewModel
-    ){
-        newsViewModel.onEvent(NewsEvent.CategoryChanged(arguments?.getString("category")?:"top"))
-        val newsUiState by newsViewModel.uiState.collectAsState()
-        LazyColumn (
-            modifier = modifier,
-        ){
-            items(items = newsUiState.articles, key = { item -> item.id }) { item ->
-                NewsListItem(newsItem = item, navigateToDetail = {link ->
-                    val action=HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(link)
-                        findNavController().navigate(action)
-                })
-                HorizontalDivider()
-            }
 
 
-
-
-        }
-    }
-
-    @Composable
-    fun NewsListItem(
-        newsItem: NewsItemUiState,
-        modifier: Modifier = Modifier,
-        navigateToDetail : (String) -> Unit
-    ){
-
-        Box (
-            modifier=modifier.padding(vertical = 24.dp)
-                .clickable { navigateToDetail(newsItem.link) }
-
-        ){
-            Row (
-                modifier = modifier
-                    .fillMaxWidth()
-                    .height(140.dp)
-            ){
-                AsyncImage(
-                    model = newsItem.imageUrl,
-                    contentDescription = null,
-                    contentScale = ContentScale.Crop,
-                    modifier = Modifier.size(140.dp)
-                )
-                Spacer(modifier = Modifier.width(8.dp))
-
-                Column (
-                    modifier = modifier
-                        .fillMaxHeight()
-                        .padding(vertical = 12.dp),
-                    verticalArrangement = Arrangement.SpaceBetween
-                ){
-                    Text(
-                        text = newsItem.title,
-                        style = MaterialTheme.typography.titleMedium,
-                        maxLines = 2,
-                        overflow = TextOverflow.Ellipsis
-                    )
-                    Text(
-                        text = "By ${newsItem.author}",
-                        style = MaterialTheme.typography.bodyMedium,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Row (
-
-                        verticalAlignment = Alignment.CenterVertically
-                    ){
-                        Text(
-                            text = newsItem.category,
-                            style = MaterialTheme.typography.labelSmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = modifier.width(4.dp))
-                        Text(
-                            text = "•",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = modifier.width(4.dp))
-
-                        Text(
-                            text = newsItem.publishDate,
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-
-                }
-            }
-            Box (
-                modifier = modifier.align(Alignment.BottomEnd)
-            ){
-                var expanded by remember { mutableStateOf(false) }
-                IconButton(
-                    onClick = { expanded=true }
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu),
-                        contentDescription = "More options"
-                    )
-                }
-
-                DropdownMenu(
-                    expanded = expanded,
-                    onDismissRequest = { expanded = false},
-                    properties = PopupProperties(focusable = true)
-                ) {
-
-                    DropdownMenuItem(
-                        text = {  Text("Share") },
-                        onClick = { /* Handle refresh! */ }
-                    )
-                    DropdownMenuItem(
-                        text = { Text("Bookmark") },
-                        onClick = { /* Handle settings! */ }
-                    )
-
-                }
-            }
-        }
-
-
-    }
 //
 //    @Preview(showBackground = true, backgroundColor = 0xFFF5F0EE)
 //    @Composable

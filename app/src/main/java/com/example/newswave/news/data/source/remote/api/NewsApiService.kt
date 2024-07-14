@@ -2,8 +2,7 @@ package com.example.newswave.news.data.source.remote.api
 
 
 import com.example.newswave.BuildConfig.API_KEY
-import com.example.newswave.data.datasource.network.models.NewsDto
-import com.example.newswave.news.data.source.remote.model.NewsDTO
+import com.example.newswave.core.data.source.remote.model.NewsDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

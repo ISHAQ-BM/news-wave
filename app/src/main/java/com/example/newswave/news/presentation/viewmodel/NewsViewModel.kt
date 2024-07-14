@@ -1,11 +1,10 @@
 package com.example.newswave.news.presentation.viewmodel
 
 import android.util.Log
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.newswave.core.presentation.ui.theme.util.asUiText
+import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.news.domain.use_case.GetNewsHeadlinesUseCase
 import com.example.newswave.news.presentation.ui.event.NewsEvent
@@ -14,7 +13,6 @@ import com.example.newswave.news.presentation.ui.state.NewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -52,7 +50,6 @@ class NewsViewModel @Inject constructor(
             getNewsHeadlinesUseCase(_uiState.value.category).collect{result ->
                 when(result){
                     is Result.Error -> _uiState.update {
-                        Log.d("news from vm","${result.error}")
                         it.copy(
                             isLoading = false,
                             generalMessage = result.error.asUiText()
@@ -60,7 +57,6 @@ class NewsViewModel @Inject constructor(
                     }
 
                     is Result.Success -> _uiState.update {
-                        Log.d("news from vm","${result.data}")
                         it.copy(
                             isLoading = false,
                             articles = result.data.map {it ->
@@ -70,7 +66,7 @@ class NewsViewModel @Inject constructor(
                                     it.author,
                                     it.imageUrl,
                                     it.timestamp,
-                                    it.category?:"",
+                                    it.category,
                                     it.link
                                 )
                             }

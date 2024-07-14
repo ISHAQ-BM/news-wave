@@ -2,10 +2,11 @@ package com.example.newswave.news.data.source.remote
 
 
 import android.util.Log
+import com.example.newswave.core.data.source.remote.utils.Util
 import com.example.newswave.core.util.Error
 import com.example.newswave.core.util.Result
 import com.example.newswave.news.data.source.remote.api.NewsApiService
-import com.example.newswave.news.domain.model.News
+import com.example.newswave.core.domain.model.News
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import retrofit2.HttpException
@@ -35,11 +36,11 @@ class NewsRemoteDataSource @Inject constructor(
                     }
                     emit(Result.Success(newsList))
                 } else {
-                    val error = getErrorFromStatusCode(response.code())
+                    val error = Util.getErrorFromStatusCode(response.code())
                     emit(Result.Error(error))
                 }
             } catch (e: HttpException) {
-                val error = getErrorFromStatusCode(e.code())
+                val error = Util.getErrorFromStatusCode(e.code())
                 emit(Result.Error(error))
             } catch (e: IOException) {
                 emit(Result.Error(Error.Network.NO_INTERNET))
@@ -50,21 +51,5 @@ class NewsRemoteDataSource @Inject constructor(
                 emit(Result.Error(Error.Network.UNKNOWN))
             }
         }
-    }
-}
-private fun getErrorFromStatusCode(statusCode: Int): Error.Network{
-    return when (statusCode) {
-        400 -> Error.Network.BAD_REQUEST
-        401 -> Error.Network.UNAUTHORIZED
-        403 -> Error.Network.FORBIDDEN
-        404 -> Error.Network.NOT_FOUND
-        408 -> Error.Network.REQUEST_TIMEOUT
-        409 -> Error.Network.CONFLICT
-        410 -> Error.Network.GONE
-        413 -> Error.Network.PAYLOAD_TOO_LARGE
-        422 -> Error.Network.UNPROCESSABLE_ENTITY
-        429 -> Error.Network.TOO_MANY_REQUESTS
-        in 500..599 -> Error.Network.SERVER_ERROR
-        else -> Error.Network.UNKNOWN
     }
 }

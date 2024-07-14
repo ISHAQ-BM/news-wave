@@ -1,4 +1,4 @@
-package com.example.newswave.core.presentation.ui.theme.util
+package com.example.newswave.core.presentation.ui.utils
 
 import android.content.Context
 import androidx.annotation.StringRes
@@ -60,7 +60,7 @@ fun Error.asUiText(): UiText {
         Error.Network.BAD_REQUEST -> TODO()
         Error.Network.CONFLICT -> TODO()
         Error.Network.GONE -> TODO()
-        Error.Network.UNPROCESSABLE_ENTITY -> TODO()
+        Error.Network.UNPROCESSABLE_ENTITY -> UiText(R.string.no_internet)
         Error.ValidationError.INVALID_INPUT -> TODO()
         Error.ValidationError.MISSING_FIELD -> TODO()
         Error.ValidationError.OUT_OF_RANGE -> TODO()

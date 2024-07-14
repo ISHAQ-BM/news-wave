@@ -1,6 +1,6 @@
 package com.example.newswave.news.presentation.ui.state
 
-import com.example.newswave.core.presentation.ui.theme.util.UiText
+import com.example.newswave.core.presentation.ui.utils.UiText
 
 
 data class NewsUiState(
