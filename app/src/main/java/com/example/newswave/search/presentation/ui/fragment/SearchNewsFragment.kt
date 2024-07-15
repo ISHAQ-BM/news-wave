@@ -109,7 +109,10 @@ class SearchNewsFragment : Fragment() {
         modifier: Modifier = Modifier
     ){
         Box(modifier = modifier.padding(innerPaddingValues)){
-            NewsList(newsListItems =newsListItems )
+            NewsList(
+                newsListItems =newsListItems,
+                navigationToDetails = {}
+                )
         }
 
     }

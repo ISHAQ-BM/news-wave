@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.fragment.findNavController
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.core.util.categories
 import com.example.newswave.databinding.FragmentHomeBinding
@@ -120,7 +121,14 @@ class HomeFragment : Fragment() {
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
                         ) {
-                            NewsList(newsListItems = uiState.articles)
+                            NewsList(
+                                newsListItems = uiState.articles,
+                                navigationToDetails = { link ->
+                                    val action=HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(link)
+                                    findNavController().navigate(action
+                                    )
+                                }
+                                )
 
                         }
                     }

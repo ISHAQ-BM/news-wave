@@ -12,15 +12,15 @@ import com.example.newswave.news.presentation.ui.state.NewsItemUiState
 @Composable
 fun NewsList(
     modifier: Modifier = Modifier,
-    newsListItems : List<NewsItemUiState>
+    newsListItems : List<NewsItemUiState>,
+    navigationToDetails:(String)->Unit
 ){
     LazyColumn (
         modifier = modifier,
     ){
         items(items = newsListItems, key = { item -> item.id }) { item ->
             NewsListItem(newsItem = item, navigateToDetail = {link ->
-                //val action= HomeFragmentDirections.actionHomeFragmentToNewsDetailsFragment(link)
-                //findNavController().navigate(action)
+                navigationToDetails(link)
             })
             HorizontalDivider()
         }

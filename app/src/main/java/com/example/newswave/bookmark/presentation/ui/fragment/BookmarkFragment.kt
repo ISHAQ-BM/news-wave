@@ -71,7 +71,10 @@ class BookmarkFragment : Fragment() {
                     .padding(top = it.calculateTopPadding())
                     .fillMaxWidth()
             ) {
-                NewsList(newsListItems = uiState.bookmarkedNews)
+                NewsList(
+                    newsListItems = uiState.bookmarkedNews,
+                    navigationToDetails = {}
+                )
 
             }
         }
