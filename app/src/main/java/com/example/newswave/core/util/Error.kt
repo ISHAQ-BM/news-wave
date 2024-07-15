@@ -18,7 +18,8 @@ sealed interface Error {
         UNKNOWN
     }
     enum class Local: Error {
-        DISK_FULL
+        DISK_FULL,
+        UNKNOWN
     }
 
     enum class Authentication : Error {

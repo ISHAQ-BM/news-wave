@@ -1,4 +1,4 @@
-package com.example.newswave.presentation.adapters
+package com.example.newswave.news.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.View

@@ -66,5 +66,6 @@ fun Error.asUiText(): UiText {
         Error.ValidationError.OUT_OF_RANGE -> TODO()
         Error.ValidationError.PATTERN_MISMATCH -> TODO()
         Error.ValidationError.UNKNOWN -> TODO()
+        Error.Local.UNKNOWN -> TODO()
     }
 }

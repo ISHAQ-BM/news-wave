@@ -67,7 +67,8 @@ class NewsViewModel @Inject constructor(
                                     it.imageUrl,
                                     it.timestamp,
                                     it.category,
-                                    it.link
+                                    it.link,
+                                    false
                                 )
                             }
                         )
@@ -80,15 +81,6 @@ class NewsViewModel @Inject constructor(
 
 
 
-    private val _tasks = getWellnessTasks().toMutableStateList()
-    val tasks: List<NewsItemUiState>
-        get() = _tasks
-
-
-    fun remove(item: NewsItemUiState) {
-        _tasks.remove(item)
-    }
-    private fun getWellnessTasks() = List(30) { i -> NewsItemUiState("Task # $i","Task # $i","Task # $i","Task # $i","https://media.gettyimages.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=","Task # $i","Task # $i") }
 
 }
 

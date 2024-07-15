@@ -29,7 +29,8 @@ class SearchNewsRemoteDataSource @Inject constructor(
                         it.category[0],
                         it.pubDate,
                         it.imageUrl ?:"https://media.gettyimages.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=",
-                        it.link
+                        it.link,
+                        false
                     )
                     }
                     emit(Result.Success(newsList))

@@ -7,5 +7,6 @@ data class NewsItemUiState(
     val imageUrl: String,
     val publishDate: String,
     val category: String,
-    val link:String
+    val link:String,
+    val isBookmarked:Boolean
 )

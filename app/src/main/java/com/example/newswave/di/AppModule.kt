@@ -4,10 +4,11 @@ package com.example.newswave.di
 import android.content.Context
 import androidx.room.Room
 import com.example.newswave.BuildConfig
-import com.example.newswave.data.datasource.local.NewsDao
-import com.example.newswave.data.datasource.local.NewsDatabase
-import com.example.newswave.data.datasource.network.NewsApi
-import com.example.newswave.data.mapper.NewsDtoMapper
+import com.example.newswave.bookmark.data.source.local.BookmarkLocalDataSource
+import com.example.newswave.bookmark.data.source.local.NewsDao
+import com.example.newswave.bookmark.data.source.local.NewsDatabase
+import com.example.newswave.bookmark.domain.repository.BookmarkRepository
+import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
 import com.example.newswave.news.data.source.remote.NewsRemoteDataSource
 import com.example.newswave.news.data.source.remote.api.NewsApiService
 import com.example.newswave.news.domain.repository.NewsRepository
@@ -16,7 +17,6 @@ import com.example.newswave.search.data.source.remote.SearchNewsRemoteDataSource
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import com.example.newswave.search.domain.repository.SearchNewsRepository
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
-import dagger.Binds
 
 import dagger.Module
 import dagger.Provides
@@ -32,15 +32,7 @@ import javax.inject.Singleton
 
 object AppModule {
 
-    @Provides
-    @Singleton
-    fun provideNewsApi(): NewsApi {
-        return Retrofit.Builder()
-            .baseUrl(BuildConfig.BASE_URL)
-            .addConverterFactory(MoshiConverterFactory.create())
-            .build()
-            .create(NewsApi::class.java)
-    }
+
 
     @Provides
     @Singleton
@@ -75,19 +67,22 @@ object AppModule {
             context,
             NewsDatabase::class.java,
             "news_database"
-        ).build()
+        ).fallbackToDestructiveMigration()
+            .allowMainThreadQueries().build()
     }
 
-    @Provides
-    @Singleton
-    fun provideNewsDtoMapper():NewsDtoMapper{
-        return NewsDtoMapper()
-    }
+
 
     @Provides
     @Singleton
     fun provideGetNewsHeadlinesUseCase(newsRepository: NewsRepository):GetNewsHeadlinesUseCase{
         return GetNewsHeadlinesUseCase(newsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetBookmarkedNewsUseCase(bookmarkRepository: BookmarkRepository):GetBookmarkedNewsUseCase{
+        return GetBookmarkedNewsUseCase(bookmarkRepository)
     }
 
     @Provides
@@ -100,6 +95,12 @@ object AppModule {
     @Singleton
     fun provideNewsRemoteDataSource(newsApiService: NewsApiService):NewsRemoteDataSource{
         return NewsRemoteDataSource(newsApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookmarkLocalDataSource(newsDao: NewsDao):BookmarkLocalDataSource{
+        return BookmarkLocalDataSource(newsDao)
     }
 
     @Provides

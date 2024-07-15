@@ -55,7 +55,8 @@ class SearchViewModel @Inject constructor(
                                     it.imageUrl,
                                     it.timestamp,
                                     it.category,
-                                    it.link
+                                    it.link,
+                                    false
                                 )
                             }
                         )

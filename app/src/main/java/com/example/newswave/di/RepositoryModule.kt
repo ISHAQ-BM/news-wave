@@ -1,7 +1,9 @@
 package com.example.newswave.di
 
-import com.example.newswave.data.repositories.NewsRepositoryImpl
-import com.example.newswave.domain.repositories.NewsRepository
+import com.example.newswave.bookmark.data.repository.BookmarkRepositoryImpl
+import com.example.newswave.bookmark.domain.repository.BookmarkRepository
+import com.example.newswave.news.data.repository.NewsRepositoryImpl
+import com.example.newswave.news.domain.repository.NewsRepository
 import com.example.newswave.search.data.repository.SearchNewsRepositoryImpl
 import com.example.newswave.search.domain.repository.SearchNewsRepository
 
@@ -15,13 +17,17 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 abstract class RepositoryModule {
 
-    @Binds
-    @Singleton
-    abstract fun bindNewsRepository(newsRepositoryImpl: NewsRepositoryImpl):NewsRepository
+
 
     @Binds
     @Singleton
-    abstract fun bindNewssRepository(newsRepositoryImpl: com.example.newswave.news.data.repository.NewsRepositoryImpl):com.example.newswave.news.domain.repository.NewsRepository
+    abstract fun bindNewsRepository(newsRepositoryImpl: NewsRepositoryImpl): NewsRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindBookmarkRepository(bookmarkRepositoryImpl: BookmarkRepositoryImpl): BookmarkRepository
+
+
 
 
     @Binds

@@ -187,57 +187,57 @@ class SearchNewsFragment : Fragment() {
 //
    }
 
-
-    @RequiresApi(Build.VERSION_CODES.Q)
-    private fun performOptionsMenuClick(article: Article, view: View) {
-        val popupMenu = PopupMenu(requireContext() , view)
-        if (article.isBookmarked) {
-            popupMenu.inflate(R.menu.popup_menu_baseline_bookmark)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.share -> {
-                        shareArticle(article.link)
-                        true
-                    }
-
-                    R.id.bookmark -> {
-                        viewModel.deleteArticle(article)
-                        Toast.makeText(requireContext(), "article unsaved", Toast.LENGTH_LONG)
-                            .show()
-                        true
-                    }
-
-                    else -> {
-                        false
-                    }
-                }
-            }
-        } else {
-            popupMenu.inflate(R.menu.popup_menu_outline_bookmark)
-            popupMenu.setOnMenuItemClickListener { item ->
-                when (item.itemId) {
-                    R.id.share -> {
-                        shareArticle(article.link)
-                        true
-                    }
-
-                    R.id.bookmark -> {
-                        viewModel.bookmarkArticle(article)
-                        Toast.makeText(requireContext(), "article saved", Toast.LENGTH_LONG).show()
-                        true
-                    }
-
-                    else -> {
-                        false
-                    }
-                }
-
-            }
-        }
-        popupMenu.setForceShowIcon(true)
-        popupMenu.show()
-
-    }
+//
+//    @RequiresApi(Build.VERSION_CODES.Q)
+//    private fun performOptionsMenuClick(article: Article, view: View) {
+//        val popupMenu = PopupMenu(requireContext() , view)
+//        if (article.isBookmarked) {
+//            popupMenu.inflate(R.menu.popup_menu_baseline_bookmark)
+//            popupMenu.setOnMenuItemClickListener { item ->
+//                when (item.itemId) {
+//                    R.id.share -> {
+//                        shareArticle(article.link)
+//                        true
+//                    }
+//
+//                    R.id.bookmark -> {
+//                        viewModel.deleteArticle(article)
+//                        Toast.makeText(requireContext(), "article unsaved", Toast.LENGTH_LONG)
+//                            .show()
+//                        true
+//                    }
+//
+//                    else -> {
+//                        false
+//                    }
+//                }
+//            }
+//        } else {
+//            popupMenu.inflate(R.menu.popup_menu_outline_bookmark)
+//            popupMenu.setOnMenuItemClickListener { item ->
+//                when (item.itemId) {
+//                    R.id.share -> {
+//                        shareArticle(article.link)
+//                        true
+//                    }
+//
+//                    R.id.bookmark -> {
+//                        viewModel.bookmarkArticle(article)
+//                        Toast.makeText(requireContext(), "article saved", Toast.LENGTH_LONG).show()
+//                        true
+//                    }
+//
+//                    else -> {
+//                        false
+//                    }
+//                }
+//
+//            }
+//        }
+//        popupMenu.setForceShowIcon(true)
+//        popupMenu.show()
+//
+//    }
 
 
     private fun shareArticle(link: String) {
