@@ -5,15 +5,5 @@
         <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
         <item name="colorPrimary">@color/blue_800</item>
     </style>
-    <style name="Theme.NewsWave.Tint">
-        <item name="tint">@color/white</item>
-        <item name="drawableTint">@color/white</item>
-        <item name="tabBackground">@drawable/tab_bg_inset_dark</item>
-        <item name="tabTextColor">@color/white</item>
-        <item name="tabSelectedTextColor">@color/white</item>
-    </style>
 
-    <style name="Theme.NewsWave.SearchBox" >
-        <item name="android:background">@drawable/search_box_bg_dark</item>
-    </style>
 </resources>

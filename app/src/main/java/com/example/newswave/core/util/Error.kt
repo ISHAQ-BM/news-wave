@@ -28,6 +28,7 @@ sealed interface Error {
         TOKEN_EXPIRED,
         INVALID_CREDENTIALS,
         ACCOUNT_LOCKED,
+        NO_EMAIL_ON_DEVICE,
         UNKNOWN
     }
 

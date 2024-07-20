@@ -29,4 +29,10 @@
     <string name="unknown_error">An unknown error occurred</string>
     <string name="error_disk_full">Failed to save the item because your device\'s disk is full</string>
     <string name="error_serialization">Oops, couldn\'t parse data.</string>
+    <string name="by">by %1$s</string>
+    <string name="comments">%1$d comments</string>
+    <string name="likes">%1$d likes</string>
+    <string name="sign_with_google">Sign in With Google</string>
+    <string name="make_it_easy">Make it easy for users to access the\nlatest and most recent news quickly\nand easily from a single platform.</string>
+
 </resources>

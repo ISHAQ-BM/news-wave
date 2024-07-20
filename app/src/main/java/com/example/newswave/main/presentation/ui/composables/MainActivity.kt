@@ -37,6 +37,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navArgument
 import androidx.navigation.ui.setupWithNavController
 import com.example.newswave.R
+import com.example.newswave.auth.presentation.ui.composables.SignUserScreen
 import com.example.newswave.bookmark.presentation.ui.composables.BookmarkScreen
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 
@@ -116,7 +117,8 @@ class MainActivity : AppCompatActivity() {
         navController:NavHostController,
     ){
 
-        NavHost(navController = navController, startDestination = "home") {
+        NavHost(navController = navController, startDestination = "sign") {
+            composable("sign"){ SignUserScreen(navController = navController)}
             composable("home"){ HomeScreen(navController = navController)}
             composable("search"){ SearchScreen(navController = navController) }
             composable("bookmark"){ BookmarkScreen(navController = navController) }

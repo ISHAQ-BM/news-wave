@@ -1,5 +1,7 @@
 package com.example.newswave.di
 
+import com.example.newswave.auth.data.repository.AuthRepositoryImpl
+import com.example.newswave.auth.domain.repository.AuthRepository
 import com.example.newswave.bookmark.data.repository.BookmarkRepositoryImpl
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.news.data.repository.NewsRepositoryImpl
@@ -27,6 +29,10 @@ abstract class RepositoryModule {
     @Singleton
     abstract fun bindBookmarkRepository(bookmarkRepositoryImpl: BookmarkRepositoryImpl): BookmarkRepository
 
+
+    @Binds
+    @Singleton
+    abstract fun bindAuthRepository(authRepositoryImpl: AuthRepositoryImpl): AuthRepository
 
 
 

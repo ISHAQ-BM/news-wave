@@ -67,5 +67,6 @@ fun Error.asUiText(): UiText {
         Error.ValidationError.PATTERN_MISMATCH -> TODO()
         Error.ValidationError.UNKNOWN -> TODO()
         Error.Local.UNKNOWN -> TODO()
+        Error.Authentication.NO_EMAIL_ON_DEVICE -> TODO()
     }
 }
