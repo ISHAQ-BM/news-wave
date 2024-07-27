@@ -4,8 +4,8 @@ import com.example.newswave.auth.data.repository.AuthRepositoryImpl
 import com.example.newswave.auth.domain.repository.AuthRepository
 import com.example.newswave.bookmark.data.repository.BookmarkRepositoryImpl
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
-import com.example.newswave.news.data.repository.NewsRepositoryImpl
-import com.example.newswave.news.domain.repository.NewsRepository
+import com.example.newswave.home.data.repository.HomeRepositoryImpl
+import com.example.newswave.home.domain.repository.HomeRepository
 import com.example.newswave.search.data.repository.SearchNewsRepositoryImpl
 import com.example.newswave.search.domain.repository.SearchNewsRepository
 
@@ -23,7 +23,7 @@ abstract class RepositoryModule {
 
     @Binds
     @Singleton
-    abstract fun bindNewsRepository(newsRepositoryImpl: NewsRepositoryImpl): NewsRepository
+    abstract fun bindNewsRepository(homeRepositoryImpl: HomeRepositoryImpl): HomeRepository
 
     @Binds
     @Singleton

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,20 +29,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import androidx.navigation.fragment.findNavController
+import com.example.newswave.core.presentation.ui.components.NewsList
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.core.util.categories
-import com.example.newswave.news.presentation.ui.components.NewsList
-import com.example.newswave.news.presentation.ui.event.NewsEvent
-import com.example.newswave.news.presentation.viewmodel.NewsViewModel
+import com.example.newswave.home.presentation.ui.event.NewsEvent
+import com.example.newswave.home.presentation.viewmodel.NewsViewModel
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
     newsViewsModel: NewsViewModel =  hiltViewModel(),
-    navController: NavHostController
+    onItemClicked:(String)-> Unit,
+    listState: LazyListState = rememberLazyListState()
 ){
     NewsWaveTheme {
 
@@ -99,10 +100,9 @@ fun HomeScreen(
             contentAlignment = Alignment.Center
         ) {
             NewsList(
-                newsListItems = uiState.articles,
-                navigationToDetails = { link ->
-                    navController.navigate("news_details/${Uri.encode(link)}")
-                }
+                newsList = uiState.articles,
+                onItemClicked = onItemClicked,
+                listState = listState
             )
 
         }

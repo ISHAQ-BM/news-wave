@@ -1,12 +1,11 @@
 package com.example.newswave.search.presentation.viewmodel
 
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
 import com.example.newswave.search.presentation.ui.event.SearchNewsEvent
 import com.example.newswave.search.presentation.ui.state.SearchUiState

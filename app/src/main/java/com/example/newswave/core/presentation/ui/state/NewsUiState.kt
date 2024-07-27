@@ -1,4 +1,4 @@
-package com.example.newswave.news.presentation.ui.state
+package com.example.newswave.core.presentation.ui.state
 
 import com.example.newswave.core.presentation.ui.utils.UiText
 

@@ -1,4 +1,4 @@
-package com.example.newswave.news.presentation.ui.components
+package com.example.newswave.core.presentation.ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,8 +12,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,19 +38,47 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
 import com.example.newswave.R
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 @Composable
-fun NewsListItem(
-    newsItem: NewsItemUiState,
+fun NewsList(
+    newsList: List<NewsItemUiState>,
+    onItemClicked: (String)->Unit,
     modifier: Modifier = Modifier,
-    navigateToDetail : (String) -> Unit
+    listState: LazyListState = rememberLazyListState()
+){
+
+        LazyColumn (
+            state = listState,
+            modifier = modifier,
+        ){
+            items(items = newsList, key = { item -> item.id }) { newsItem ->
+                NewsItem(
+                    item = newsItem,
+                    onItemClicked = onItemClicked
+                )
+                HorizontalDivider()
+            }
+
+
+
+
+        }
+    }
+
+
+
+@Composable
+fun NewsItem(
+    modifier: Modifier = Modifier,
+    item: NewsItemUiState,
+    onItemClicked : (String) -> Unit
 ){
 
     Box (
         modifier= modifier
             .padding(vertical = 24.dp)
-            .clickable { navigateToDetail(newsItem.link) }
+            .clickable { onItemClicked(item.link) }
 
     ){
         Row (
@@ -54,7 +87,7 @@ fun NewsListItem(
                 .height(140.dp)
         ){
             AsyncImage(
-                model = newsItem.imageUrl,
+                model = item.imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(140.dp)
@@ -68,13 +101,13 @@ fun NewsListItem(
                 verticalArrangement = Arrangement.SpaceBetween
             ){
                 Text(
-                    text = newsItem.title,
+                    text = item.title,
                     style = MaterialTheme.typography.titleMedium,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = "By ${newsItem.author}",
+                    text = "By ${item.author}",
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -85,7 +118,7 @@ fun NewsListItem(
                     verticalAlignment = Alignment.CenterVertically
                 ){
                     Text(
-                        text = newsItem.category,
+                        text = item.category,
                         style = MaterialTheme.typography.labelSmall,
                         color = MaterialTheme.colorScheme.primary
                     )
@@ -98,7 +131,7 @@ fun NewsListItem(
                     Spacer(modifier = modifier.width(4.dp))
 
                     Text(
-                        text = newsItem.publishDate,
+                        text = item.publishDate,
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )

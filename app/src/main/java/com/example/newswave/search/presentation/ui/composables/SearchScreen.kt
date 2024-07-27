@@ -2,9 +2,9 @@ package com.example.newswave.search.presentation.ui.composables
 
 import android.net.Uri
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,18 +22,16 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import com.example.newswave.core.domain.model.News
-import com.example.newswave.news.presentation.ui.components.NewsList
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.components.NewsList
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.search.presentation.ui.event.SearchNewsEvent
 import com.example.newswave.search.presentation.viewmodel.SearchViewModel
 
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel =  hiltViewModel(),
-    navController:NavHostController
+    navController:NavHostController,
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
     var searchQuery by remember {
@@ -76,21 +74,10 @@ fun SearchScreen(
         Box(modifier = Modifier.padding(it.calculateTopPadding())) {
 
 
-            News(newsListItems = searchUiState.searchResult, navController = navController)
+            NewsList(
+                newsList = searchUiState.searchResult,
+                onItemClicked = {link -> navController.navigate("news_details/${Uri.encode(link)}")},
+            )
         }
     }
-}
-
-@Composable
-fun News(
-    newsListItems: List<NewsItemUiState>,
-    navController:NavHostController
-) {
-
-        NewsList(
-            newsListItems = newsListItems,
-            navigationToDetails = {link -> navController.navigate("news_details/${Uri.encode(link)}")}
-        )
-
-
 }

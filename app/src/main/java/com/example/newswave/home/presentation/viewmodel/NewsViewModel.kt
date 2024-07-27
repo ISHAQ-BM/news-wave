@@ -1,15 +1,13 @@
-package com.example.newswave.news.presentation.viewmodel
+package com.example.newswave.home.presentation.viewmodel
 
-import android.util.Log
-import androidx.compose.runtime.toMutableStateList
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
-import com.example.newswave.news.domain.use_case.GetNewsHeadlinesUseCase
-import com.example.newswave.news.presentation.ui.event.NewsEvent
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
-import com.example.newswave.news.presentation.ui.state.NewsUiState
+import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
+import com.example.newswave.home.presentation.ui.event.NewsEvent
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.state.NewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,7 +24,7 @@ class NewsViewModel @Inject constructor(
     val uiState: StateFlow<NewsUiState> = _uiState
 
 
-    fun onEvent(event:NewsEvent){
+    fun onEvent(event: NewsEvent){
         when(event){
             is NewsEvent.ArticleSelected -> TODO()
             is NewsEvent.BookmarkArticle -> TODO()

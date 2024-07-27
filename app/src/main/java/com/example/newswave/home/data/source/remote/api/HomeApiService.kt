@@ -1,4 +1,4 @@
-package com.example.newswave.news.data.source.remote.api
+package com.example.newswave.home.data.source.remote.api
 
 
 import com.example.newswave.BuildConfig.API_KEY
@@ -7,7 +7,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface NewsApiService {
+interface HomeApiService {
     @GET("news?")
     suspend fun getNewsHeadline(
         @Query("apikey")

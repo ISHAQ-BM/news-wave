@@ -3,6 +3,7 @@ appcompat = "1.7.0"
 coil = "2.6.0"
 coilCompose = "2.6.0"
 composeBom = "2024.06.00"
+composeWebview = "0.33.6"
 constraintlayout = "2.1.4"
 converterMoshi = "2.9.0"
 coreKtx = "1.13.1"
@@ -56,6 +57,7 @@ androidx-ui = { module = "androidx.compose.ui:ui" }
 androidx-ui-tooling = { module = "androidx.compose.ui:ui-tooling" }
 coil = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+compose-webview = { module = "io.github.kevinnzou:compose-webview", version.ref = "composeWebview" }
 converter-moshi = { module = "com.squareup.retrofit2:converter-moshi", version.ref = "converterMoshi" }
 firebase-analytics = { module = "com.google.firebase:firebase-analytics" }
 firebase-bom = { module = "com.google.firebase:firebase-bom", version.ref = "firebaseBom" }

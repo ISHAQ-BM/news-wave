@@ -1,8 +1,7 @@
 package com.example.newswave.search.presentation.ui.state
 
 import com.example.newswave.core.presentation.ui.utils.UiText
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
-import com.example.newswave.news.presentation.ui.state.NewsUiState
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 data class SearchUiState (
 

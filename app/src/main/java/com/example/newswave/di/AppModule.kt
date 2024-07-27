@@ -5,7 +5,6 @@ import android.app.Application
 import android.content.Context
 import androidx.room.Room
 import com.example.newswave.BuildConfig
-import com.example.newswave.R
 import com.example.newswave.auth.data.source.remote.AuthRemoteDataSource
 import com.example.newswave.auth.domain.repository.AuthRepository
 import com.example.newswave.auth.domain.use_case.OneTapSignInUseCase
@@ -17,10 +16,10 @@ import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
 import com.example.newswave.core.util.SIGN_IN_REQUEST
 import com.example.newswave.core.util.SIGN_UP_REQUEST
-import com.example.newswave.news.data.source.remote.NewsRemoteDataSource
-import com.example.newswave.news.data.source.remote.api.NewsApiService
-import com.example.newswave.news.domain.repository.NewsRepository
-import com.example.newswave.news.domain.use_case.GetNewsHeadlinesUseCase
+import com.example.newswave.home.data.source.remote.HomeRemoteDataSource
+import com.example.newswave.home.data.source.remote.api.HomeApiService
+import com.example.newswave.home.domain.repository.HomeRepository
+import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
 import com.example.newswave.search.data.source.remote.SearchNewsRemoteDataSource
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import com.example.newswave.search.domain.repository.SearchNewsRepository
@@ -88,12 +87,12 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsApiService(): NewsApiService {
+    fun provideNewsApiService(): HomeApiService {
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .addConverterFactory(MoshiConverterFactory.create())
             .build()
-            .create(NewsApiService::class.java)
+            .create(HomeApiService::class.java)
     }
 
     @Provides
@@ -127,8 +126,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideGetNewsHeadlinesUseCase(newsRepository: NewsRepository):GetNewsHeadlinesUseCase{
-        return GetNewsHeadlinesUseCase(newsRepository)
+    fun provideGetNewsHeadlinesUseCase(homeRepository: HomeRepository): GetNewsHeadlinesUseCase {
+        return GetNewsHeadlinesUseCase(homeRepository)
     }
 
     @Provides
@@ -158,8 +157,8 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsRemoteDataSource(newsApiService: NewsApiService):NewsRemoteDataSource{
-        return NewsRemoteDataSource(newsApiService)
+    fun provideNewsRemoteDataSource(homeApiService: HomeApiService): HomeRemoteDataSource {
+        return HomeRemoteDataSource(homeApiService)
     }
 
     @Provides

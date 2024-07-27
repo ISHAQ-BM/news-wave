@@ -1,4 +1,4 @@
-package com.example.newswave.news.presentation.ui.state
+package com.example.newswave.core.presentation.ui.state
 
 data class NewsItemUiState(
     val id: String,

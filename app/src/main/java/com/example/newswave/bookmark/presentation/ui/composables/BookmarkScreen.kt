@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -19,12 +20,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.example.newswave.bookmark.presentation.ui.event.BookmarkEvent
 import com.example.newswave.bookmark.presentation.viewmodel.BookmarkViewModel
-import com.example.newswave.news.presentation.ui.components.NewsList
+import com.example.newswave.core.presentation.ui.components.NewsList
 
 @Composable
 fun BookmarkScreen(
     navController:NavHostController,
-    bookmarkViewModel: BookmarkViewModel =  hiltViewModel()
+    bookmarkViewModel: BookmarkViewModel =  hiltViewModel(),
 ) {
     val uiState by bookmarkViewModel.uiState.collectAsState()
     bookmarkViewModel.onEvent(BookmarkEvent.LoadBookmark)
@@ -48,8 +49,8 @@ fun BookmarkScreen(
                 .fillMaxWidth()
         ) {
             NewsList(
-                newsListItems = uiState.bookmarkedNews,
-                navigationToDetails = {link -> navController.navigate("news_details/${Uri.encode(link)}")}
+                newsList = uiState.bookmarkedNews,
+                onItemClicked = {link -> navController.navigate("news_details/${Uri.encode(link)}")},
             )
 
         }

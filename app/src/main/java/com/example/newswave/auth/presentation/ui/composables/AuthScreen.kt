@@ -44,10 +44,10 @@ import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.GoogleAuthProvider
 
 @Composable
-fun SignUserScreen(
+fun AuthScreen(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel = hiltViewModel(),
-    navController: NavHostController,
+    onNavigateToHome: ()->Unit
 ) {
 
     val authUiState by authViewModel.uiState.collectAsState()
@@ -74,7 +74,8 @@ fun SignUserScreen(
     }
 
     if (authUiState.isLoginSuccessful)
-        navController.navigate("home")
+        onNavigateToHome()
+
 
 
 

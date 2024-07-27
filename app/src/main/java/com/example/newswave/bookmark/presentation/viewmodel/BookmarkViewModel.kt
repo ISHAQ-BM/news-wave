@@ -6,7 +6,7 @@ import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
 import com.example.newswave.bookmark.presentation.ui.event.BookmarkEvent
 import com.example.newswave.bookmark.presentation.ui.state.BookmarkUiState
 import com.example.newswave.core.util.Result
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

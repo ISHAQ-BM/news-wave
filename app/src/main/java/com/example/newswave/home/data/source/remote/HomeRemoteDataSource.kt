@@ -1,11 +1,11 @@
-package com.example.newswave.news.data.source.remote
+package com.example.newswave.home.data.source.remote
 
 
 import android.util.Log
 import com.example.newswave.core.data.source.remote.utils.Util
 import com.example.newswave.core.util.Error
 import com.example.newswave.core.util.Result
-import com.example.newswave.news.data.source.remote.api.NewsApiService
+import com.example.newswave.home.data.source.remote.api.HomeApiService
 import com.example.newswave.core.domain.model.News
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -13,14 +13,14 @@ import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
 
-class NewsRemoteDataSource @Inject constructor(
-    private val newsApiService: NewsApiService
+class HomeRemoteDataSource @Inject constructor(
+    private val homeApiService: HomeApiService
 ) {
 
     suspend fun getNewsHeadline(category:String):Flow<Result<List<News>,Error.Network>> {
         return flow {
             try {
-                val response = newsApiService.getNewsHeadline(category = category)
+                val response = homeApiService.getNewsHeadline(category = category)
                 Log.d("response","${response}")
                 if (response.isSuccessful) {
                     Log.d("response body","${response.body()!!.results}")

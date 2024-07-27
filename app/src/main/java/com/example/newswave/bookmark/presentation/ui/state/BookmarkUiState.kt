@@ -1,7 +1,7 @@
 package com.example.newswave.bookmark.presentation.ui.state
 
 import com.example.newswave.core.presentation.ui.utils.UiText
-import com.example.newswave.news.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 data class BookmarkUiState (
     val bookmarkedNews: List<NewsItemUiState> = emptyList(),
