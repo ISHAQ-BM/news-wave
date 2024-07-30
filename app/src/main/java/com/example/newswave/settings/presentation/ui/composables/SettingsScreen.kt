@@ -4,6 +4,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,16 +24,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.newswave.R
+import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 
 @Composable
 fun SettingsScreen(
-    navController:NavHostController
+    onThemeUpdated :()->Unit
 ){
         @OptIn(ExperimentalMaterial3Api::class)
-        (Scaffold(
+        Scaffold(
         topBar = {
             TopAppBar(
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -50,19 +53,23 @@ fun SettingsScreen(
 
         ) {
             Column (
-                modifier = Modifier.padding(it.calculateTopPadding())
+                modifier = Modifier.padding(top =it.calculateTopPadding())
             ){
-                Settings()
+                Settings(onThemeUpdated = onThemeUpdated)
             }
 
-    })
+    }
 
 }
 
 @Composable
 fun Settings(
+    modifier: Modifier=Modifier,
+    onThemeUpdated: () -> Unit
 ){
-    Column {
+    Column(
+        modifier.padding(horizontal = 16.dp)
+    ){
 
         SettingsListItem(icon = R.drawable.ic_notification, settingText ="Profile" , contentDescription ="" , navigate = {})
         HorizontalDivider()
@@ -72,7 +79,7 @@ fun Settings(
         HorizontalDivider()
         SettingsListItem(icon = R.drawable.ic_notification, settingText ="Notifications" , contentDescription ="" , navigate = {})
         HorizontalDivider()
-        DarkMode()
+        DarkMode(onThemeUpdated=onThemeUpdated)
         HorizontalDivider()
         SettingsListItem(icon = R.drawable.ic_notification, settingText ="Terms & Conditions" , contentDescription ="" , navigate = {})
         HorizontalDivider()
@@ -87,6 +94,7 @@ fun Settings(
 @Composable
 fun DarkMode(
     modifier: Modifier = Modifier,
+    onThemeUpdated: () -> Unit
 ){
     var checked by remember { mutableStateOf(false) }
 
@@ -107,9 +115,9 @@ fun DarkMode(
         Switch(
             checked = checked,
             onCheckedChange = {
-                checked = it
+                checked= !checked
+                onThemeUpdated()
             }
-
 
         )
 
@@ -149,3 +157,4 @@ fun SettingsListItem(
             )
     }
 }
+

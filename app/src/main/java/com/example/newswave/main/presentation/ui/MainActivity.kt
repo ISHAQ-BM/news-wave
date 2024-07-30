@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -60,7 +61,8 @@ class MainActivity : AppCompatActivity() {
             var newsLink by remember {
                 mutableStateOf("")
             }
-            NewsWaveTheme {
+            var darkTheme by remember { mutableStateOf(false) }
+            NewsWaveTheme(darkTheme = darkTheme) {
                 Surface {
                     Box {
                         MainScreen(
@@ -69,7 +71,8 @@ class MainActivity : AppCompatActivity() {
                                 showBottomSheet=true
                                 newsLink=link
 
-                            }
+                            },
+                            onThemeUpdated = {darkTheme = !darkTheme}
                         )
                         if (showBottomSheet) {
                             NewsDetailsBottomSheet(
@@ -88,7 +91,8 @@ class MainActivity : AppCompatActivity() {
     @Composable
     fun MainScreen(
         navController: NavHostController,
-        onItemClicked:(String)->Unit
+        onItemClicked:(String)->Unit,
+        onThemeUpdated:()->Unit
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -131,7 +135,8 @@ class MainActivity : AppCompatActivity() {
                     onItemClicked,
                     {
                         navController.navigateSingleTopTo(Home.route)
-                    }
+                    },
+                    onThemeUpdated = onThemeUpdated
                 )
             }
         }

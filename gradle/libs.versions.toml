@@ -3,6 +3,7 @@ appcompat = "1.7.0"
 coil = "2.6.0"
 coilCompose = "2.6.0"
 composeBom = "2024.06.00"
+composefoundation ="1.6.8"
 composeWebview = "0.33.6"
 constraintlayout = "2.1.4"
 converterMoshi = "2.9.0"
@@ -29,6 +30,8 @@ roomKtx = "2.6.1"
 roomRuntime = "2.6.1"
 sdpAndroid = "1.1.1"
 sspAndroid = "1.1.1"
+googleGmsGoogleServices = "4.4.2"
+firebaseFirestore = "25.0.0"
 [libraries]
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
@@ -37,7 +40,7 @@ androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "coreKtx"
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }
 androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espressoCore" }
-androidx-foundation = { module = "androidx.compose.foundation:foundation" }
+androidx-foundation = { module = "androidx.compose.foundation:foundation" , version.ref="composefoundation" }
 androidx-foundation-layout = { module = "androidx.compose.foundation:foundation-layout" }
 androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version.ref = "fragmentKtx" }
 androidx-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
@@ -70,4 +73,6 @@ play-services-auth = { module = "com.google.android.gms:play-services-auth", ver
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
 sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 ssp-android = { module = "com.intuit.ssp:ssp-android", version.ref = "sspAndroid" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
 [plugins]
+google-gms-google-services = { id = "com.google.gms.google-services", version.ref = "googleGmsGoogleServices" }
