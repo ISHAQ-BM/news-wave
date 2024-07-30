@@ -6,6 +6,8 @@ import com.example.newswave.bookmark.data.repository.BookmarkRepositoryImpl
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.home.data.repository.HomeRepositoryImpl
 import com.example.newswave.home.domain.repository.HomeRepository
+import com.example.newswave.interests.data.repository.InterestsRepositoryImpl
+import com.example.newswave.interests.domain.repository.InterestsRepository
 import com.example.newswave.search.data.repository.SearchNewsRepositoryImpl
 import com.example.newswave.search.domain.repository.SearchNewsRepository
 
@@ -39,6 +41,13 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindSearchNewsRepository(searchNewsRepositoryImpl: SearchNewsRepositoryImpl): SearchNewsRepository
+
+
+
+    @Binds
+    @Singleton
+    abstract fun bindInterestsRepository(interestsRepositoryImpl: InterestsRepositoryImpl): InterestsRepository
+
 
 
 }

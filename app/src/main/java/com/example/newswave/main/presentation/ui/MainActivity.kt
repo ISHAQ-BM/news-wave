@@ -1,6 +1,7 @@
 package com.example.newswave.main.presentation.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.animation.AnimatedVisibility
@@ -8,8 +9,14 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.AssistChip
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -23,15 +30,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.newswave.core.presentation.ui.components.NewsDetailsBottomSheet
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
+import com.example.newswave.main.presentation.ui.components.Auth
+import com.example.newswave.main.presentation.ui.components.Home
 import com.example.newswave.main.presentation.ui.components.NewsWaveNavHost
 import com.example.newswave.main.presentation.ui.components.bottomBarRoutes
 import com.example.newswave.main.presentation.ui.components.bottomNavigationItems
+import com.example.newswave.main.presentation.ui.components.navigateSingleTopTo
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -117,7 +128,10 @@ class MainActivity : AppCompatActivity() {
             Box(modifier = Modifier.padding(innerPadding)){
                 NewsWaveNavHost(
                     navController,
-                    onItemClicked
+                    onItemClicked,
+                    {
+                        navController.navigateSingleTopTo(Home.route)
+                    }
                 )
             }
         }

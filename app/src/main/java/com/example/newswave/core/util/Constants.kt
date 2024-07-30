@@ -17,19 +17,33 @@ package com.example.newswave.core.util
 //
 //}
 
+const val USERS = "users"
+
+
+const val DISPLAY_NAME = "displayName"
+const val EMAIL = "email"
+const val PHOTO_URL = "photoUrl"
+const val CREATED_AT = "createdAt"
+const val INTERESTS = "interests"
+
 const val SIGN_IN_REQUEST = "signInRequest"
 const val SIGN_UP_REQUEST = "signUPRequest"
 val categories= listOf(
-        "top",
-        "technology",
-        "sports",
-        "science",
-        "business",
-        "entertainment",
-        "environment",
-        "food",
-        "health",
-        "politics",
-        "tourism",
-        "world",
-    )
+        "Top",
+        "Technology",
+        "Sports",
+        "Science",
+        "Business",
+        "Entertainment",
+        "Environment",
+        "Food",
+        "Health",
+        "Politics",
+        "Tourism",
+        "Crime",
+        "Domestic",
+        "Education",
+        "Lifestyle",
+        "World",
+        "Other"
+)

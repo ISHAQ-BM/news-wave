@@ -131,6 +131,7 @@ dependencies {
     implementation(libs.firebase.analytics)
     implementation(libs.google.firebase.auth)
     implementation(libs.play.services.auth)
+    implementation(libs.firebase.firestore)
 
     //webview
     implementation (libs.compose.webview)

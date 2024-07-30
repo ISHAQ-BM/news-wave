@@ -50,6 +50,7 @@ class AuthViewModel @Inject constructor(
                     }
                     is Result.Success -> _uiState.update {
                         it.copy(
+                            isNewUser = result.data,
                             isLoading = false,
                             isLoginSuccessful = true
                         )

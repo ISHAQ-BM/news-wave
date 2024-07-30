@@ -20,6 +20,7 @@ import com.example.newswave.home.data.source.remote.HomeRemoteDataSource
 import com.example.newswave.home.data.source.remote.api.HomeApiService
 import com.example.newswave.home.domain.repository.HomeRepository
 import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
+import com.example.newswave.interests.data.source.remote.InterestsRemoteDataSource
 import com.example.newswave.search.data.source.remote.SearchNewsRemoteDataSource
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import com.example.newswave.search.domain.repository.SearchNewsRepository
@@ -29,6 +30,8 @@ import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
 import dagger.Module
@@ -49,6 +52,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideFirebaseAuth()= Firebase.auth
+
+    @Singleton
+    @Provides
+    fun provideFirebaseFirestore() = Firebase.firestore
 
 
     @Singleton
@@ -176,14 +183,21 @@ object AppModule {
         signUpRequest: BeginSignInRequest,
         @Named(SIGN_UP_REQUEST)
         signInRequest: BeginSignInRequest,
+        firestore:FirebaseFirestore
     ):AuthRemoteDataSource{
-        return AuthRemoteDataSource(oneTapClient, signUpRequest, signInRequest, auth)
+        return AuthRemoteDataSource(oneTapClient, signUpRequest, signInRequest, auth, firestore  )
     }
 
     @Provides
     @Singleton
     fun provideSearchNewsRemoteDataSource(searchApiService: SearchApiService):SearchNewsRemoteDataSource{
         return SearchNewsRemoteDataSource(searchApiService)
+    }
+
+    @Provides
+    @Singleton
+    fun provideInterestsRemoteDataSource(auth:FirebaseAuth,firestore:FirebaseFirestore):InterestsRemoteDataSource{
+        return InterestsRemoteDataSource(auth, firestore)
     }
 
 

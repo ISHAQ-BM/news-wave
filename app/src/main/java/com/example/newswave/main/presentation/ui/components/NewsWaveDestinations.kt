@@ -2,6 +2,7 @@ package com.example.newswave.main.presentation.ui.components
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
@@ -43,9 +44,16 @@ object Settings : NewsWaveDestination {
 }
 
 object Auth : NewsWaveDestination {
-    override val icon=Icons.Filled.Home
+    override val icon=Icons.Filled.Info
     override val route="auth"
     override val label="Auth"
+
+}
+
+object Interests : NewsWaveDestination {
+    override val icon=Icons.Filled.Star
+    override val route="interests"
+    override val label="Interests"
 
 }
 

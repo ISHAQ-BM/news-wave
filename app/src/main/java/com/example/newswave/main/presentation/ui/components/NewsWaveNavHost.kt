@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.newswave.auth.presentation.ui.composables.AuthScreen
 import com.example.newswave.bookmark.presentation.ui.composables.BookmarkScreen
 import com.example.newswave.home.presentation.ui.composables.HomeScreen
+import com.example.newswave.interests.presentation.ui.components.InterestScreen
 import com.example.newswave.search.presentation.ui.composables.SearchScreen
 import com.example.newswave.settings.presentation.ui.composables.SettingsScreen
 
@@ -15,22 +16,31 @@ import com.example.newswave.settings.presentation.ui.composables.SettingsScreen
 fun NewsWaveNavHost(
     navHostController: NavHostController,
     onItemClicked:(String)->Unit,
+    onSaveSuccess :()->Unit,
     modifier: Modifier=Modifier
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Home.route,
+        startDestination = Auth.route,
         modifier = modifier
     ) {
         composable(Auth.route) {
             AuthScreen(
-                onNavigateToHome = { navHostController.navigateSingleTopTo(Home.route) }
+                onLoginSuccess = { isNewUser ->
+                        if (isNewUser){
+                            navHostController.navigateSingleTopTo(Interests.route)
+                        }else{
+                            navHostController.navigateSingleTopTo(Home.route)
+                        }
+
+                }
             )
         }
         composable(Home.route) { HomeScreen(onItemClicked = onItemClicked) }
         composable(Search.route) { SearchScreen(navController = navHostController) }
         composable(Bookmark.route) { BookmarkScreen(navController = navHostController) }
         composable(Settings.route) { SettingsScreen(navController = navHostController) }
+        composable(Interests.route) { InterestScreen(onSaveSuccess = onSaveSuccess) }
 
     }
 }

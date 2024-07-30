@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.navArgument
 import com.example.newswave.R
 import com.example.newswave.auth.presentation.viewmodel.AuthViewModel
 import com.google.android.gms.auth.api.identity.BeginSignInResult
@@ -47,7 +48,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 fun AuthScreen(
     modifier: Modifier = Modifier,
     authViewModel: AuthViewModel = hiltViewModel(),
-    onNavigateToHome: ()->Unit
+    onLoginSuccess: (Boolean)->Unit
 ) {
 
     val authUiState by authViewModel.uiState.collectAsState()
@@ -74,7 +75,9 @@ fun AuthScreen(
     }
 
     if (authUiState.isLoginSuccessful)
-        onNavigateToHome()
+        onLoginSuccess(authUiState.isNewUser)
+
+
 
 
 
