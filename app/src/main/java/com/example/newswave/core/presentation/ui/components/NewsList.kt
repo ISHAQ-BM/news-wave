@@ -50,7 +50,8 @@ fun NewsList(
     onItemClicked: (String)->Unit,
     onBookmarkClicked :(NewsItemUiState)->Unit,
     modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState()
+    listState: LazyListState = rememberLazyListState(),
+    onShareNews :(String)-> Unit,
 ){
 
         LazyColumn (
@@ -61,7 +62,8 @@ fun NewsList(
                 NewsItem(
                     item = newsItem,
                     onItemClicked = onItemClicked,
-                    onBookmarkClicked = onBookmarkClicked
+                    onBookmarkClicked = onBookmarkClicked,
+                    onShareNews = onShareNews
                 )
                 HorizontalDivider()
             }
@@ -79,7 +81,8 @@ fun NewsItem(
     modifier: Modifier = Modifier,
     item: NewsItemUiState,
     onItemClicked : (String) -> Unit,
-    onBookmarkClicked: (NewsItemUiState) -> Unit
+    onBookmarkClicked: (NewsItemUiState) -> Unit,
+    onShareNews :(String)-> Unit,
 ){
 
     Box (
@@ -167,7 +170,8 @@ fun NewsItem(
 
                 DropdownMenuItem(
                     text = {  Text("Share") },
-                    onClick = { /* Handle refresh! */ },
+                    onClick = { onShareNews(item.link)
+                              expanded = false},
                     leadingIcon = {Icon(painter = painterResource(id = R.drawable.ic_share ), contentDescription = null) }
 
                 )

@@ -40,6 +40,7 @@ import com.google.android.play.integrity.internal.i
 fun HomeScreen(
     homeViewsModel: HomeViewModel =  hiltViewModel(),
     onItemClicked:(String)-> Unit,
+    onShareNews :(String)-> Unit,
     listState: LazyListState = rememberLazyListState()
 ){
     NewsWaveTheme {
@@ -102,7 +103,8 @@ fun HomeScreen(
                 newsList = uiState.articles,
                 onItemClicked = onItemClicked,
                 listState = listState,
-                onBookmarkClicked = {item -> homeViewsModel.bookmarkClicked(item = item) }
+                onBookmarkClicked = {item -> homeViewsModel.bookmarkClicked(item = item) },
+                onShareNews = onShareNews
             )
 
         }

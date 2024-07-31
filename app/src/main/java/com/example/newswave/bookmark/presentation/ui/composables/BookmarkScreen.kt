@@ -26,6 +26,7 @@ import com.example.newswave.core.presentation.ui.components.NewsList
 fun BookmarkScreen(
     onItemClicked:(String)-> Unit,
     bookmarkViewModel: BookmarkViewModel =  hiltViewModel(),
+    onShareNews :(String)-> Unit,
 ) {
     val uiState by bookmarkViewModel.uiState.collectAsState()
     bookmarkViewModel.onEvent(BookmarkEvent.LoadBookmark)
@@ -51,7 +52,8 @@ fun BookmarkScreen(
             NewsList(
                 newsList = uiState.bookmarkedNews,
                 onItemClicked = onItemClicked,
-                onBookmarkClicked = {item -> bookmarkViewModel.unBookmark(item = item) }
+                onBookmarkClicked = {item -> bookmarkViewModel.unBookmark(item = item) },
+                onShareNews = onShareNews
             )
 
         }

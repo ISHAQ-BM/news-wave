@@ -20,6 +20,7 @@ fun NewsWaveNavHost(
     onThemeUpdated :()->Unit,
     onLoadingStateChange :(Boolean)->Unit,
     navigate:(String)->Unit,
+    onShareNews :(String)-> Unit,
     modifier: Modifier=Modifier
 ) {
     NavHost(
@@ -39,9 +40,9 @@ fun NewsWaveNavHost(
                 }
             )
         }
-        composable(Home.route) { HomeScreen(onItemClicked = onItemClicked) }
-        composable(Search.route) { SearchScreen(onItemClicked = onItemClicked) }
-        composable(Bookmark.route) { BookmarkScreen(onItemClicked = onItemClicked) }
+        composable(Home.route) { HomeScreen(onItemClicked = onItemClicked,onShareNews=onShareNews) }
+        composable(Search.route) { SearchScreen(onItemClicked = onItemClicked,onShareNews=onShareNews) }
+        composable(Bookmark.route) { BookmarkScreen(onItemClicked = onItemClicked,onShareNews=onShareNews) }
         composable(Settings.route) { SettingsScreen(onThemeUpdated =onThemeUpdated ,onLoadingStateChange=onLoadingStateChange, navigate = navigate) }
         composable(Interests.route) { InterestScreen(onSaveSuccess = onSaveSuccess) }
 

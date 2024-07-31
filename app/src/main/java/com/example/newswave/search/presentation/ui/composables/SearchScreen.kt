@@ -32,6 +32,7 @@ import com.example.newswave.search.presentation.viewmodel.SearchViewModel
 fun SearchScreen(
     searchViewModel: SearchViewModel =  hiltViewModel(),
     onItemClicked:(String)-> Unit,
+    onShareNews :(String)-> Unit,
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
     var searchQuery by remember {
@@ -77,7 +78,8 @@ fun SearchScreen(
             NewsList(
                 newsList = searchUiState.searchResult,
                 onItemClicked = onItemClicked,
-                onBookmarkClicked = {item -> searchViewModel.bookmarkClicked(item = item) }
+                onBookmarkClicked = {item -> searchViewModel.bookmarkClicked(item = item) },
+                onShareNews = onShareNews
             )
         }
     }

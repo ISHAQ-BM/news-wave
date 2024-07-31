@@ -1,5 +1,7 @@
 package com.example.newswave.main.presentation.ui
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
@@ -66,6 +68,7 @@ class MainActivity : AppCompatActivity() {
                 mutableStateOf("")
             }
             var darkTheme by remember { mutableStateOf(false) }
+            val context=this
             NewsWaveTheme(darkTheme = darkTheme) {
                 Surface {
                     Box {
@@ -83,7 +86,14 @@ class MainActivity : AppCompatActivity() {
                                 popUpTo(navController.graph.id){
                                     inclusive= true
                                 }
-                            } }
+                            }
+                            },
+                            onShareNews = {
+                                shareNews(
+                                    context = context,
+                                    link = it
+                                )
+                            }
                         )
                         if (showBottomSheet) {
                             NewsDetailsBottomSheet(
@@ -108,7 +118,8 @@ class MainActivity : AppCompatActivity() {
         onItemClicked:(String)->Unit,
         onThemeUpdated:()->Unit,
         onLoadingStateChange :(Boolean)->Unit,
-        navigate:(String)->Unit
+        navigate:(String)->Unit,
+        onShareNews :(String)->Unit
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -154,13 +165,23 @@ class MainActivity : AppCompatActivity() {
                     },
                     onThemeUpdated = onThemeUpdated,
                     onLoadingStateChange=onLoadingStateChange,
-                    navigate = navigate
+                    navigate = navigate,
+                    onShareNews= onShareNews
                 )
             }
         }
 
     }
 
+    private fun shareNews(context: Context, link: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(Intent.EXTRA_TEXT, link)
+            type = "text/plain"
+        }
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        context.startActivity(shareIntent)
+    }
 
 
 
