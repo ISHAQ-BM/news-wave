@@ -25,6 +25,8 @@ import com.example.newswave.search.data.source.remote.SearchNewsRemoteDataSource
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import com.example.newswave.search.domain.repository.SearchNewsRepository
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
+import com.example.newswave.settings.domain.repository.SettingsRepository
+import com.example.newswave.settings.domain.use_case.SignOutUseCase
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.identity.Identity
 import com.google.android.gms.auth.api.identity.SignInClient
@@ -159,6 +161,12 @@ object AppModule {
     @Singleton
     fun provideOneTapSignInUseCase(authRepository: AuthRepository):OneTapSignInUseCase{
         return OneTapSignInUseCase(authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSignOutUseCase(settingsRepository: SettingsRepository):SignOutUseCase{
+        return SignOutUseCase(settingsRepository)
     }
 
 

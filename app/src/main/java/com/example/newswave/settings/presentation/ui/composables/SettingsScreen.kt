@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -26,13 +27,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import com.example.newswave.R
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
+import com.example.newswave.main.presentation.ui.components.Auth
+import com.example.newswave.settings.presentation.viewmodel.SettingsViewModel
 
 @Composable
 fun SettingsScreen(
-    onThemeUpdated :()->Unit
+    onThemeUpdated :()->Unit,
+    onLoadingStateChange :(Boolean)->Unit,
+    navigate:(String)->Unit
 ){
         @OptIn(ExperimentalMaterial3Api::class)
         Scaffold(
@@ -55,7 +61,11 @@ fun SettingsScreen(
             Column (
                 modifier = Modifier.padding(top =it.calculateTopPadding())
             ){
-                Settings(onThemeUpdated = onThemeUpdated)
+                Settings(
+                    onThemeUpdated = onThemeUpdated,
+                    onLoadingStateChange = onLoadingStateChange,
+                    navigate = navigate
+                )
             }
 
     }
@@ -65,27 +75,34 @@ fun SettingsScreen(
 @Composable
 fun Settings(
     modifier: Modifier=Modifier,
-    onThemeUpdated: () -> Unit
+    onThemeUpdated: () -> Unit,
+    onLoadingStateChange: (Boolean) -> Unit,
+    navigate: (String) -> Unit,
+    viewModel: SettingsViewModel = hiltViewModel()
 ){
     Column(
         modifier.padding(horizontal = 16.dp)
     ){
 
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Profile" , contentDescription ="" , navigate = {})
+        val uiState by viewModel.uiState.collectAsState()
+        onLoadingStateChange(uiState.isLoading)
+        if (uiState.isSignOut)
+            navigate(Auth.route)
+        SettingsListItem(icon = R.drawable.ic_profile, settingText ="Profile" , contentDescription ="" , onClick = {})
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Account" , contentDescription ="", navigate = {} )
+        SettingsListItem(icon = R.drawable.ic_account, settingText ="Account" , contentDescription ="", onClick = {} )
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_interests, settingText ="Interests" , contentDescription ="" , navigate = {})
+        SettingsListItem(icon = R.drawable.ic_interests, settingText ="Interests" , contentDescription ="" , onClick = {})
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Notifications" , contentDescription ="" , navigate = {})
+        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Notifications" , contentDescription ="" , onClick = {})
         HorizontalDivider()
         DarkMode(onThemeUpdated=onThemeUpdated)
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Terms & Conditions" , contentDescription ="" , navigate = {})
+        SettingsListItem(icon = R.drawable.ic_privacy, settingText ="Privacy policy" , contentDescription ="" , onClick = {})
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="About" , contentDescription ="" , navigate = {})
+        SettingsListItem(icon = R.drawable.ic_about, settingText ="About" , contentDescription ="" , onClick = {})
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_notification, settingText ="Log Out" , contentDescription ="", navigate = {} )
+        SettingsListItem(icon = R.drawable.ic_logout, settingText ="Log Out" , contentDescription ="", onClick = {viewModel.signOut()} )
         HorizontalDivider()
 
     }
@@ -131,16 +148,16 @@ fun SettingsListItem(
     icon:Int,
     settingText:String,
     contentDescription:String,
-    navigate :() -> Unit
+    onClick :() -> Unit
 ){
     Row (
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
             .fillMaxWidth()
-            .padding(vertical = 16.dp)
             .clickable {
-                navigate
+                onClick()
             }
+            .padding(vertical = 16.dp)
 
     ){
         Icon(painter = painterResource(icon), contentDescription =contentDescription )

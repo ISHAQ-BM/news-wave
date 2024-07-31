@@ -10,6 +10,8 @@ import com.example.newswave.interests.data.repository.InterestsRepositoryImpl
 import com.example.newswave.interests.domain.repository.InterestsRepository
 import com.example.newswave.search.data.repository.SearchNewsRepositoryImpl
 import com.example.newswave.search.domain.repository.SearchNewsRepository
+import com.example.newswave.settings.data.repository.SettingsRepositoryImpl
+import com.example.newswave.settings.domain.repository.SettingsRepository
 
 import dagger.Binds
 import dagger.Module
@@ -47,6 +49,13 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindInterestsRepository(interestsRepositoryImpl: InterestsRepositoryImpl): InterestsRepository
+
+
+
+
+    @Binds
+    @Singleton
+    abstract fun bindSettingsRepository(settingsRepositoryImpl: SettingsRepositoryImpl): SettingsRepository
 
 
 

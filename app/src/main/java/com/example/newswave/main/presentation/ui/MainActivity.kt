@@ -36,6 +36,7 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.newswave.core.presentation.ui.components.LoadingLayer
 import com.example.newswave.core.presentation.ui.components.NewsDetailsBottomSheet
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.main.presentation.ui.components.Auth
@@ -58,6 +59,9 @@ class MainActivity : AppCompatActivity() {
             var showBottomSheet by remember {
                 mutableStateOf(false)
             }
+            var isLoading by remember {
+                mutableStateOf(false)
+            }
             var newsLink by remember {
                 mutableStateOf("")
             }
@@ -65,6 +69,7 @@ class MainActivity : AppCompatActivity() {
             NewsWaveTheme(darkTheme = darkTheme) {
                 Surface {
                     Box {
+
                         MainScreen(
                             navController = navController,
                             onItemClicked={link ->
@@ -72,13 +77,22 @@ class MainActivity : AppCompatActivity() {
                                 newsLink=link
 
                             },
-                            onThemeUpdated = {darkTheme = !darkTheme}
+                            onThemeUpdated = {darkTheme = !darkTheme},
+                            onLoadingStateChange ={it -> isLoading = it },
+                            navigate = {route -> navController.navigate(route){
+                                popUpTo(navController.graph.id){
+                                    inclusive= true
+                                }
+                            } }
                         )
                         if (showBottomSheet) {
                             NewsDetailsBottomSheet(
                                 onDismiss = { showBottomSheet=false },
                                 link =newsLink
                             )
+                        }
+                        if (isLoading){
+                            LoadingLayer()
                         }
                     }
                 }
@@ -92,7 +106,9 @@ class MainActivity : AppCompatActivity() {
     fun MainScreen(
         navController: NavHostController,
         onItemClicked:(String)->Unit,
-        onThemeUpdated:()->Unit
+        onThemeUpdated:()->Unit,
+        onLoadingStateChange :(Boolean)->Unit,
+        navigate:(String)->Unit
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -136,7 +152,9 @@ class MainActivity : AppCompatActivity() {
                     {
                         navController.navigateSingleTopTo(Home.route)
                     },
-                    onThemeUpdated = onThemeUpdated
+                    onThemeUpdated = onThemeUpdated,
+                    onLoadingStateChange=onLoadingStateChange,
+                    navigate = navigate
                 )
             }
         }
