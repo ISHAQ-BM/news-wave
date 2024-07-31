@@ -24,7 +24,7 @@ fun NewsWaveNavHost(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Auth.route,
+        startDestination = Home.route,
         modifier = modifier
     ) {
         composable(Auth.route) {
@@ -40,8 +40,8 @@ fun NewsWaveNavHost(
             )
         }
         composable(Home.route) { HomeScreen(onItemClicked = onItemClicked) }
-        composable(Search.route) { SearchScreen(navController = navHostController) }
-        composable(Bookmark.route) { BookmarkScreen(navController = navHostController) }
+        composable(Search.route) { SearchScreen(onItemClicked = onItemClicked) }
+        composable(Bookmark.route) { BookmarkScreen(onItemClicked = onItemClicked) }
         composable(Settings.route) { SettingsScreen(onThemeUpdated =onThemeUpdated ,onLoadingStateChange=onLoadingStateChange, navigate = navigate) }
         composable(Interests.route) { InterestScreen(onSaveSuccess = onSaveSuccess) }
 

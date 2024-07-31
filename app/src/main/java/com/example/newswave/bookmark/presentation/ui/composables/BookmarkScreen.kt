@@ -24,7 +24,7 @@ import com.example.newswave.core.presentation.ui.components.NewsList
 
 @Composable
 fun BookmarkScreen(
-    navController:NavHostController,
+    onItemClicked:(String)-> Unit,
     bookmarkViewModel: BookmarkViewModel =  hiltViewModel(),
 ) {
     val uiState by bookmarkViewModel.uiState.collectAsState()
@@ -50,7 +50,8 @@ fun BookmarkScreen(
         ) {
             NewsList(
                 newsList = uiState.bookmarkedNews,
-                onItemClicked = {link -> navController.navigate("news_details/${Uri.encode(link)}")},
+                onItemClicked = onItemClicked,
+                onBookmarkClicked = {item -> bookmarkViewModel.unBookmark(item = item) }
             )
 
         }

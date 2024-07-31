@@ -13,7 +13,9 @@ import com.example.newswave.bookmark.data.source.local.BookmarkLocalDataSource
 import com.example.newswave.bookmark.data.source.local.NewsDao
 import com.example.newswave.bookmark.data.source.local.NewsDatabase
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
+import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
+import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.util.SIGN_IN_REQUEST
 import com.example.newswave.core.util.SIGN_UP_REQUEST
 import com.example.newswave.home.data.source.remote.HomeRemoteDataSource
@@ -143,6 +145,18 @@ object AppModule {
     @Singleton
     fun provideGetBookmarkedNewsUseCase(bookmarkRepository: BookmarkRepository):GetBookmarkedNewsUseCase{
         return GetBookmarkedNewsUseCase(bookmarkRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBookmarkNewsUseCase(bookmarkRepository: BookmarkRepository):BookmarkNewsUseCase{
+        return BookmarkNewsUseCase(bookmarkRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideUnBookmarkNewsUseCase(bookmarkRepository: BookmarkRepository):UnBookmarkNewsUseCase{
+        return UnBookmarkNewsUseCase(bookmarkRepository)
     }
 
     @Provides

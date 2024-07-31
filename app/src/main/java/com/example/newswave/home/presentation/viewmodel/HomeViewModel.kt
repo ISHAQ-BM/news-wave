@@ -1,11 +1,15 @@
 package com.example.newswave.home.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
+import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
+import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
-import com.example.newswave.home.presentation.ui.event.NewsEvent
+import com.example.newswave.home.presentation.ui.event.HomeEvent
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.state.NewsUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,21 +20,19 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class NewsViewModel @Inject constructor(
-    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase
+class HomeViewModel @Inject constructor(
+    val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
+    val bookmarkNewsUseCase: BookmarkNewsUseCase,
+    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(NewsUiState())
     val uiState: StateFlow<NewsUiState> = _uiState
 
 
-    fun onEvent(event: NewsEvent){
+    fun onEvent(event: HomeEvent){
         when(event){
-            is NewsEvent.ArticleSelected -> TODO()
-            is NewsEvent.BookmarkArticle -> TODO()
-            NewsEvent.LoadBookmarkedArticles -> TODO()
-            is NewsEvent.UnBookmarkArticle -> TODO()
-            is NewsEvent.CategoryChanged -> {
+            is HomeEvent.CategoryChanged -> {
                 _uiState.update {
                     it.copy(category = event.category)
 
@@ -40,7 +42,7 @@ class NewsViewModel @Inject constructor(
         }
     }
 
-    fun getNewsHeadlines() {
+    private fun getNewsHeadlines() {
         _uiState.update {
             it.copy(isLoading = true)
         }
@@ -73,6 +75,40 @@ class NewsViewModel @Inject constructor(
                     }
 
                 }
+            }
+        }
+    }
+
+    fun bookmarkClicked(item:NewsItemUiState){
+        viewModelScope.launch {
+            if (!item.isBookmarked){
+                bookmarkNewsUseCase(
+                    News(
+                        item.id,
+                        item.title,
+                        item.author,
+                        item.category,
+                        item.publishDate,
+                        item.imageUrl,
+                        item.link,
+                        true)
+                )
+                val index=_uiState.value.articles.indexOf(item)
+                _uiState.value.articles[index].isBookmarked = true
+                Log.d("news list","${_uiState.value.articles}")
+            }else{
+                unBookmarkNewsUseCase(
+                    News(item.id,
+                        item.title,
+                        item.author,
+                        item.category,
+                        item.publishDate,
+                        item.imageUrl,
+                        item.link,
+                        true)
+                )
+                val index=_uiState.value.articles.indexOf(item)
+                _uiState.value.articles[index].isBookmarked = false
             }
         }
     }

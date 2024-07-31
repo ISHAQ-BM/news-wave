@@ -32,18 +32,23 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
+import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.example.newswave.R
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
+import com.google.android.play.integrity.internal.i
 
 @Composable
 fun NewsList(
     newsList: List<NewsItemUiState>,
     onItemClicked: (String)->Unit,
+    onBookmarkClicked :(NewsItemUiState)->Unit,
     modifier: Modifier = Modifier,
     listState: LazyListState = rememberLazyListState()
 ){
@@ -55,7 +60,8 @@ fun NewsList(
             items(items = newsList, key = { item -> item.id }) { newsItem ->
                 NewsItem(
                     item = newsItem,
-                    onItemClicked = onItemClicked
+                    onItemClicked = onItemClicked,
+                    onBookmarkClicked = onBookmarkClicked
                 )
                 HorizontalDivider()
             }
@@ -72,7 +78,8 @@ fun NewsList(
 fun NewsItem(
     modifier: Modifier = Modifier,
     item: NewsItemUiState,
-    onItemClicked : (String) -> Unit
+    onItemClicked : (String) -> Unit,
+    onBookmarkClicked: (NewsItemUiState) -> Unit
 ){
 
     Box (
@@ -160,11 +167,17 @@ fun NewsItem(
 
                 DropdownMenuItem(
                     text = {  Text("Share") },
-                    onClick = { /* Handle refresh! */ }
+                    onClick = { /* Handle refresh! */ },
+                    leadingIcon = {Icon(painter = painterResource(id = R.drawable.ic_share ), contentDescription = null) }
+
                 )
                 DropdownMenuItem(
                     text = { Text("Bookmark") },
-                    onClick = { /* Handle settings! */ }
+                    onClick = {
+                        onBookmarkClicked(item)
+                              expanded = false},
+                    leadingIcon = {Icon(painter = painterResource(id = if (!item.isBookmarked) R.drawable.ic_outline_bookmark else R.drawable.ic_baseline_bookmark), contentDescription = null) }
+
                 )
 
             }
@@ -173,3 +186,5 @@ fun NewsItem(
 
 
 }
+
+

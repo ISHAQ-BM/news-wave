@@ -3,6 +3,9 @@ package com.example.newswave.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
+import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
+import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
@@ -19,7 +22,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SearchViewModel @Inject constructor(
-    val searchNewsUseCase: SearchNewsUseCase
+    val searchNewsUseCase: SearchNewsUseCase,
+    val bookmarkNewsUseCase: BookmarkNewsUseCase,
+    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
 ):ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -63,6 +68,40 @@ class SearchViewModel @Inject constructor(
 
                 }
 
+            }
+        }
+    }
+
+    fun bookmarkClicked(item:NewsItemUiState){
+        viewModelScope.launch {
+            if (!item.isBookmarked){
+                bookmarkNewsUseCase(
+                    News(item.id,
+                        item.title,
+                        item.author,
+                        item.category,
+                        item.publishDate,
+                        item.imageUrl,
+                        item.link,
+                        true)
+                )
+                val index=_uiState.value.searchResult.indexOf(item)
+                _uiState.value.searchResult[index].isBookmarked = true
+            }else{
+                unBookmarkNewsUseCase(
+                    News(
+                        item.id,
+                        item.title,
+                        item.author,
+                        item.category,
+                        item.publishDate,
+                        item.imageUrl,
+                        item.link,
+                        true
+                    )
+                )
+                val index=_uiState.value.searchResult.indexOf(item)
+                _uiState.value.searchResult[index].isBookmarked = false
             }
         }
     }

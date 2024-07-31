@@ -3,8 +3,10 @@ package com.example.newswave.bookmark.presentation.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
+import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.bookmark.presentation.ui.event.BookmarkEvent
 import com.example.newswave.bookmark.presentation.ui.state.BookmarkUiState
+import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.util.Result
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,7 +18,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class BookmarkViewModel @Inject constructor(
-    val getBookmarkedNewsUseCase: GetBookmarkedNewsUseCase
+    val getBookmarkedNewsUseCase: GetBookmarkedNewsUseCase,
+    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
 ):ViewModel() {
 
     private val _uiState = MutableStateFlow(BookmarkUiState())
@@ -58,6 +61,26 @@ class BookmarkViewModel @Inject constructor(
                 }
 
             }
+        }
+    }
+
+
+    fun unBookmark(item:NewsItemUiState){
+        viewModelScope.launch {
+
+                unBookmarkNewsUseCase(
+                    News(item.id,
+                        item.title,
+                        item.author,
+                        item.category,
+                        item.publishDate,
+                        item.imageUrl,
+                        item.link,
+                        true)
+                )
+                val index=_uiState.value.bookmarkedNews.indexOf(item)
+                _uiState.value.bookmarkedNews[index].isBookmarked = false
+
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.example.newswave.home.presentation.ui.composables
 
-import android.net.Uri
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,24 +28,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.example.newswave.core.presentation.ui.components.NewsList
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.core.util.categories
-import com.example.newswave.home.presentation.ui.event.NewsEvent
-import com.example.newswave.home.presentation.viewmodel.NewsViewModel
+import com.example.newswave.home.presentation.ui.event.HomeEvent
+import com.example.newswave.home.presentation.viewmodel.HomeViewModel
+import com.google.android.play.integrity.internal.i
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    newsViewsModel: NewsViewModel =  hiltViewModel(),
+    homeViewsModel: HomeViewModel =  hiltViewModel(),
     onItemClicked:(String)-> Unit,
     listState: LazyListState = rememberLazyListState()
 ){
     NewsWaveTheme {
 
-        val uiState by newsViewsModel.uiState.collectAsState()
-        newsViewsModel.onEvent(NewsEvent.CategoryChanged("top"))
+        val uiState by homeViewsModel.uiState.collectAsState()
+        homeViewsModel.onEvent(HomeEvent.CategoryChanged("top"))
         Scaffold (
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +80,7 @@ fun HomeScreen(
                             selected = selectedTabIndex.value == index,
                             onClick = {
                                 selectedTabIndex.value = index
-                                newsViewsModel.onEvent(NewsEvent.CategoryChanged(categories[selectedTabIndex.value]))
+                                homeViewsModel.onEvent(HomeEvent.CategoryChanged(categories[selectedTabIndex.value]))
                             },
                             text = { Text(text = currentTab) }
                         )
@@ -102,7 +101,8 @@ fun HomeScreen(
             NewsList(
                 newsList = uiState.articles,
                 onItemClicked = onItemClicked,
-                listState = listState
+                listState = listState,
+                onBookmarkClicked = {item -> homeViewsModel.bookmarkClicked(item = item) }
             )
 
         }

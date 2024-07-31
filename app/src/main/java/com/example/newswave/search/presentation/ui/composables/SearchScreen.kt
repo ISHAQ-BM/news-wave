@@ -31,7 +31,7 @@ import com.example.newswave.search.presentation.viewmodel.SearchViewModel
 @Composable
 fun SearchScreen(
     searchViewModel: SearchViewModel =  hiltViewModel(),
-    navController:NavHostController,
+    onItemClicked:(String)-> Unit,
 ) {
     val searchUiState by searchViewModel.uiState.collectAsState()
     var searchQuery by remember {
@@ -71,12 +71,13 @@ fun SearchScreen(
             })
         },
     ) {
-        Box(modifier = Modifier.padding(it.calculateTopPadding())) {
+        Box(modifier = Modifier.padding(top = it.calculateTopPadding())) {
 
 
             NewsList(
                 newsList = searchUiState.searchResult,
-                onItemClicked = {link -> navController.navigate("news_details/${Uri.encode(link)}")},
+                onItemClicked = onItemClicked,
+                onBookmarkClicked = {item -> searchViewModel.bookmarkClicked(item = item) }
             )
         }
     }

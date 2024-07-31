@@ -8,5 +8,5 @@ data class NewsItemUiState(
     val publishDate: String,
     val category: String,
     val link:String,
-    val isBookmarked:Boolean
+    var isBookmarked:Boolean
 )
