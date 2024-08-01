@@ -7,13 +7,13 @@ import java.io.Serializable
 
 @Entity(tableName = "news")
 data class News(
-    val id:String,
-    val title: String,
-    val author: String?,
-    val category: String,
-    val timestamp: String,
-    val imageUrl: String,
+    val id:String="",
+    val title: String="",
+    val author: String?="",
+    val category: String="",
+    val timestamp: String="",
+    val imageUrl: String="",
     @PrimaryKey
-    val link: String,
-    var isBookmarked:Boolean
+    val link: String="",
+    var isBookmarked:Boolean=false
 )

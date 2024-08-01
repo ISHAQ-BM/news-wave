@@ -1,5 +1,6 @@
 package com.example.newswave.bookmark.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
@@ -9,6 +10,7 @@ import com.example.newswave.bookmark.presentation.ui.state.BookmarkUiState
 import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.util.Result
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.utils.asUiText
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -39,7 +41,7 @@ class BookmarkViewModel @Inject constructor(
         viewModelScope.launch {
             getBookmarkedNewsUseCase().collect{result ->
                 when(result){
-                    is Result.Error -> TODO()
+                    is Result.Error -> {Log.d("bookmark","${result.error}")}
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
@@ -52,7 +54,7 @@ class BookmarkViewModel @Inject constructor(
                                         it.timestamp,
                                         it.category,
                                         it.link,
-                                        it.isBookmarked
+                                        true
                                     )
                                 }
                             )
@@ -69,14 +71,7 @@ class BookmarkViewModel @Inject constructor(
         viewModelScope.launch {
 
                 unBookmarkNewsUseCase(
-                    News(item.id,
-                        item.title,
-                        item.author,
-                        item.category,
-                        item.publishDate,
-                        item.imageUrl,
-                        item.link,
-                        true)
+                        item.title
                 )
                 val index=_uiState.value.bookmarkedNews.indexOf(item)
                 _uiState.value.bookmarkedNews[index].isBookmarked = false

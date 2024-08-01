@@ -92,21 +92,26 @@ class HomeViewModel @Inject constructor(
                         item.imageUrl,
                         item.link,
                         true)
-                )
+                ).collect{result ->
+                    when(result){
+                        is Result.Error -> {Log.d("bookmark error","${result.error}")}
+                        is Result.Success -> {Log.d("bookmark sucess","${result.data}")}
+                    }
+
+                }
                 val index=_uiState.value.articles.indexOf(item)
                 _uiState.value.articles[index].isBookmarked = true
-                Log.d("news list","${_uiState.value.articles}")
-            }else{
+                }else{
                 unBookmarkNewsUseCase(
-                    News(item.id,
-                        item.title,
-                        item.author,
-                        item.category,
-                        item.publishDate,
-                        item.imageUrl,
-                        item.link,
-                        true)
-                )
+                        item.title
+                ).collect{result ->
+                    when(result){
+                        is Result.Error -> {}
+                        is Result.Success -> {}
+
+                    }
+
+                }
                 val index=_uiState.value.articles.indexOf(item)
                 _uiState.value.articles[index].isBookmarked = false
             }

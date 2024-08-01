@@ -3,6 +3,8 @@ package com.example.newswave.di
 
 import android.app.Application
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresExtension
 import androidx.room.Room
 import com.example.newswave.BuildConfig
 import com.example.newswave.auth.data.source.remote.AuthRemoteDataSource
@@ -12,6 +14,7 @@ import com.example.newswave.auth.domain.use_case.SignUserWithCredentialUseCase
 import com.example.newswave.bookmark.data.source.local.BookmarkLocalDataSource
 import com.example.newswave.bookmark.data.source.local.NewsDao
 import com.example.newswave.bookmark.data.source.local.NewsDatabase
+import com.example.newswave.bookmark.data.source.remote.BookmarkRemoteDataSource
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
@@ -194,6 +197,14 @@ object AppModule {
     @Singleton
     fun provideBookmarkLocalDataSource(newsDao: NewsDao):BookmarkLocalDataSource{
         return BookmarkLocalDataSource(newsDao)
+    }
+
+
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    @Provides
+    @Singleton
+    fun provideBookmarkRemoteDataSource(auth: FirebaseAuth,firestore: FirebaseFirestore): BookmarkRemoteDataSource {
+        return BookmarkRemoteDataSource(firestore, auth)
     }
 
     @Provides

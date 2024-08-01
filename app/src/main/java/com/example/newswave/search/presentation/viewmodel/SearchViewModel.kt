@@ -89,16 +89,7 @@ class SearchViewModel @Inject constructor(
                 _uiState.value.searchResult[index].isBookmarked = true
             }else{
                 unBookmarkNewsUseCase(
-                    News(
-                        item.id,
-                        item.title,
-                        item.author,
-                        item.category,
-                        item.publishDate,
-                        item.imageUrl,
-                        item.link,
-                        true
-                    )
+                        item.title
                 )
                 val index=_uiState.value.searchResult.indexOf(item)
                 _uiState.value.searchResult[index].isBookmarked = false

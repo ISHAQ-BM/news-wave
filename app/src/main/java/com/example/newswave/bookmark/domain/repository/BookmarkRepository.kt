@@ -7,6 +7,6 @@ import kotlinx.coroutines.flow.Flow
 
 interface BookmarkRepository {
     suspend fun getBookmarkedNews():Flow<Result<List<News>,Error>>
-    suspend fun bookmarkNews(news: News)
-    suspend fun unBookmarkNews(news: News)
+    suspend fun bookmarkNews(news: News):Flow<Result<Boolean,Error>>
+    suspend fun unBookmarkNews(title:String):Flow<Result<Boolean,Error>>
 }

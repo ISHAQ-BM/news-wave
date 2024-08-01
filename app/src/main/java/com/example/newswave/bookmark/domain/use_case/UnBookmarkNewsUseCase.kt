@@ -7,6 +7,6 @@ import javax.inject.Inject
 class UnBookmarkNewsUseCase @Inject constructor(
     private val bookmarkRepository: BookmarkRepository
 ){
-    suspend operator fun invoke(news: News)=bookmarkRepository.unBookmarkNews(news)
+    suspend operator fun invoke(title:String)=bookmarkRepository.unBookmarkNews(title)
 
 }

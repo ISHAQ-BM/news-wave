@@ -26,6 +26,10 @@ const val PHOTO_URL = "photoUrl"
 const val CREATED_AT = "createdAt"
 const val INTERESTS = "interests"
 
+
+const val BOOKMARKED = "bookmarked"
+const val NEWS = "news"
+
 const val SIGN_IN_REQUEST = "signInRequest"
 const val SIGN_UP_REQUEST = "signUPRequest"
 val categories= listOf(
