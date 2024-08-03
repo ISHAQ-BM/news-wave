@@ -136,6 +136,10 @@ dependencies {
     //webview
     implementation (libs.compose.webview)
 
+    //paging
+    implementation (libs.androidx.paging.runtime.ktx)
+    implementation (libs.androidx.paging.compose)
+
 
 
 

@@ -7,6 +7,5 @@ data class SearchUiState (
 
     val searchQuery:String="",
     val isLoading:Boolean=false,
-    val searchResult:List<NewsItemUiState> = listOf(),
     val generalMessage: UiText? = null
 )

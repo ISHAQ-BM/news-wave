@@ -6,12 +6,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScrollableTabRow
@@ -28,25 +33,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.example.newswave.core.presentation.ui.components.NewsList
+import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
+import com.example.newswave.core.presentation.ui.components.NewsItem
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.core.util.categories
 import com.example.newswave.home.presentation.ui.event.HomeEvent
 import com.example.newswave.home.presentation.viewmodel.HomeViewModel
-import com.google.android.play.integrity.internal.i
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
-    homeViewsModel: HomeViewModel =  hiltViewModel(),
+    homeViewModel: HomeViewModel =  hiltViewModel(),
     onItemClicked:(String)-> Unit,
     onShareNews :(String)-> Unit,
     listState: LazyListState = rememberLazyListState()
 ){
     NewsWaveTheme {
+        val articles: LazyPagingItems<NewsItemUiState> = homeViewModel.articles.collectAsLazyPagingItems()
 
-        val uiState by homeViewsModel.uiState.collectAsState()
-        homeViewsModel.onEvent(HomeEvent.CategoryChanged("top"))
+        homeViewModel.onEvent(HomeEvent.CategoryChanged("top"))
         Scaffold (
             topBar = {
                 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +88,7 @@ fun HomeScreen(
                             selected = selectedTabIndex.value == index,
                             onClick = {
                                 selectedTabIndex.value = index
-                                homeViewsModel.onEvent(HomeEvent.CategoryChanged(categories[selectedTabIndex.value]))
+                                homeViewModel.onEvent(HomeEvent.CategoryChanged(categories[selectedTabIndex.value]))
                             },
                             text = { Text(text = currentTab) }
                         )
@@ -99,11 +106,11 @@ fun HomeScreen(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            NewsList(
-                newsList = uiState.articles,
+            HomeNewsList(
+                news = articles,
                 onItemClicked = onItemClicked,
                 listState = listState,
-                onBookmarkClicked = {item -> homeViewsModel.bookmarkClicked(item = item) },
+                onBookmarkClicked = {item -> homeViewModel.bookmarkClicked(item = item) },
                 onShareNews = onShareNews
             )
 
@@ -112,5 +119,45 @@ fun HomeScreen(
             }
         }
     }
+
+}
+
+@Composable
+fun HomeNewsList(
+    news: LazyPagingItems<NewsItemUiState>,
+    onItemClicked: (String)->Unit,
+    onBookmarkClicked :(NewsItemUiState)->Unit,
+    modifier: Modifier = Modifier,
+    listState: LazyListState = rememberLazyListState(),
+    onShareNews :(String)-> Unit,
+) {
+
+    LazyColumn(
+        state = listState,
+        modifier = modifier,
+    ) {
+        items(news.itemCount) { index ->
+            val newsItem = news[index]
+            newsItem?.let {
+                NewsItem(
+                    item = it,
+                    onItemClicked = onItemClicked,
+                    onBookmarkClicked = onBookmarkClicked,
+                    onShareNews = onShareNews
+                )
+                HorizontalDivider()
+
+            }
+        }
+        item {
+            if(news.loadState.append is LoadState.Loading) {
+                CircularProgressIndicator()
+            }
+        }
+    }
+
+
+
+
 
 }

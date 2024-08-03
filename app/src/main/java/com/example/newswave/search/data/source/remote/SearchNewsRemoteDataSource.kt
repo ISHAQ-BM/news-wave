@@ -1,6 +1,9 @@
 package com.example.newswave.search.data.source.remote
 
 import android.util.Log
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import com.example.newswave.core.data.source.remote.utils.Util
 import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.util.Error
@@ -8,6 +11,7 @@ import com.example.newswave.core.util.Result
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import retrofit2.HttpException
 import java.io.IOException
 import javax.inject.Inject
@@ -15,38 +19,30 @@ import javax.inject.Inject
 class SearchNewsRemoteDataSource @Inject constructor(
     private val searchApiService: SearchApiService
 ) {
-    suspend fun searchNews(searchQuery:String): Flow<Result<List<News>, Error.Network>> {
+    suspend fun searchNews(searchQuery:String): Flow<Result<PagingData<News>, Error.Network>> {
         return flow {
             try {
-                val response = searchApiService.searchNews(qInTitle = searchQuery)
-                Log.d("response","${response}")
-                if (response.isSuccessful) {
-                    Log.d("response body","${response.body()!!.results}")
-                    val newsList = response.body()!!.results.map { News(
-                        it.link,
-                        it.title,
-                        it.creator?.getOrNull(0),
-                        it.category[0],
-                        it.pubDate,
-                        it.imageUrl ?:"https://media.gettyimages.com/id/1311148884/vector/abstract-globe-background.jpg?s=612x612&w=0&k=20&c=9rVQfrUGNtR5Q0ygmuQ9jviVUfrnYHUHcfiwaH5-WFE=",
-                        it.link,
-                        false
-                    )
+                Pager(
+                    config = PagingConfig(
+                        pageSize = 10,
+                        enablePlaceholders = false
+                    ),
+                    pagingSourceFactory = { SearchPagingSource(searchQuery, searchApiService) }
+                ).flow
+                    .map<PagingData<News>, Result<PagingData<News>, Error.Network>> { pagingData ->
+                        Result.Success(
+                            pagingData
+                        )
                     }
-                    emit(Result.Success(newsList))
-                } else {
-                    val error = Util.getErrorFromStatusCode(response.code())
-                    emit(Result.Error(error))
-                }
+                    .collect { result ->
+                        emit(result)
+                    }
             } catch (e: HttpException) {
                 val error = Util.getErrorFromStatusCode(e.code())
                 emit(Result.Error(error))
             } catch (e: IOException) {
                 emit(Result.Error(Error.Network.NO_INTERNET))
             } catch (e: Exception) {
-                Log.d("response exceptione","${e.message}")
-                Log.d("response exceptione","${e.printStackTrace()}")
-                Log.d("response exceptione","${e.localizedMessage}")
                 emit(Result.Error(Error.Network.UNKNOWN))
             }
         }

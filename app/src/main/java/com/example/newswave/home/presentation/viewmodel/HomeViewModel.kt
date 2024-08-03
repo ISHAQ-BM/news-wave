@@ -3,6 +3,8 @@ package com.example.newswave.home.presentation.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
@@ -12,6 +14,7 @@ import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
 import com.example.newswave.home.presentation.ui.event.HomeEvent
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.state.NewsUiState
+import com.example.newswave.home.presentation.ui.state.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,8 +29,12 @@ class HomeViewModel @Inject constructor(
     val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(NewsUiState())
-    val uiState: StateFlow<NewsUiState> = _uiState
+    private val _uiState = MutableStateFlow(HomeUiState())
+    val uiState: StateFlow<HomeUiState> = _uiState
+
+    private val _articles = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
+    val articles: StateFlow<PagingData<NewsItemUiState>> = _articles
+
 
 
     fun onEvent(event: HomeEvent){
@@ -47,8 +54,8 @@ class HomeViewModel @Inject constructor(
             it.copy(isLoading = true)
         }
         viewModelScope.launch {
-            getNewsHeadlinesUseCase(_uiState.value.category).collect{result ->
-                when(result){
+            getNewsHeadlinesUseCase(_uiState.value.category).collect { result ->
+                when (result) {
                     is Result.Error -> _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -56,26 +63,28 @@ class HomeViewModel @Inject constructor(
                         )
                     }
 
-                    is Result.Success -> _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            articles = result.data.map {it ->
+
+                    is Result.Success -> {
+                        _articles.update {
+                            result.data.map {news ->
                                 NewsItemUiState(
-                                    it.id,
-                                    it.title,
-                                    it.author,
-                                    it.imageUrl,
-                                    it.timestamp,
-                                    it.category,
-                                    it.link,
-                                    false
+                                    id = news.id,
+                                    title = news.title,
+                                    author = news.author,
+                                    imageUrl = news.imageUrl,
+                                    publishDate = news.timestamp,
+                                    category = news.category,
+                                    link = news.link,
+                                    isBookmarked = false
                                 )
                             }
-                        )
+                        }
                     }
-
                 }
             }
+
+
+
         }
     }
 
@@ -99,8 +108,8 @@ class HomeViewModel @Inject constructor(
                     }
 
                 }
-                val index=_uiState.value.articles.indexOf(item)
-                _uiState.value.articles[index].isBookmarked = true
+//                val index=_uiState.value.articles.indexOf(item)
+//                _uiState.value.articles[index].isBookmarked = true
                 }else{
                 unBookmarkNewsUseCase(
                         item.title
@@ -112,8 +121,8 @@ class HomeViewModel @Inject constructor(
                     }
 
                 }
-                val index=_uiState.value.articles.indexOf(item)
-                _uiState.value.articles[index].isBookmarked = false
+                //val index=_uiState.value.articles.indexOf(item)
+                //_uiState.value.articles[index].isBookmarked = false
             }
         }
     }

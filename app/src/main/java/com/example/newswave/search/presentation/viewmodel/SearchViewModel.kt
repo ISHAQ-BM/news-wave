@@ -3,6 +3,8 @@ package com.example.newswave.search.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.PagingData
+import androidx.paging.map
 import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
@@ -30,6 +32,10 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState :StateFlow<SearchUiState> = _uiState
 
+    private val _articles = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
+    val articles: StateFlow<PagingData<NewsItemUiState>> = _articles
+
+
     fun onEvent(event:SearchNewsEvent){
         when(event){
             is SearchNewsEvent.ToggleSearch -> searchNews(event.searchQuery)
@@ -38,9 +44,14 @@ class SearchViewModel @Inject constructor(
     }
 
     private fun searchNews(searchQuery: String) {
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
-            searchNewsUseCase(searchQuery).collect{result ->
-                when(result){
+            searchNewsUseCase(searchQuery).collect{ result ->
+                when (result) {
                     is Result.Error -> _uiState.update {
                         it.copy(
                             isLoading = false,
@@ -48,24 +59,22 @@ class SearchViewModel @Inject constructor(
                         )
                     }
 
-                    is Result.Success -> _uiState.update {
-                        it.copy(
-                            isLoading = false,
-                            searchResult = result.data.map {it ->
+                    is Result.Success -> {
+                        _articles.update {
+                            result.data.map { news ->
                                 NewsItemUiState(
-                                    it.id,
-                                    it.title,
-                                    it.author,
-                                    it.imageUrl,
-                                    it.timestamp,
-                                    it.category,
-                                    it.link,
-                                    false
+                                    id = news.id,
+                                    title = news.title,
+                                    author = news.author,
+                                    imageUrl = news.imageUrl,
+                                    publishDate = news.timestamp,
+                                    category = news.category,
+                                    link = news.link,
+                                    isBookmarked = false
                                 )
                             }
-                        )
+                        }
                     }
-
                 }
 
             }
@@ -85,14 +94,14 @@ class SearchViewModel @Inject constructor(
                         item.link,
                         true)
                 )
-                val index=_uiState.value.searchResult.indexOf(item)
-                _uiState.value.searchResult[index].isBookmarked = true
+               // val index=_uiState.value.searchResult.indexOf(item)
+                //_uiState.value.searchResult[index].isBookmarked = true
             }else{
                 unBookmarkNewsUseCase(
                         item.title
                 )
-                val index=_uiState.value.searchResult.indexOf(item)
-                _uiState.value.searchResult[index].isBookmarked = false
+                //val index=_uiState.value.searchResult.indexOf(item)
+                //_uiState.value.searchResult[index].isBookmarked = false
             }
         }
     }

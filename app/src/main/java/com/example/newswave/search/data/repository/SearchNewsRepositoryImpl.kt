@@ -1,5 +1,6 @@
 package com.example.newswave.search.data.repository
 
+import androidx.paging.PagingData
 import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.util.Error
 import com.example.newswave.core.util.Result
@@ -11,7 +12,7 @@ import javax.inject.Inject
 class SearchNewsRepositoryImpl @Inject constructor(
     private val searchNewsRemoteDataSource: SearchNewsRemoteDataSource
 ):SearchNewsRepository {
-    override suspend fun searchNews(searchQuery: String): Flow<Result<List<News>, Error>> {
+    override suspend fun searchNews(searchQuery: String): Flow<Result<PagingData<News>, Error>> {
         return searchNewsRemoteDataSource.searchNews(searchQuery)
     }
 

@@ -24,6 +24,8 @@ material = "1.12.0"
 navigationCompose = "2.7.7"
 navigationFragmentKtx = "2.7.7"
 navigationUiKtx = "2.7.7"
+pagingCompose = "3.3.1"
+pagingRuntimeKtx = "3.3.1"
 playServicesAuth = "21.2.0"
 retrofit = "2.9.0"
 roomKtx = "2.6.1"
@@ -52,6 +54,8 @@ androidx-material3 = { module = "androidx.compose.material3:material3" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 androidx-navigation-fragment-ktx = { module = "androidx.navigation:navigation-fragment-ktx", version.ref = "navigationFragmentKtx" }
 androidx-navigation-ui-ktx = { module = "androidx.navigation:navigation-ui-ktx", version.ref = "navigationUiKtx" }
+androidx-paging-compose = { module = "androidx.paging:paging-compose", version.ref = "pagingCompose" }
+androidx-paging-runtime-ktx = { module = "androidx.paging:paging-runtime-ktx", version.ref = "pagingRuntimeKtx" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomRuntime" }
 androidx-runtime = { module = "androidx.compose.runtime:runtime" }
