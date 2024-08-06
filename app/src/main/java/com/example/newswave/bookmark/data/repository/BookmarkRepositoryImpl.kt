@@ -2,7 +2,6 @@ package com.example.newswave.bookmark.data.repository
 
 import android.os.Build
 import androidx.annotation.RequiresExtension
-import com.example.newswave.bookmark.data.source.local.BookmarkLocalDataSource
 import com.example.newswave.bookmark.data.source.remote.BookmarkRemoteDataSource
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.core.domain.model.News

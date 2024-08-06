@@ -99,6 +99,7 @@ dependencies {
     //Room
     implementation (libs.androidx.room.runtime)
     kapt ("androidx.room:room-compiler:2.6.1")
+    implementation (libs.androidx.room.paging)
     // Kotlin Extensions and Coroutines support for Room
     implementation (libs.androidx.room.ktx)
 

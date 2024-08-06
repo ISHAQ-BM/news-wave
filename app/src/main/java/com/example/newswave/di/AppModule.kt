@@ -11,9 +11,8 @@ import com.example.newswave.auth.data.source.remote.AuthRemoteDataSource
 import com.example.newswave.auth.domain.repository.AuthRepository
 import com.example.newswave.auth.domain.use_case.OneTapSignInUseCase
 import com.example.newswave.auth.domain.use_case.SignUserWithCredentialUseCase
-import com.example.newswave.bookmark.data.source.local.BookmarkLocalDataSource
-import com.example.newswave.bookmark.data.source.local.NewsDao
-import com.example.newswave.bookmark.data.source.local.NewsDatabase
+import com.example.newswave.home.data.source.local.NewsDao
+import com.example.newswave.home.data.source.local.NewsDatabase
 import com.example.newswave.bookmark.data.source.remote.BookmarkRemoteDataSource
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
@@ -21,6 +20,7 @@ import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.util.SIGN_IN_REQUEST
 import com.example.newswave.core.util.SIGN_UP_REQUEST
+import com.example.newswave.home.data.source.local.HomeLocalDataSource
 import com.example.newswave.home.data.source.remote.HomeRemoteDataSource
 import com.example.newswave.home.data.source.remote.api.HomeApiService
 import com.example.newswave.home.domain.repository.HomeRepository
@@ -193,13 +193,6 @@ object AppModule {
         return HomeRemoteDataSource(homeApiService)
     }
 
-    @Provides
-    @Singleton
-    fun provideBookmarkLocalDataSource(newsDao: NewsDao):BookmarkLocalDataSource{
-        return BookmarkLocalDataSource(newsDao)
-    }
-
-
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     @Provides
     @Singleton
@@ -231,6 +224,12 @@ object AppModule {
     @Singleton
     fun provideInterestsRemoteDataSource(auth:FirebaseAuth,firestore:FirebaseFirestore):InterestsRemoteDataSource{
         return InterestsRemoteDataSource(auth, firestore)
+    }
+
+    @Provides
+    @Singleton
+    fun provideHomeLocalDataSource(newsDatabase: NewsDatabase, homeApiService: HomeApiService):HomeLocalDataSource{
+        return HomeLocalDataSource(newsDatabase, homeApiService)
     }
 
 

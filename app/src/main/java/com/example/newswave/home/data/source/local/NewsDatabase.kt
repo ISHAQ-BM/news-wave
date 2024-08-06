@@ -1,4 +1,4 @@
-package com.example.newswave.bookmark.data.source.local
+package com.example.newswave.home.data.source.local
 
 import androidx.room.Database
 import androidx.room.RoomDatabase
