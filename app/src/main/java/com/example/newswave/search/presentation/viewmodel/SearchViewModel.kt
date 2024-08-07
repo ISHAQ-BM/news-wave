@@ -11,6 +11,7 @@ import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
+import com.example.newswave.search.domain.use_case.GetLatestNewsUseCase
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
 import com.example.newswave.search.presentation.ui.event.SearchNewsEvent
 import com.example.newswave.search.presentation.ui.state.SearchUiState
@@ -26,7 +27,8 @@ import javax.inject.Inject
 class SearchViewModel @Inject constructor(
     val searchNewsUseCase: SearchNewsUseCase,
     val bookmarkNewsUseCase: BookmarkNewsUseCase,
-    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
+    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase,
+    val getLatestNewsUseCase: GetLatestNewsUseCase
 ):ViewModel() {
 
     private val _uiState = MutableStateFlow(SearchUiState())
@@ -34,6 +36,10 @@ class SearchViewModel @Inject constructor(
 
     private val _articles = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
     val articles: StateFlow<PagingData<NewsItemUiState>> = _articles
+
+    init {
+        getLatestNews()
+    }
 
 
     fun onEvent(event:SearchNewsEvent){
@@ -102,6 +108,32 @@ class SearchViewModel @Inject constructor(
                 )
                 //val index=_uiState.value.searchResult.indexOf(item)
                 //_uiState.value.searchResult[index].isBookmarked = false
+            }
+        }
+    }
+
+    private fun getLatestNews(){
+        viewModelScope.launch {
+            getLatestNewsUseCase().collect{result ->
+                when(result){
+                    is Result.Error -> {}
+                    is Result.Success -> _uiState.update {
+                        it.copy(
+                            latestNews = result.data.map { news ->
+                                NewsItemUiState(
+                                    id = news.id,
+                                    title = news.title,
+                                    author = news.author,
+                                    imageUrl = news.imageUrl,
+                                    publishDate = news.timestamp,
+                                    category = news.category,
+                                    link = news.link,
+                                    isBookmarked = false
+                                )
+                            }
+                        )
+                    }
+                }
             }
         }
     }

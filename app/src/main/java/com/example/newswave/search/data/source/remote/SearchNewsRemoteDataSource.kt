@@ -9,6 +9,7 @@ import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.util.Error
 import com.example.newswave.core.util.Result
 import com.example.newswave.search.data.source.remote.api.SearchApiService
+
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -37,6 +38,37 @@ class SearchNewsRemoteDataSource @Inject constructor(
                     .collect { result ->
                         emit(result)
                     }
+            } catch (e: HttpException) {
+                val error = Util.getErrorFromStatusCode(e.code())
+                emit(Result.Error(error))
+            } catch (e: IOException) {
+                emit(Result.Error(Error.Network.NO_INTERNET))
+            } catch (e: Exception) {
+                emit(Result.Error(Error.Network.UNKNOWN))
+            }
+        }
+    }
+
+    suspend fun getLatestNews():Flow<Result<List<News>, Error.Network>>{
+        return flow {
+            try {
+               val response=searchApiService.getLatestNews()
+                if (response.isSuccessful){
+                    Log.d("response hhh","${response.body()!!.results}")
+                    val latestNews = response.body()!!.results.map { News(
+                        it.link,
+                        it.title,
+                        it.creator?.getOrNull(0),
+                        it.category[0],
+                        it.pubDate,
+                        it.imageUrl ?:"",
+                        it.link,
+                        false
+                    )
+                    }
+                    emit(Result.Success(latestNews))
+                }
+
             } catch (e: HttpException) {
                 val error = Util.getErrorFromStatusCode(e.code())
                 emit(Result.Error(error))

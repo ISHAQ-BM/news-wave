@@ -28,4 +28,14 @@ interface SearchApiService {
         @Query("page")
         page:String
     ): Response<NewsHeadlineResponse>
+
+    @GET("latest?")
+    suspend fun getLatestNews(
+        @Query("apikey")
+        apikey: String = API_KEY,
+        @Query("language")
+        language: String = "en",
+        @Query("image")
+        image:String="1",
+    ): Response<NewsHeadlineResponse>
 }

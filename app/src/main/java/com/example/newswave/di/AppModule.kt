@@ -30,6 +30,7 @@ import com.example.newswave.interests.data.source.remote.InterestsRemoteDataSour
 import com.example.newswave.search.data.source.remote.SearchNewsRemoteDataSource
 import com.example.newswave.search.data.source.remote.api.SearchApiService
 import com.example.newswave.search.domain.repository.SearchNewsRepository
+import com.example.newswave.search.domain.use_case.GetLatestNewsUseCase
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
 import com.example.newswave.settings.domain.repository.SettingsRepository
 import com.example.newswave.settings.domain.use_case.SignOutUseCase
@@ -167,6 +168,12 @@ object AppModule {
     @Singleton
     fun provideSearchNewsUseCase(searchNewsRepository: SearchNewsRepository):SearchNewsUseCase{
         return SearchNewsUseCase(searchNewsRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetLatestNewsUseCase(searchNewsRepository: SearchNewsRepository):GetLatestNewsUseCase{
+        return GetLatestNewsUseCase(searchNewsRepository)
     }
 
     @Provides

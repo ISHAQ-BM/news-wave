@@ -51,3 +51,20 @@ val categories= listOf(
         "World",
         "Other"
 )
+
+val youMightLikeSuggestions = listOf(
+        "Mars Rover",
+        "Crypto Rules",
+        "Remote Work",
+        "Global Vaccines",
+        "Electric Cars",
+        "Renewable Energy",
+        "Space Tourism",
+        "AI Breakthroughs",
+        "Climate Impact",
+        "5G Rollout",
+        "Mental Health",
+        "Cyber Threats",
+        "Trade Deals",
+        "Pandemic Recovery",
+)

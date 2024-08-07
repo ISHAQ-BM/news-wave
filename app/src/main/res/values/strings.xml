@@ -52,6 +52,8 @@
     <string name="error_validation_unknown">Unknown validation error occurred.</string>
     <string name="error_local_unknown">Unknown local error occurred.</string>
     <string name="error_no_email_on_device">No email configured on the device.</string>
+    <string name="you_might_like">You Might Like</string>
+    <string name="latest_news">Latest News</string>
 
 
 </resources>

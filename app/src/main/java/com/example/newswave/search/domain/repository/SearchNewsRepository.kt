@@ -8,4 +8,5 @@ import kotlinx.coroutines.flow.Flow
 
 interface SearchNewsRepository {
     suspend fun searchNews(searchQuery:String): Flow<Result<PagingData<News>, Error>>
+    suspend fun getLatestNews(): Flow<Result<List<News>, Error>>
 }

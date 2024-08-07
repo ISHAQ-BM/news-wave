@@ -5,6 +5,7 @@ import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 data class SearchUiState (
 
+    val latestNews:List<NewsItemUiState> = emptyList(),
     val searchQuery:String="",
     val isLoading:Boolean=false,
     val generalMessage: UiText? = null

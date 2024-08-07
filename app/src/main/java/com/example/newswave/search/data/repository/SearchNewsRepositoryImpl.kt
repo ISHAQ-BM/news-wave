@@ -16,4 +16,8 @@ class SearchNewsRepositoryImpl @Inject constructor(
         return searchNewsRemoteDataSource.searchNews(searchQuery)
     }
 
+    override suspend fun getLatestNews(): Flow<Result<List<News>, Error>> {
+        return searchNewsRemoteDataSource.getLatestNews()
+    }
+
 }
