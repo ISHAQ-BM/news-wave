@@ -2,6 +2,7 @@ package com.example.newswave.auth.data.source.remote
 
 import android.net.http.HttpException
 import android.os.Build
+import android.util.Log
 import androidx.annotation.RequiresExtension
 import com.example.newswave.core.data.source.remote.model.User
 import com.example.newswave.core.util.Error
@@ -36,6 +37,9 @@ class AuthRemoteDataSource @Inject constructor(
     private val firestore: FirebaseFirestore
 
 ){
+
+    val currentUser = auth.currentUser
+
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>>{
         return flow {
@@ -48,7 +52,7 @@ class AuthRemoteDataSource @Inject constructor(
                     val signUpResult = oneTapClient.beginSignIn(signUpRequest).await()
                     emit(Result.Success(signUpResult))
                 } catch (e: ApiException) {
-                    emit(Result.Error(Error.Authentication.NO_EMAIL_ON_DEVICE))
+                    emit(Result.Error(Error.Network.NO_INTERNET))
                 } catch (e: HttpException) {
                     emit(Result.Error(Error.Network.UNKNOWN))
                 } catch (e: IOException) {

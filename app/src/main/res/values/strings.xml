@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">NewsWave</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="news_wave_logo">NewsWave logo</string>
     <string name="news_wave">Newswave</string>
     <string name="navigate_previous">navigate previous</string>
@@ -23,7 +21,6 @@
     <string name="no_internet_connection">no internet connection</string>
     <string name="the_request_timed_out">The request timed out</string>
     <string name="youve_hit_your_rate_limit">You\'ve hit your rate limit</string>
-    <string name="no_internet">Couldn\'t reach server. Check your internet connection.</string>
     <string name="file_too_large">The file you tried to upload was too large.</string>
     <string name="server_error">Oops, something went wrong. Please try again.</string>
     <string name="unknown_error">An unknown error occurred</string>
@@ -34,5 +31,27 @@
     <string name="likes">%1$d likes</string>
     <string name="sign_with_google">Sign in With Google</string>
     <string name="make_it_easy">Make it easy for users to access the\nlatest and most recent news quickly\nand easily from a single platform.</string>
+    <string name="error_unauthorized">Unauthorized access. Please log in.</string>
+    <string name="error_forbidden">Access forbidden. You don\'t have permission to access this resource.</string>
+    <string name="error_token_expired">Session expired. Please log in again.</string>
+    <string name="error_invalid_credentials">Invalid credentials. Please check your username and password.</string>
+    <string name="error_account_locked">Your account is locked. Please contact support.</string>
+    <string name="error_authentication_unknown">Unknown authentication error occurred.</string>
+    <string name="error_network_unauthorized">Network error: Unauthorized access.</string>
+    <string name="error_network_forbidden">Network error: Access forbidden.</string>
+    <string name="error_network_not_found">Network error: Resource not found.</string>
+    <string name="error_network_bad_request">Network error: Bad request.</string>
+    <string name="error_network_conflict">Network error: Conflict occurred.</string>
+    <string name="error_network_gone">Network error: Resource gone.</string>
+    <string name="error_network_unprocessable_entity">Network error: Unprocessable entity.</string>
+    <string name="no_internet">No internet connection. Please check your network settings.</string>
+    <string name="error_invalid_input">Invalid input. Please check your data.</string>
+    <string name="error_missing_field">Missing required field. Please complete all fields.</string>
+    <string name="error_out_of_range">Input out of range. Please enter valid data.</string>
+    <string name="error_pattern_mismatch">Pattern mismatch. Please follow the required format.</string>
+    <string name="error_validation_unknown">Unknown validation error occurred.</string>
+    <string name="error_local_unknown">Unknown local error occurred.</string>
+    <string name="error_no_email_on_device">No email configured on the device.</string>
+
 
 </resources>

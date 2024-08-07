@@ -25,7 +25,7 @@ fun NewsWaveNavHost(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Home.route,
+        startDestination = Auth.route,
         modifier = modifier
     ) {
         composable(Auth.route) {

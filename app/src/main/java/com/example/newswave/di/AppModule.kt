@@ -9,6 +9,7 @@ import androidx.room.Room
 import com.example.newswave.BuildConfig
 import com.example.newswave.auth.data.source.remote.AuthRemoteDataSource
 import com.example.newswave.auth.domain.repository.AuthRepository
+import com.example.newswave.auth.domain.use_case.GetCurrentUserUseCase
 import com.example.newswave.auth.domain.use_case.OneTapSignInUseCase
 import com.example.newswave.auth.domain.use_case.SignUserWithCredentialUseCase
 import com.example.newswave.home.data.source.local.NewsDao
@@ -172,6 +173,12 @@ object AppModule {
     @Singleton
     fun provideSignUserWithCredentialUseCase(authRepository: AuthRepository):SignUserWithCredentialUseCase{
         return SignUserWithCredentialUseCase(authRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetCurrentUserUseCase(authRepository: AuthRepository):GetCurrentUserUseCase{
+        return GetCurrentUserUseCase(authRepository)
     }
 
     @Provides
