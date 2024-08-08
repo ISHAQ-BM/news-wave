@@ -32,6 +32,7 @@ import androidx.navigation.NavHostController
 import com.example.newswave.R
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.main.presentation.ui.components.Auth
+import com.example.newswave.main.presentation.ui.components.Interests
 import com.example.newswave.settings.presentation.viewmodel.SettingsViewModel
 
 @Composable
@@ -92,7 +93,7 @@ fun Settings(
         HorizontalDivider()
         SettingsListItem(icon = R.drawable.ic_account, settingText ="Account" , contentDescription ="", onClick = {} )
         HorizontalDivider()
-        SettingsListItem(icon = R.drawable.ic_interests, settingText ="Interests" , contentDescription ="" , onClick = {})
+        SettingsListItem(icon = R.drawable.ic_interests, settingText ="Interests" , contentDescription ="" , onClick = {navigate(Interests.route)})
         HorizontalDivider()
         SettingsListItem(icon = R.drawable.ic_notification, settingText ="Notifications" , contentDescription ="" , onClick = {})
         HorizontalDivider()

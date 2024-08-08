@@ -16,7 +16,7 @@ import com.example.newswave.settings.presentation.ui.composables.SettingsScreen
 fun NewsWaveNavHost(
     navHostController: NavHostController,
     onItemClicked:(String)->Unit,
-    onSaveSuccess :()->Unit,
+    onSaveSuccess :(Boolean?)->Unit,
     onThemeUpdated :()->Unit,
     onLoadingStateChange :(Boolean)->Unit,
     navigate:(String)->Unit,
@@ -32,7 +32,7 @@ fun NewsWaveNavHost(
             AuthScreen(
                 onLoginSuccess = { isNewUser ->
                         if (isNewUser){
-                            navHostController.navigateSingleTopTo(Interests.route)
+                            navHostController.navigate("${Interests.route}/$isNewUser")
                         }else{
                             navHostController.navigateSingleTopTo(Home.route)
                         }
@@ -44,7 +44,15 @@ fun NewsWaveNavHost(
         composable(Search.route) { SearchScreen(onItemClicked = onItemClicked,onShareNews=onShareNews) }
         composable(Bookmark.route) { BookmarkScreen(onItemClicked = onItemClicked,onShareNews=onShareNews) }
         composable(Settings.route) { SettingsScreen(onThemeUpdated =onThemeUpdated ,onLoadingStateChange=onLoadingStateChange, navigate = navigate) }
-        composable(Interests.route) { InterestScreen(onSaveSuccess = onSaveSuccess) }
+        composable(
+            route=Interests.routeWithArgs,
+            arguments = Interests.arguments
+        ) {navBackStackEntry ->
+            val isNewUser =
+                navBackStackEntry.arguments?.getBoolean(Interests.isNewUserArg)
+
+            InterestScreen(onSaveSuccess = onSaveSuccess, isNewUser = isNewUser)
+        }
 
     }
 }

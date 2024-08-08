@@ -1,7 +1,9 @@
 package com.example.newswave.interests.presentation.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.interests.domain.use_case.GetInterestsUseCase
 import com.example.newswave.interests.domain.use_case.UpdateInterestsUseCase
@@ -23,15 +25,27 @@ class InterestsViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             getInterestsUseCase().collect{result ->
                 when(result){
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText(),
+                                isLoading = false
+                            )
+                        }
+                    }
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                updateSuccessful = true,
                                 interestsList = result.data.toMutableList(),
-                                previousInterests = result.data
+                                previousInterests = result.data,
+                                isLoading = false
                             )
                         }
                     }
@@ -77,7 +91,9 @@ class InterestsViewModel @Inject constructor(
                         _uiState.update {
                             it.copy(
                                 isLoading = false,
-                                previousInterests = it.interestsList
+                                updateSuccessful = true,
+                                previousInterests = _uiState.value.interestsList
+
                             )
                         }
                     }

@@ -7,6 +7,8 @@ import androidx.compose.material.icons.filled.Search
 import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 
 interface NewsWaveDestination{
     val icon: ImageVector
@@ -54,6 +56,11 @@ object Interests : NewsWaveDestination {
     override val icon=Icons.Filled.Star
     override val route="interests"
     override val label="Interests"
+    const val isNewUserArg = "is_new_user"
+    val routeWithArgs = "${route}/{${isNewUserArg}}"
+    val arguments = listOf(
+        navArgument(isNewUserArg) { type = NavType.BoolType }
+    )
 
 }
 

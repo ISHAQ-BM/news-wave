@@ -43,6 +43,7 @@ import com.example.newswave.core.presentation.ui.components.NewsDetailsBottomShe
 import com.example.newswave.core.presentation.ui.theme.NewsWaveTheme
 import com.example.newswave.main.presentation.ui.components.Auth
 import com.example.newswave.main.presentation.ui.components.Home
+import com.example.newswave.main.presentation.ui.components.Interests
 import com.example.newswave.main.presentation.ui.components.NewsWaveNavHost
 import com.example.newswave.main.presentation.ui.components.bottomBarRoutes
 import com.example.newswave.main.presentation.ui.components.bottomNavigationItems
@@ -82,11 +83,24 @@ class MainActivity : AppCompatActivity() {
                             },
                             onThemeUpdated = {darkTheme = !darkTheme},
                             onLoadingStateChange ={it -> isLoading = it },
-                            navigate = {route -> navController.navigate(route){
-                                popUpTo(navController.graph.id){
-                                    inclusive= true
+                            navigate = {route ->
+                                if (route==Interests.route){
+                                    val isNewUser=false
+                                        navController.navigate("${Interests.route}/$isNewUser")
+
                                 }
-                            }
+                                else if(route==Auth.route){
+                                    navController.navigate(route){
+                                        popUpTo(navController.graph.id){
+                                            inclusive= true
+                                        }
+                                    }
+                                }else{
+                                    navController.navigate(route)
+                                }
+
+
+
                             },
                             onShareNews = {
                                 shareNews(
@@ -160,8 +174,13 @@ class MainActivity : AppCompatActivity() {
                 NewsWaveNavHost(
                     navController,
                     onItemClicked,
-                    {
-                        navController.navigateSingleTopTo(Home.route)
+                    {isNewsUser ->
+                        if (isNewsUser==true)
+                            navController.navigateSingleTopTo(Home.route)
+                        else{
+                            navController.popBackStack()
+                        }
+
                     },
                     onThemeUpdated = onThemeUpdated,
                     onLoadingStateChange=onLoadingStateChange,

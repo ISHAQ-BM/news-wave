@@ -34,18 +34,18 @@ class AuthViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             val currentUser=getCurrentUserUseCase()
-            if (currentUser!=null)
+            if (currentUser!=null) {
                 _uiState.update {
                     it.copy(
-                        isLoginSuccessful = true
+                        isLoginSuccessful = true,
                     )
                 }
+            }
         }
     }
 
 
     fun signUserWithCredential(googleCredential: AuthCredential){
-        Log.d("alpha","called")
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
