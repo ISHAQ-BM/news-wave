@@ -59,6 +59,9 @@
     <string name="save">Save</string>
     <string name="choose_your_interests">Choose your Interests</string>
     <string name="choose_which">Choose which you have more interest to give you best app experience</string>
+    <string name="account">Account</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="log_out">Log Out</string>
 
 
 </resources>

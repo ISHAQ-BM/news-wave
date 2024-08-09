@@ -9,6 +9,7 @@ import javax.inject.Inject
 
 class SettingsRepositoryImpl @Inject constructor(
     private val settingsRemoteDataSource: SettingsRemoteDataSource
-) :SettingsRepository {
-    override suspend fun signOut(): Flow<Result<Boolean, Error>> = settingsRemoteDataSource.signOut()
+) : SettingsRepository {
+    override suspend fun signOut(): Flow<Result<Boolean, Error>> =
+        settingsRemoteDataSource.signOut()
 }

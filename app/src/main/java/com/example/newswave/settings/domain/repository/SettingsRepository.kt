@@ -5,5 +5,5 @@ import com.example.newswave.core.util.Result
 import kotlinx.coroutines.flow.Flow
 
 interface SettingsRepository {
-    suspend fun signOut():Flow<Result<Boolean,Error>>
+    suspend fun signOut(): Flow<Result<Boolean, Error>>
 }

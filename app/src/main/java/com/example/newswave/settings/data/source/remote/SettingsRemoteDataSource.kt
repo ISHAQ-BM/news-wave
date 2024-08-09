@@ -12,15 +12,15 @@ import java.io.IOException
 import javax.inject.Inject
 
 class SettingsRemoteDataSource @Inject constructor(
-    val auth:FirebaseAuth
+    val auth: FirebaseAuth
 ) {
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun signOut():Flow<Result<Boolean,Error>> {
+    suspend fun signOut(): Flow<Result<Boolean, Error>> {
         return flow {
             try {
                 auth.signOut()
                 emit(Result.Success(true))
-            }catch (e: HttpException) {
+            } catch (e: HttpException) {
                 emit(Result.Error(Error.Network.UNKNOWN))
             } catch (e: IOException) {
                 emit(Result.Error(Error.Network.NO_INTERNET))
