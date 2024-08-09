@@ -2,7 +2,6 @@ package com.example.newswave.auth.data.source.remote
 
 import android.net.http.HttpException
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresExtension
 import com.example.newswave.core.data.source.remote.model.User
 import com.example.newswave.core.util.Error
@@ -36,12 +35,12 @@ class AuthRemoteDataSource @Inject constructor(
     private val auth: FirebaseAuth,
     private val firestore: FirebaseFirestore
 
-){
+) {
 
     val currentUser = auth.currentUser
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>>{
+    suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>> {
         return flow {
             try {
 
@@ -72,7 +71,7 @@ class AuthRemoteDataSource @Inject constructor(
                 if (isNewUser) {
                     emit(Result.Success(true))
                     addUserToFirestore()
-                }else{
+                } else {
                     emit(Result.Success(false))
                 }
 
@@ -90,8 +89,9 @@ class AuthRemoteDataSource @Inject constructor(
     }
 
 }
-private fun FirebaseUser.toUser()= User(displayName!!
-    ,email!!,
+
+private fun FirebaseUser.toUser() = User(
+    displayName!!, email!!,
     photoUrl!!.toString(),
     serverTimestamp(),
     emptyList()

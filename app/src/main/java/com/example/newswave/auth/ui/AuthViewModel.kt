@@ -1,18 +1,15 @@
-package com.example.newswave.auth.presentation.viewmodel
+package com.example.newswave.auth.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.auth.domain.use_case.GetCurrentUserUseCase
 import com.example.newswave.auth.domain.use_case.OneTapSignInUseCase
 import com.example.newswave.auth.domain.use_case.SignUserWithCredentialUseCase
-import com.example.newswave.auth.presentation.ui.state.SignUserUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.android.gms.auth.api.identity.SignInClient
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,15 +23,15 @@ class AuthViewModel @Inject constructor(
     val signUserWithCredentialUseCase: SignUserWithCredentialUseCase,
     val oneTapSignInUseCase: OneTapSignInUseCase,
     val getCurrentUserUseCase: GetCurrentUserUseCase
-):ViewModel() {
+) : ViewModel() {
 
-    private val _uiState = MutableStateFlow(SignUserUiState())
-    val uiState : StateFlow<SignUserUiState> = _uiState
+    private val _uiState = MutableStateFlow(AuthUiState())
+    val uiState: StateFlow<AuthUiState> = _uiState
 
     init {
         viewModelScope.launch {
-            val currentUser=getCurrentUserUseCase()
-            if (currentUser!=null) {
+            val currentUser = getCurrentUserUseCase()
+            if (currentUser != null) {
                 _uiState.update {
                     it.copy(
                         isLoginSuccessful = true,
@@ -45,15 +42,15 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    fun signUserWithCredential(googleCredential: AuthCredential){
+    fun signUserWithCredential(googleCredential: AuthCredential) {
         viewModelScope.launch {
             _uiState.update {
                 it.copy(
                     isLoading = true
                 )
             }
-            signUserWithCredentialUseCase(googleCredential).collect{result ->
-                when(result){
+            signUserWithCredentialUseCase(googleCredential).collect { result ->
+                when (result) {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
@@ -62,6 +59,7 @@ class AuthViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Result.Success -> _uiState.update {
                         it.copy(
                             isNewUser = result.data,
@@ -75,15 +73,15 @@ class AuthViewModel @Inject constructor(
     }
 
 
-    fun oneTapSignIn(googleLauncher:(signInResult: BeginSignInResult)->Unit){
+    fun oneTapSignIn(googleLauncher: (signInResult: BeginSignInResult) -> Unit) {
         _uiState.update {
             it.copy(
                 isLoading = true
             )
         }
         viewModelScope.launch {
-            oneTapSignInUseCase().collect{result ->
-                when(result){
+            oneTapSignInUseCase().collect { result ->
+                when (result) {
                     is Result.Error -> {
                         _uiState.update {
                             it.copy(
@@ -92,6 +90,7 @@ class AuthViewModel @Inject constructor(
                             )
                         }
                     }
+
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(

@@ -5,7 +5,7 @@ import javax.inject.Inject
 
 class OneTapSignInUseCase @Inject constructor(
     private val authRepository: AuthRepository
-){
-    suspend operator fun invoke()=authRepository.signUserWithOneTap()
+) {
+    suspend operator fun invoke() = authRepository.signUserWithOneTap()
 
 }

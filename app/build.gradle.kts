@@ -127,6 +127,7 @@ dependencies {
     implementation (libs.androidx.material3)
     implementation (libs.androidx.runtime.livedata)
     implementation (libs.androidx.ui.tooling)
+    implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(platform(libs.firebase.bom))
     implementation(libs.firebase.analytics)

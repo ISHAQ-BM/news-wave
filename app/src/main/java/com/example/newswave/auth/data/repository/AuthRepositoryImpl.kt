@@ -20,7 +20,9 @@ class AuthRepositoryImpl @Inject constructor(
         get() = authRemoteDataSource.currentUser
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
-    override suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>> = authRemoteDataSource.signUserWithOneTap()
+    override suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>> =
+        authRemoteDataSource.signUserWithOneTap()
 
-    override suspend fun signUserWithCredential(googleCredential: AuthCredential): Flow<Result<Boolean, Error>> = authRemoteDataSource.signUserWithCredential(googleCredential)
+    override suspend fun signUserWithCredential(googleCredential: AuthCredential): Flow<Result<Boolean, Error>> =
+        authRemoteDataSource.signUserWithCredential(googleCredential)
 }

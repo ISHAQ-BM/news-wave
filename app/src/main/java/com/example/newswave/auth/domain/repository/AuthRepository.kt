@@ -12,8 +12,8 @@ interface AuthRepository {
 
     val currentUser: FirebaseUser?
 
-    suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult,Error>>
+    suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>>
 
-   suspend fun signUserWithCredential(googleCredential: AuthCredential): Flow<Result<Boolean,Error>>
+    suspend fun signUserWithCredential(googleCredential: AuthCredential): Flow<Result<Boolean, Error>>
 
 }
