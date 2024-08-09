@@ -8,5 +8,5 @@ import kotlinx.coroutines.flow.Flow
 interface InterestsRepository {
     val currentUser: FirebaseUser?
     suspend fun getInterests(): Flow<Result<List<String>, Error>>
-    suspend fun updateInterests(interests:List<String>):Flow<Result<Boolean,Error>>
+    suspend fun saveInterests(interests: List<String>): Flow<Result<Boolean, Error>>
 }
