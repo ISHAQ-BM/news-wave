@@ -1,12 +1,10 @@
-package com.example.newswave.search.presentation.ui.state
+package com.example.newswave.search.presentation
 
-import com.example.newswave.core.presentation.ui.utils.UiText
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
+import com.example.newswave.core.presentation.ui.utils.UiText
 
 data class SearchUiState (
-
     val latestNews:List<NewsItemUiState> = emptyList(),
-    val searchQuery:String="",
     val isLoading:Boolean=false,
     val generalMessage: UiText? = null
 )

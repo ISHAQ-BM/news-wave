@@ -26,7 +26,6 @@
     <string name="unknown_error">An unknown error occurred</string>
     <string name="error_disk_full">Failed to save the item because your device\'s disk is full</string>
     <string name="error_serialization">Oops, couldn\'t parse data.</string>
-    <string name="by">by %1$s</string>
     <string name="comments">%1$d comments</string>
     <string name="likes">%1$d likes</string>
     <string name="sign_with_google">Sign in With Google</string>
@@ -62,6 +61,8 @@
     <string name="account">Account</string>
     <string name="privacy_policy">Privacy policy</string>
     <string name="log_out">Log Out</string>
+    <string name="search_news">Search news</string>
+    <string name="by">By %1$s</string>
 
 
 </resources>

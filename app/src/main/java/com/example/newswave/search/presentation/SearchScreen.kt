@@ -1,13 +1,9 @@
-package com.example.newswave.search.presentation.ui.composables
+package com.example.newswave.search.presentation
 
-import android.widget.Space
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -16,19 +12,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.ElevatedSuggestionChip
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -36,10 +30,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
-import androidx.compose.material3.SuggestionChipDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -57,6 +49,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
@@ -64,42 +57,65 @@ import coil.compose.AsyncImage
 import com.example.newswave.R
 import com.example.newswave.core.presentation.ui.components.NewsItem
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
-import com.example.newswave.core.util.youMightLikeSuggestions
-import com.example.newswave.search.presentation.ui.event.SearchNewsEvent
-import com.example.newswave.search.presentation.viewmodel.SearchViewModel
 
-@OptIn(ExperimentalLayoutApi::class)
+
 @Composable
-fun SearchScreen(
+fun SearchRoute(
+    modifier: Modifier = Modifier,
     searchViewModel: SearchViewModel = hiltViewModel(),
-    onItemClicked: (String) -> Unit,
+    onClickNews: (String) -> Unit,
     onShareNews: (String) -> Unit,
 ) {
-    val searchUiState by searchViewModel.uiState.collectAsState()
-    val articles: LazyPagingItems<NewsItemUiState> =
-        searchViewModel.articles.collectAsLazyPagingItems()
+    val uiState by searchViewModel.uiState.collectAsStateWithLifecycle()
+    val searchResult = searchViewModel.searchResult.collectAsLazyPagingItems()
 
+    SearchScreen(
+        modifier = modifier,
+        uiState = uiState,
+        onClickNews = onClickNews,
+        searchResult = searchResult,
+        onShareNews = onShareNews,
+        onSearch = { searchQuery -> searchViewModel.searchNews(searchQuery) },
+        onClickBookmark = { item -> searchViewModel.bookmarkClicked(item) },
+        clearSearchResult = { searchViewModel.clearSearchResult() }
+
+    )
+}
+
+@Composable
+fun SearchScreen(
+    modifier: Modifier = Modifier,
+    uiState: SearchUiState,
+    searchResult: LazyPagingItems<NewsItemUiState>,
+    onClickNews: (String) -> Unit,
+    onShareNews: (String) -> Unit,
+    onSearch: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
+    clearSearchResult: () -> Unit
+) {
     var searchQuery by remember {
         mutableStateOf("")
     }
+    if (searchQuery.isNullOrEmpty())
+        clearSearchResult()
 
     var isSearching by remember {
         mutableStateOf(false)
     }
-    Scaffold(
 
+    Scaffold(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
             (SearchBar(
                 query = searchQuery,
                 onQueryChange = { searchQuery = it },
-                onSearch = { searchViewModel.onEvent(SearchNewsEvent.ToggleSearch(searchQuery)) }, //the callback to be invoked when the input service triggers the ImeAction.Search action
+                onSearch = { onSearch(searchQuery) },
                 active = isSearching,
                 onActiveChange = {
                     isSearching = !it
                 },
                 placeholder = {
-                    Text(text = "Search news")
+                    Text(text = stringResource(R.string.search_news))
                 },
                 leadingIcon = {
                     Icon(
@@ -108,7 +124,19 @@ fun SearchScreen(
                         contentDescription = null
                     )
                 },
-                modifier = Modifier
+                trailingIcon = {
+                    if (!searchQuery.isNullOrEmpty())
+                        IconButton(onClick = {
+                            searchQuery = ""
+                        }) {
+                            Icon(
+                                imageVector = Icons.Default.Clear,
+                                tint = MaterialTheme.colorScheme.onSurface,
+                                contentDescription = null
+                            )
+                        }
+                },
+                modifier = modifier
                     .fillMaxWidth()
                     .padding(16.dp)
             ) {
@@ -117,108 +145,94 @@ fun SearchScreen(
         },
     ) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .padding(top = it.calculateTopPadding())
         ) {
             if (searchQuery.isNullOrEmpty()){
                 Column(
-                    modifier = Modifier.verticalScroll(rememberScrollState())
+                    modifier = modifier.verticalScroll(rememberScrollState())
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.you_might_like),
-                        style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 24.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    FlowRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 24.dp)
 
-                    ) {
-                        youMightLikeSuggestions.forEach { it ->
-                            ElevatedSuggestionChip(
-                                onClick = { },
-                                label = { Text(text = it) },
-                                colors = SuggestionChipDefaults.suggestionChipColors(
-                                    containerColor = MaterialTheme.colorScheme.tertiaryContainer,
-                                    labelColor = MaterialTheme.colorScheme.onTertiaryContainer
-                                )
-                            )
+                    Spacer(modifier = modifier.height(16.dp))
 
-                        }
-                    }
-
-                    HorizontalDivider(
-                        modifier = Modifier.padding(vertical = 8.dp, horizontal = 16.dp)
-                    )
                     Text(
                         text = stringResource(id = R.string.latest_news),
                         style = MaterialTheme.typography.titleLarge,
                         fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(horizontal = 24.dp)
+                        modifier = modifier.padding(horizontal = 24.dp)
                     )
-                    Spacer(modifier = Modifier.height(24.dp))
-                    LazyRow(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        contentPadding = PaddingValues(
-                            start = 24.dp,
-                            end = 24.dp
-                        )
-                    ) {
-                        items(searchUiState.latestNews) { item ->
-                            VerticalNewsItem(
-                                item = item,
-                                onItemClicked = onItemClicked,
-                                onBookmarkClicked = {},
-                                onShareNews = onShareNews
-                            )
-
-                        }
-                    }
+                    Spacer(modifier = modifier.height(24.dp))
+                    LatestNewsList(
+                        latestNews = uiState.latestNews,
+                        onClickNews = onClickNews,
+                        onClickBookmark = onClickBookmark,
+                        onShareNews = onShareNews
+                    )
 
                 }
-            }else{
-                SearchNewsList(
-                    news = articles,
-                    onItemClicked = onItemClicked,
-                    onBookmarkClicked = { item -> searchViewModel.bookmarkClicked(item = item) },
-                    onShareNews = onShareNews
-                )
+            } else {
+                if (uiState.isLoading) {
+                    CircularProgressIndicator()
+                } else {
+                    SearchNewsList(
+                        searchResult = searchResult,
+                        onClickNews = onClickNews,
+                        onClickBookmark = onClickBookmark,
+                        onShareNews = onShareNews
+                    )
+                }
+
             }
 
 
-
         }
-
 
 
     }
 }
 
 @Composable
-fun SearchNewsList(
-    news: LazyPagingItems<NewsItemUiState>,
-    onItemClicked: (String) -> Unit,
-    onBookmarkClicked: (NewsItemUiState) -> Unit,
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
+fun LatestNewsList(
+    latestNews: List<NewsItemUiState>,
+    onClickNews: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
     onShareNews: (String) -> Unit,
 ) {
-
-    LazyColumn(
-        state = listState,
-        modifier = modifier,
+    LazyRow(
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(
+            start = 24.dp,
+            end = 24.dp
+        )
     ) {
-        items(news.itemCount) { index ->
-            val newsItem = news[index]
+        items(latestNews) { item ->
+            LatestNewsItem(
+                item = item,
+                onClickNews = onClickNews,
+                onClickBookmark = onClickBookmark,
+                onShareNews = onShareNews
+            )
+
+        }
+    }
+
+}
+
+@Composable
+fun SearchNewsList(
+    searchResult: LazyPagingItems<NewsItemUiState>,
+    onClickNews: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
+    onShareNews: (String) -> Unit,
+) {
+    LazyColumn {
+        items(searchResult.itemCount) { index ->
+            val newsItem = searchResult[index]
             newsItem?.let {
                 NewsItem(
                     item = it,
-                    onItemClicked = onItemClicked,
-                    onBookmarkClicked = onBookmarkClicked,
+                    onItemClicked = onClickNews,
+                    onBookmarkClicked = onClickBookmark,
                     onShareNews = onShareNews
                 )
                 HorizontalDivider()
@@ -226,7 +240,7 @@ fun SearchNewsList(
             }
         }
         item {
-            if (news.loadState.append is LoadState.Loading) {
+            if (searchResult.loadState.append is LoadState.Loading) {
                 CircularProgressIndicator()
             }
         }
@@ -237,17 +251,17 @@ fun SearchNewsList(
 
 
 @Composable
-fun VerticalNewsItem(
+fun LatestNewsItem(
     modifier: Modifier = Modifier,
     item: NewsItemUiState,
-    onItemClicked: (String) -> Unit,
-    onBookmarkClicked: (NewsItemUiState) -> Unit,
+    onClickNews: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
     onShareNews: (String) -> Unit
 ) {
 
     Column(
         modifier = modifier
-            .clickable { onItemClicked(item.link) }
+            .clickable { onClickNews(item.link) }
             .width(250.dp)
     ) {
         AsyncImage(
@@ -273,7 +287,7 @@ fun VerticalNewsItem(
             modifier = Modifier.height(8.dp)
         )
         Text(
-            text = "By ${item.author}",
+            text = stringResource(R.string.by, item.author ?: "Author"),
             style = MaterialTheme.typography.bodyMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis,
@@ -312,7 +326,7 @@ fun VerticalNewsItem(
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu),
-                        contentDescription = "More options"
+                        contentDescription = null
                     )
                 }
 
@@ -323,7 +337,7 @@ fun VerticalNewsItem(
                 ) {
 
                     DropdownMenuItem(
-                        text = { Text("Share") },
+                        text = { Text(stringResource(id = R.string.share)) },
                         onClick = {
                             onShareNews(item.link)
                             expanded = false
@@ -337,9 +351,9 @@ fun VerticalNewsItem(
 
                     )
                     DropdownMenuItem(
-                        text = { Text("Bookmark") },
+                        text = { Text(stringResource(id = R.string.bookmark)) },
                         onClick = {
-                            onBookmarkClicked(item)
+                            onClickBookmark(item)
                             expanded = false
                         },
                         leadingIcon = {
@@ -355,9 +369,10 @@ fun VerticalNewsItem(
             }
         }
 
-
     }
 
 
 }
+
+
 

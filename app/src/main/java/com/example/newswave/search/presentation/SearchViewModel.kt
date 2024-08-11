@@ -1,4 +1,4 @@
-package com.example.newswave.search.presentation.viewmodel
+package com.example.newswave.search.presentation
 
 
 import androidx.lifecycle.ViewModel
@@ -8,13 +8,11 @@ import androidx.paging.map
 import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
-import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.search.domain.use_case.GetLatestNewsUseCase
 import com.example.newswave.search.domain.use_case.SearchNewsUseCase
-import com.example.newswave.search.presentation.ui.event.SearchNewsEvent
-import com.example.newswave.search.presentation.ui.state.SearchUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -34,22 +32,21 @@ class SearchViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(SearchUiState())
     val uiState :StateFlow<SearchUiState> = _uiState
 
-    private val _articles = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
-    val articles: StateFlow<PagingData<NewsItemUiState>> = _articles
+    private val _searchResult = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
+    val searchResult: StateFlow<PagingData<NewsItemUiState>> = _searchResult
 
     init {
         getLatestNews()
     }
 
-
-    fun onEvent(event:SearchNewsEvent){
-        when(event){
-            is SearchNewsEvent.ToggleSearch -> searchNews(event.searchQuery)
+    fun clearSearchResult() {
+        _searchResult.update {
+            PagingData.empty()
         }
-
     }
 
-    private fun searchNews(searchQuery: String) {
+
+    fun searchNews(searchQuery: String) {
         _uiState.update {
             it.copy(
                 isLoading = true
@@ -66,7 +63,12 @@ class SearchViewModel @Inject constructor(
                     }
 
                     is Result.Success -> {
-                        _articles.update {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false
+                            )
+                        }
+                        _searchResult.update {
                             result.data.map { news ->
                                 NewsItemUiState(
                                     id = news.id,
@@ -100,25 +102,35 @@ class SearchViewModel @Inject constructor(
                         item.link,
                         true)
                 )
-               // val index=_uiState.value.searchResult.indexOf(item)
-                //_uiState.value.searchResult[index].isBookmarked = true
+
             }else{
                 unBookmarkNewsUseCase(
                         item.title
                 )
-                //val index=_uiState.value.searchResult.indexOf(item)
-                //_uiState.value.searchResult[index].isBookmarked = false
             }
         }
     }
 
     private fun getLatestNews(){
+        _uiState.update {
+            it.copy(
+                isLoading = true
+            )
+        }
         viewModelScope.launch {
             getLatestNewsUseCase().collect{result ->
                 when(result){
-                    is Result.Error -> {}
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                generalMessage = result.error.asUiText()
+                            )
+                        }
+                    }
                     is Result.Success -> _uiState.update {
                         it.copy(
+                            isLoading = false,
                             latestNews = result.data.map { news ->
                                 NewsItemUiState(
                                     id = news.id,
