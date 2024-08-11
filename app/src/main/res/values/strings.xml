@@ -63,6 +63,9 @@
     <string name="log_out">Log Out</string>
     <string name="search_news">Search news</string>
     <string name="by">By %1$s</string>
+    <string name="your_bookmarks_are_empty">Your bookmarks are empty</string>
+    <string name="you_haven_t_saved">You haven\'t saved any articles yet. Explore the latest news and keep all your favorite stories in one place by adding them to your bookmarks.</string>
+    <string name="explore_latest_news">Explore Latest News</string>
 
 
 </resources>

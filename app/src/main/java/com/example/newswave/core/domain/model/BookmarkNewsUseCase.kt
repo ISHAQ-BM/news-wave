@@ -1,7 +1,6 @@
-package com.example.newswave.bookmark.domain.use_case
+package com.example.newswave.core.domain.model
 
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
-import com.example.newswave.core.domain.model.News
 import javax.inject.Inject
 
 class BookmarkNewsUseCase @Inject constructor(

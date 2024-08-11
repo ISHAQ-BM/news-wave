@@ -1,16 +1,12 @@
-package com.example.newswave.bookmark.presentation.viewmodel
+package com.example.newswave.bookmark.ui
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
-import com.example.newswave.bookmark.presentation.ui.event.BookmarkEvent
-import com.example.newswave.bookmark.presentation.ui.state.BookmarkUiState
-import com.example.newswave.core.domain.model.News
-import com.example.newswave.core.util.Result
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
+import com.example.newswave.core.util.Result
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,25 +23,33 @@ class BookmarkViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(BookmarkUiState())
     val uiState : StateFlow<BookmarkUiState> =_uiState
 
-    fun onEvent(event:BookmarkEvent){
-        when(event){
-            BookmarkEvent.LoadBookmark -> loadBookmarkedNews()
-
-            is BookmarkEvent.UnBookmark -> {
-                Unit
-            }
-        }
+    init {
+        getBookmarkNews()
     }
 
-    private fun loadBookmarkedNews() {
+
+    private fun getBookmarkNews() {
+        _uiState.update {
+            it.copy(
+                isLoading = false
+            )
+        }
         viewModelScope.launch {
             getBookmarkedNewsUseCase().collect{result ->
                 when(result){
-                    is Result.Error -> {Log.d("bookmark","${result.error}")}
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                                generalMessage = result.error.asUiText()
+                            )
+                        }
+                    }
                     is Result.Success -> {
                         _uiState.update {
                             it.copy(
-                                bookmarkedNews = result.data.map {it ->
+                                isLoading = false,
+                                bookmarkNewsList = result.data.map { it ->
                                     NewsItemUiState(
                                         it.id,
                                         it.title,
@@ -69,13 +73,9 @@ class BookmarkViewModel @Inject constructor(
 
     fun unBookmark(item:NewsItemUiState){
         viewModelScope.launch {
-
                 unBookmarkNewsUseCase(
                         item.title
                 )
-                val index=_uiState.value.bookmarkedNews.indexOf(item)
-                _uiState.value.bookmarkedNews[index].isBookmarked = false
-
         }
     }
 }
