@@ -2,23 +2,16 @@ package com.example.newswave.home.data.source.remote
 
 import android.net.http.HttpException
 import android.os.Build
-import android.util.Log
 import androidx.annotation.RequiresExtension
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.paging.LoadState
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import com.example.newswave.core.data.source.remote.model.NewsHeadlineResponse
-import com.example.newswave.core.data.source.remote.model.NewsDTO
 import com.example.newswave.core.domain.model.News
-import com.example.newswave.home.data.source.remote.api.HomeApiService
-
-import retrofit2.Response
+import com.example.newswave.home.data.source.remote.api.NewsApiService
 import okio.IOException
 
 class NewsPagingSource (
     val category:String,
-    private val homeApiService: HomeApiService
+    private val newsApiService: NewsApiService
 ): PagingSource<String, News>() {
     override fun getRefreshKey(state: PagingState<String, News>): String? {
         return state.anchorPosition?.let { anchorPosition ->
@@ -31,9 +24,9 @@ class NewsPagingSource (
         return try {
             val pageKey=params.key
             val response = if (pageKey==null){
-                homeApiService.getNewsHeadline(category = category)
+                newsApiService.getNewsHeadline(category = category)
             }else{
-                homeApiService.getNewsHeadlinePerPage(category = category, page = pageKey)
+                newsApiService.getNewsHeadlinePerPage(category = category, page = pageKey)
             }
 
 
@@ -47,6 +40,7 @@ class NewsPagingSource (
                         it.link,
                         false
                     ) }
+
             val nextKey=response.body()?.nextPage
             LoadResult.Page(
                 data = news?: listOf(),

@@ -1,20 +1,17 @@
-package com.example.newswave.home.presentation.viewmodel
+package com.example.newswave.home.presentation
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.newswave.bookmark.domain.use_case.BookmarkNewsUseCase
 import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
+import com.example.newswave.core.domain.model.BookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
+import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
 import com.example.newswave.home.domain.use_case.GetNewsHeadlinesUseCase
-import com.example.newswave.home.presentation.ui.event.HomeEvent
-import com.example.newswave.core.presentation.ui.state.NewsItemUiState
-import com.example.newswave.core.presentation.ui.state.NewsUiState
-import com.example.newswave.home.presentation.ui.state.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -32,29 +29,16 @@ class HomeViewModel @Inject constructor(
     private val _uiState = MutableStateFlow(HomeUiState())
     val uiState: StateFlow<HomeUiState> = _uiState
 
-    private val _articles = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
-    val articles: StateFlow<PagingData<NewsItemUiState>> = _articles
+    private val _latestNews = MutableStateFlow<PagingData<NewsItemUiState>>(PagingData.empty())
+    val latestNews: StateFlow<PagingData<NewsItemUiState>> = _latestNews
 
 
-
-    fun onEvent(event: HomeEvent){
-        when(event){
-            is HomeEvent.CategoryChanged -> {
-                _uiState.update {
-                    it.copy(category = event.category)
-
-                }
-                getNewsHeadlines()
-            }
-        }
-    }
-
-    private fun getNewsHeadlines() {
+    fun getNewsHeadlines(category: String) {
         _uiState.update {
             it.copy(isLoading = true)
         }
         viewModelScope.launch {
-            getNewsHeadlinesUseCase(_uiState.value.category).collect { result ->
+            getNewsHeadlinesUseCase(category).collect { result ->
                 when (result) {
                     is Result.Error -> _uiState.update {
                         it.copy(
@@ -65,7 +49,13 @@ class HomeViewModel @Inject constructor(
 
 
                     is Result.Success -> {
-                        _articles.update {
+                        _uiState.update {
+                            it.copy(
+                                isLoading = false,
+                            )
+                        }
+                        Log.d("headline news success", category)
+                        _latestNews.update {
                             result.data.map {news ->
                                 NewsItemUiState(
                                     id = news.id,

@@ -7,7 +7,7 @@ import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface HomeApiService {
+interface NewsApiService {
     @GET("news?")
     suspend fun getNewsHeadline(
         @Query("apikey")

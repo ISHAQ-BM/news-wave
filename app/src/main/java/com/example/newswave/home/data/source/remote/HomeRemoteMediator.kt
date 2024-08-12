@@ -1,29 +1,28 @@
 package com.example.newswave.home.data.source.remote
 
-import androidx.compose.runtime.key
+import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
 import androidx.paging.RemoteMediator
-import androidx.room.PrimaryKey
 import androidx.room.withTransaction
 import com.example.newswave.core.domain.model.News
-import com.example.newswave.home.data.source.local.NewsDao
 import com.example.newswave.home.data.source.local.NewsDatabase
-import com.example.newswave.home.data.source.remote.api.HomeApiService
+import com.example.newswave.home.data.source.remote.api.NewsApiService
 import retrofit2.HttpException
 import java.io.IOException
 
 private val keys = mutableMapOf<String, String?>()
 
 @OptIn(ExperimentalPagingApi::class)
-class NewsRemoteMediator(
+class HomeRemoteMediator(
     private val category: String,
-    private val homeApiService: HomeApiService,
+    private val newsApiService: NewsApiService,
     private val newsDatabase: NewsDatabase
 ): RemoteMediator<Int, News>() {
 
     override suspend fun initialize(): InitializeAction {
+        Log.d("news headline mediator", "initial")
         return InitializeAction.LAUNCH_INITIAL_REFRESH
     }
 
@@ -31,19 +30,25 @@ class NewsRemoteMediator(
         loadType: LoadType,
         state: PagingState<Int, News>
     ): MediatorResult {
+        Log.d("news headline mediator", "load..")
         return try {
             val loadKey = when (loadType) {
-                LoadType.REFRESH -> null
+                LoadType.REFRESH -> {
+                    keys[category] = null
+                    null
+                }
                 LoadType.PREPEND -> return MediatorResult.Success(endOfPaginationReached = true)
                 LoadType.APPEND -> {
                     keys[category]
                 }
             }
+            Log.d("news headline load key", "$loadKey")
+
 
             val response = if (loadKey==null){
-                homeApiService.getNewsHeadline(category = category)
+                newsApiService.getNewsHeadline(category = category)
             }else{
-                homeApiService.getNewsHeadlinePerPage(category = category, page = loadKey)
+                newsApiService.getNewsHeadlinePerPage(category = category, page = loadKey)
             }
 
 
@@ -59,6 +64,7 @@ class NewsRemoteMediator(
                     false
                 )
             }
+            Log.d("news headline $category", "$newsItems")
 
             keys[category]= response.body()!!.nextPage
             val endOfPaginationReached = newsItems.isEmpty()
