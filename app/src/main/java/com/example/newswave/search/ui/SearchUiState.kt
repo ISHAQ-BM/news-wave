@@ -1,4 +1,4 @@
-package com.example.newswave.search.presentation
+package com.example.newswave.search.ui
 
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.UiText

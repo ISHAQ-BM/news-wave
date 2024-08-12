@@ -1,4 +1,4 @@
-package com.example.newswave.search.presentation
+package com.example.newswave.search.ui
 
 
 import androidx.lifecycle.ViewModel

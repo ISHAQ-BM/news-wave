@@ -1,4 +1,4 @@
-package com.example.newswave.search.presentation
+package com.example.newswave.search.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -31,6 +31,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +43,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -82,6 +86,7 @@ fun SearchRoute(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SearchScreen(
     modifier: Modifier = Modifier,
@@ -102,53 +107,63 @@ fun SearchScreen(
     var isSearching by remember {
         mutableStateOf(false)
     }
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
 
     Scaffold(
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
-            (SearchBar(
-                query = searchQuery,
-                onQueryChange = { searchQuery = it },
-                onSearch = { onSearch(searchQuery) },
-                active = isSearching,
-                onActiveChange = {
-                    isSearching = !it
-                },
-                placeholder = {
-                    Text(text = stringResource(R.string.search_news))
-                },
-                leadingIcon = {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        tint = MaterialTheme.colorScheme.onSurface,
-                        contentDescription = null
-                    )
-                },
-                trailingIcon = {
-                    if (!searchQuery.isNullOrEmpty())
-                        IconButton(onClick = {
-                            searchQuery = ""
-                        }) {
+            TopAppBar(
+
+                title = {
+                    SearchBar(
+                        query = searchQuery,
+                        onQueryChange = { searchQuery = it },
+                        onSearch = { onSearch(searchQuery) },
+                        active = isSearching,
+                        onActiveChange = {
+                            isSearching = !it
+                        },
+                        placeholder = {
+                            Text(text = stringResource(R.string.search_news))
+                        },
+                        leadingIcon = {
                             Icon(
-                                imageVector = Icons.Default.Clear,
+                                imageVector = Icons.Default.Search,
                                 tint = MaterialTheme.colorScheme.onSurface,
                                 contentDescription = null
                             )
-                        }
-                },
-                modifier = modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
+                        },
+                        trailingIcon = {
+                            if (!searchQuery.isNullOrEmpty())
+                                IconButton(onClick = {
+                                    searchQuery = ""
+                                }) {
+                                    Icon(
+                                        imageVector = Icons.Default.Clear,
+                                        tint = MaterialTheme.colorScheme.onSurface,
+                                        contentDescription = null
+                                    )
+                                }
+                        },
+                        modifier = modifier
+                            .fillMaxWidth()
+                            .padding(end = 16.dp)
+                    ) {
 
-            })
-        },
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+
+        }
     ) {
         Box(
             modifier = modifier
                 .padding(top = it.calculateTopPadding())
         ) {
-            if (searchQuery.isNullOrEmpty()){
+            if (searchQuery.isNullOrEmpty()) {
                 Column(
                     modifier = modifier.verticalScroll(rememberScrollState())
                 ) {
