@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -24,7 +23,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -54,12 +52,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import com.example.newswave.R
-import com.example.newswave.core.presentation.ui.components.NewsItem
+import com.example.newswave.core.presentation.ui.components.PagingNewsList
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 
@@ -115,6 +112,10 @@ fun SearchScreen(
         topBar = {
             @OptIn(ExperimentalMaterial3Api::class)
             TopAppBar(
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onBackground,
+                ),
 
                 title = {
                     SearchBar(
@@ -189,8 +190,8 @@ fun SearchScreen(
                 if (uiState.isLoading) {
                     CircularProgressIndicator()
                 } else {
-                    SearchNewsList(
-                        searchResult = searchResult,
+                    PagingNewsList(
+                        newsList = searchResult,
                         onClickNews = onClickNews,
                         onClickBookmark = onClickBookmark,
                         onShareNews = onShareNews
@@ -232,38 +233,6 @@ fun LatestNewsList(
     }
 
 }
-
-@Composable
-fun SearchNewsList(
-    searchResult: LazyPagingItems<NewsItemUiState>,
-    onClickNews: (String) -> Unit,
-    onClickBookmark: (NewsItemUiState) -> Unit,
-    onShareNews: (String) -> Unit,
-) {
-    LazyColumn {
-        items(searchResult.itemCount) { index ->
-            val newsItem = searchResult[index]
-            newsItem?.let {
-                NewsItem(
-                    item = it,
-                    onItemClicked = onClickNews,
-                    onBookmarkClicked = onClickBookmark,
-                    onShareNews = onShareNews
-                )
-                HorizontalDivider()
-
-            }
-        }
-        item {
-            if (searchResult.loadState.append is LoadState.Loading) {
-                CircularProgressIndicator()
-            }
-        }
-    }
-
-
-}
-
 
 @Composable
 fun LatestNewsItem(
@@ -373,7 +342,7 @@ fun LatestNewsItem(
                         },
                         leadingIcon = {
                             Icon(
-                                painter = painterResource(id = if (!item.isBookmarked) R.drawable.ic_outline_bookmark else R.drawable.ic_baseline_bookmark),
+                                painter = painterResource(id = if (!item.isBookmarked) R.drawable.ic_bookmark_outlined else R.drawable.ic_bookmark_contained),
                                 contentDescription = null
                             )
                         }

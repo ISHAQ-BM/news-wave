@@ -6,12 +6,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -35,12 +33,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.paging.LoadState
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.example.newswave.R
-
-import com.example.newswave.core.presentation.ui.components.NewsItem
+import com.example.newswave.core.presentation.ui.components.PagingNewsList
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.util.categories
 import kotlinx.coroutines.launch
@@ -149,7 +145,7 @@ fun HomeScreen(
                 ) {
                     if (uiState.isLoading)
                         CircularProgressIndicator()
-                    HomeNewsList(
+                    PagingNewsList(
                         newsList = latestNews,
                         onClickNews = onClickNews,
                         onClickBookmark = onClickBookmark,
@@ -163,34 +159,5 @@ fun HomeScreen(
 }
 
 
-@Composable
-fun HomeNewsList(
-    newsList: LazyPagingItems<NewsItemUiState>,
-    onClickNews: (String) -> Unit,
-    onClickBookmark: (NewsItemUiState) -> Unit,
-    onShareNews: (String) -> Unit,
-) {
-    LazyColumn {
-        items(newsList.itemCount) { index ->
-            val newsItem = newsList[index]
-            newsItem?.let {
-                NewsItem(
-                    item = it,
-                    onItemClicked = onClickNews,
-                    onBookmarkClicked = onClickBookmark,
-                    onShareNews = onShareNews
-                )
-                HorizontalDivider()
 
-            }
-        }
-        item {
-            if (newsList.loadState.append is LoadState.Loading) {
-                CircularProgressIndicator()
-            }
-        }
-    }
-
-
-}
 

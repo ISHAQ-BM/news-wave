@@ -33,8 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.newswave.R
-import com.example.newswave.main.presentation.ui.components.Auth
-import com.example.newswave.main.presentation.ui.components.Interests
+import com.example.newswave.main.navigation.Auth
+import com.example.newswave.main.navigation.Interests
 
 
 @Composable

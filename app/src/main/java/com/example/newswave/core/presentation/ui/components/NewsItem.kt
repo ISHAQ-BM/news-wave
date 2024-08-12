@@ -12,13 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -33,64 +28,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.PopupProperties
 import coil.compose.AsyncImage
-import coil.compose.AsyncImagePainter.State.Empty.painter
 import com.example.newswave.R
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
-import com.google.android.play.integrity.internal.i
-
-@Composable
-fun NewsList(
-    newsList: List<NewsItemUiState>,
-    onItemClicked: (String)->Unit,
-    onBookmarkClicked :(NewsItemUiState)->Unit,
-    modifier: Modifier = Modifier,
-    listState: LazyListState = rememberLazyListState(),
-    onShareNews :(String)-> Unit,
-){
-
-        LazyColumn (
-            state = listState,
-            modifier = modifier,
-        ){
-            items(items = newsList, key = { item -> item.id }) { newsItem ->
-                NewsItem(
-                    item = newsItem,
-                    onItemClicked = onItemClicked,
-                    onBookmarkClicked = onBookmarkClicked,
-                    onShareNews = onShareNews
-                )
-                HorizontalDivider()
-            }
-
-
-
-
-        }
-    }
-
-
 
 @Composable
 fun NewsItem(
     modifier: Modifier = Modifier,
     item: NewsItemUiState,
-    onItemClicked : (String) -> Unit,
-    onBookmarkClicked: (NewsItemUiState) -> Unit,
+    onClickNews: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
     onShareNews :(String)-> Unit,
 ){
-
     Box (
         modifier= modifier
             .padding(vertical = 24.dp)
-            .clickable { onItemClicked(item.link) }
-
+            .clickable { onClickNews(item.link) }
     ){
         Row (
             modifier = modifier
@@ -103,7 +62,7 @@ fun NewsItem(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier.size(140.dp)
             )
-            Spacer(modifier = Modifier.width(8.dp))
+            Spacer(modifier = modifier.width(8.dp))
 
             Column (
                 modifier = modifier
@@ -119,7 +78,7 @@ fun NewsItem(
                     fontWeight = FontWeight.SemiBold
                 )
                 Text(
-                    text = "By ${item.author}",
+                    text = "By ${item.author ?: "Author"}",
                     style = MaterialTheme.typography.bodyMedium,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
@@ -160,7 +119,7 @@ fun NewsItem(
             ) {
                 Icon(
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_menu),
-                    contentDescription = "More options"
+                    contentDescription = null
                 )
             }
 
@@ -171,18 +130,23 @@ fun NewsItem(
             ) {
 
                 DropdownMenuItem(
-                    text = {  Text("Share") },
+                    text = { Text(stringResource(id = R.string.share)) },
                     onClick = { onShareNews(item.link)
                               expanded = false},
                     leadingIcon = {Icon(painter = painterResource(id = R.drawable.ic_share ), contentDescription = null) }
 
                 )
                 DropdownMenuItem(
-                    text = { Text("Bookmark") },
+                    text = { Text(stringResource(id = R.string.bookmark)) },
                     onClick = {
-                        onBookmarkClicked(item)
+                        onClickBookmark(item)
                               expanded = false},
-                    leadingIcon = {Icon(painter = painterResource(id = if (!item.isBookmarked) R.drawable.ic_outline_bookmark else R.drawable.ic_baseline_bookmark), contentDescription = null) }
+                    leadingIcon = {
+                        Icon(
+                            painter = painterResource(id = if (!item.isBookmarked) R.drawable.ic_bookmark_outlined else R.drawable.ic_bookmark_contained),
+                            contentDescription = null
+                        )
+                    }
 
                 )
 

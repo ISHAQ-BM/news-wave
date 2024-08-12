@@ -6,9 +6,12 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -25,7 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.newswave.R
-import com.example.newswave.core.presentation.ui.components.NewsList
+import com.example.newswave.core.presentation.ui.components.NewsItem
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 
 @Composable
@@ -95,8 +98,8 @@ fun BookmarkScreen(
 
             NewsList(
                 newsList = uiState.bookmarkNewsList,
-                onItemClicked = onClickNews,
-                onBookmarkClicked = onClickBookmark,
+                onClickNews = onClickNews,
+                onClickBookmark = onClickBookmark,
                 onShareNews = onShareNews
             )
 
@@ -129,6 +132,27 @@ fun EmptyBookmarksContent(
         Spacer(modifier = modifier.height(72.dp))
         Button(onClick = { navigateToHome() }) {
             Text(text = stringResource(R.string.explore_latest_news))
+        }
+    }
+}
+
+@Composable
+fun NewsList(
+    newsList: List<NewsItemUiState>,
+    onClickNews: (String) -> Unit,
+    onClickBookmark: (NewsItemUiState) -> Unit,
+    onShareNews: (String) -> Unit,
+) {
+
+    LazyColumn {
+        items(items = newsList, key = { item -> item.id }) { newsItem ->
+            NewsItem(
+                item = newsItem,
+                onClickNews = onClickNews,
+                onClickBookmark = onClickBookmark,
+                onShareNews = onShareNews
+            )
+            HorizontalDivider()
         }
     }
 }
