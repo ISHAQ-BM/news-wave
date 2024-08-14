@@ -77,7 +77,7 @@ fun SearchRoute(
         searchResult = searchResult,
         onShareNews = onShareNews,
         onSearch = { searchQuery -> searchViewModel.searchNews(searchQuery) },
-        onClickBookmark = { item -> searchViewModel.bookmarkClicked(item) },
+        onClickBookmark = { item -> searchViewModel.bookmark(item) },
         clearSearchResult = { searchViewModel.clearSearchResult() }
 
     )

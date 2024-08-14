@@ -4,7 +4,7 @@ package com.example.newswave.bookmark.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
-import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
+import com.example.newswave.core.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result

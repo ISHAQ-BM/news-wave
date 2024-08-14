@@ -57,7 +57,7 @@ fun HomeRoute(
         onClickNews = onClickNews,
         onShareNews = onShareNews,
         latestNews = latestNews,
-        onClickBookmark = { item -> homeViewModel.bookmarkClicked(item) },
+        onClickBookmark = { item -> homeViewModel.bookmark(item) },
         getNewsByCategory = { category -> homeViewModel.getNewsHeadlines(category) }
     )
 

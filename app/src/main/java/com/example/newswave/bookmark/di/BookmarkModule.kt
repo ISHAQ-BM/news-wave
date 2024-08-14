@@ -6,7 +6,6 @@ import com.example.newswave.bookmark.data.repository.BookmarkRepositoryImpl
 import com.example.newswave.bookmark.data.source.remote.BookmarkRemoteDataSource
 import com.example.newswave.bookmark.domain.repository.BookmarkRepository
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
-import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.Binds
@@ -25,12 +24,6 @@ object BookmarkModule {
     @Singleton
     fun provideGetBookmarkedNewsUseCase(bookmarkRepository: BookmarkRepository): GetBookmarkedNewsUseCase {
         return GetBookmarkedNewsUseCase(bookmarkRepository)
-    }
-
-    @Provides
-    @Singleton
-    fun provideUnBookmarkNewsUseCase(bookmarkRepository: BookmarkRepository): UnBookmarkNewsUseCase {
-        return UnBookmarkNewsUseCase(bookmarkRepository)
     }
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)

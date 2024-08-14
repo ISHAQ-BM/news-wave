@@ -104,7 +104,7 @@ class NewsViewModel @Inject constructor(
 //
 //
 //    fun readNetworkState(category:String){
-//        val connectivityManager = getApplication<NewsWaveApp>()
+//        val connectivityManager = getApplication<NewsWaveApplication>()
 //            .getSystemService(ConnectivityManager::class.java)
 //        connectivityManager.registerDefaultNetworkCallback(object : ConnectivityManager.NetworkCallback() {
 //            override fun onAvailable(network : Network) {
@@ -124,7 +124,7 @@ class NewsViewModel @Inject constructor(
 //    }
 //
 //    private fun isNetworkAvailable(): Boolean {
-//        val connectivityManager = getApplication<NewsWaveApp>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+//        val connectivityManager = getApplication<NewsWaveApplication>().getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 //        val network = connectivityManager.activeNetwork
 //        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
 //        return networkCapabilities != null && (networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) || networkCapabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR))

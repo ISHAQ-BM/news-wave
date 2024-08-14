@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.domain.use_case.BookmarkNewsUseCase
+import com.example.newswave.core.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
@@ -89,24 +89,50 @@ class SearchViewModel @Inject constructor(
         }
     }
 
-    fun bookmarkClicked(item:NewsItemUiState){
+    fun bookmark(item: NewsItemUiState) {
         viewModelScope.launch {
-            if (!item.isBookmarked){
+            if (!item.isBookmarked) {
                 bookmarkNewsUseCase(
-                    News(item.id,
+                    News(
+                        item.id,
                         item.title,
                         item.author,
                         item.category,
                         item.publishDate,
                         item.imageUrl,
                         item.link,
-                        true)
-                )
+                        true
+                    )
+                ).collect { result ->
+                    when (result) {
+                        is Result.Error -> _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText()
+                            )
+                        }
 
-            }else{
+                        is Result.Success -> {}
+                    }
+
+                }
+
+            } else {
+
                 unBookmarkNewsUseCase(
-                        item.title
-                )
+                    item.title
+                ).collect { result ->
+                    when (result) {
+                        is Result.Error -> _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText(),
+                            )
+                        }
+
+                        is Result.Success -> {}
+                    }
+
+                }
+
             }
         }
     }

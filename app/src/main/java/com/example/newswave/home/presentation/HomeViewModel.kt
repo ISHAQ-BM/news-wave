@@ -1,13 +1,12 @@
 package com.example.newswave.home.presentation
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
 import androidx.paging.map
-import com.example.newswave.bookmark.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.domain.model.News
 import com.example.newswave.core.domain.use_case.BookmarkNewsUseCase
+import com.example.newswave.core.domain.use_case.UnBookmarkNewsUseCase
 import com.example.newswave.core.presentation.ui.state.NewsItemUiState
 import com.example.newswave.core.presentation.ui.utils.asUiText
 import com.example.newswave.core.util.Result
@@ -23,7 +22,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     val getNewsHeadlinesUseCase: GetNewsHeadlinesUseCase,
     val bookmarkNewsUseCase: BookmarkNewsUseCase,
-    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase
+    val unBookmarkNewsUseCase: UnBookmarkNewsUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(HomeUiState())
@@ -54,9 +53,8 @@ class HomeViewModel @Inject constructor(
                                 isLoading = false,
                             )
                         }
-                        Log.d("headline news success", category)
                         _latestNews.update {
-                            result.data.map {news ->
+                            result.data.map { news ->
                                 NewsItemUiState(
                                     id = news.id,
                                     title = news.title,
@@ -74,13 +72,12 @@ class HomeViewModel @Inject constructor(
             }
 
 
-
         }
     }
 
-    fun bookmarkClicked(item:NewsItemUiState){
+    fun bookmark(item: NewsItemUiState) {
         viewModelScope.launch {
-            if (!item.isBookmarked){
+            if (!item.isBookmarked) {
                 bookmarkNewsUseCase(
                     News(
                         item.id,
@@ -90,34 +87,41 @@ class HomeViewModel @Inject constructor(
                         item.publishDate,
                         item.imageUrl,
                         item.link,
-                        true)
+                        true
+                    )
                 ).collect{result ->
                     when(result){
-                        is Result.Error -> {Log.d("bookmark error","${result.error}")}
-                        is Result.Success -> {Log.d("bookmark sucess","${result.data}")}
-                    }
+                        is Result.Error -> _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText()
+                            )
+                        }
 
-                }
-//                val index=_uiState.value.articles.indexOf(item)
-//                _uiState.value.articles[index].isBookmarked = true
-                }else{
-                unBookmarkNewsUseCase(
-                        item.title
-                ).collect{result ->
-                    when(result){
-                        is Result.Error -> {}
                         is Result.Success -> {}
-
                     }
 
                 }
-                //val index=_uiState.value.articles.indexOf(item)
-                //_uiState.value.articles[index].isBookmarked = false
+
+            } else {
+
+                unBookmarkNewsUseCase(
+                    item.title
+                ).collect{result ->
+                    when(result){
+                        is Result.Error -> _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText(),
+                            )
+                        }
+
+                        is Result.Success -> {}
+                    }
+
+                }
+
             }
         }
     }
-
-
 
 
 }
