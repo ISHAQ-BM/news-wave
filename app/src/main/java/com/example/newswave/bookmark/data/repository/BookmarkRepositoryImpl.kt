@@ -15,9 +15,10 @@ import javax.inject.Inject
 class BookmarkRepositoryImpl @Inject constructor(
     private val bookmarkRemoteDataSource: BookmarkRemoteDataSource
 ) : BookmarkRepository {
-   override suspend fun getBookmarkedNews(): Flow<Result<List<News>, Error>> = bookmarkRemoteDataSource.getBookmarkedNews()
+    override suspend fun getBookmarkedNews(): Flow<Result<List<News>, Error>> =
+        bookmarkRemoteDataSource.getBookmarkedNews()
 
-    override suspend fun bookmarkNews(news:News) = bookmarkRemoteDataSource.bookmarkNews(news)
-
-    override suspend fun unBookmarkNews(title:String) = bookmarkRemoteDataSource.unBookmarkNews(title)
+    override suspend fun bookmarkNews(news: News) = bookmarkRemoteDataSource.bookmarkNews(news)
+    override suspend fun unBookmarkNews(title: String) =
+        bookmarkRemoteDataSource.unBookmarkNews(title)
 }

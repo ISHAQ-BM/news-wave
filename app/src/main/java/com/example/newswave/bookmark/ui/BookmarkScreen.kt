@@ -45,7 +45,7 @@ fun BookmarkRoute(
         uiState = uiState,
         onClickNews = onClickNews,
         onShareNews = onShareNews,
-        onClickBookmark = { title -> bookmarkViewModel.unBookmark(title) },
+        onClickBookmark = { item -> bookmarkViewModel.unBookmark(item) },
         navigateToHome
     )
 
@@ -85,7 +85,6 @@ fun BookmarkScreen(
                 .padding(top = it.calculateTopPadding())
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
-
         ) {
             if (uiState.isLoading)
                 CircularProgressIndicator()
@@ -138,13 +137,16 @@ fun EmptyBookmarksContent(
 
 @Composable
 fun NewsList(
+    modifier: Modifier = Modifier,
     newsList: List<NewsItemUiState>,
     onClickNews: (String) -> Unit,
     onClickBookmark: (NewsItemUiState) -> Unit,
     onShareNews: (String) -> Unit,
 ) {
 
-    LazyColumn {
+    LazyColumn(
+        modifier = modifier.fillMaxSize()
+    ) {
         items(items = newsList, key = { item -> item.id }) { newsItem ->
             NewsItem(
                 item = newsItem,

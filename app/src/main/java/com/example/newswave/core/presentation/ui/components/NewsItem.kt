@@ -137,7 +137,7 @@ fun NewsItem(
 
                 )
                 DropdownMenuItem(
-                    text = { Text(stringResource(id = R.string.bookmark)) },
+                    text = { Text(stringResource(id = if (item.isBookmarked) R.string.unbookmark else R.string.bookmark)) },
                     onClick = {
                         onClickBookmark(item)
                               expanded = false},

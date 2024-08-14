@@ -1,5 +1,6 @@
 package com.example.newswave.bookmark.ui
 
+
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.newswave.bookmark.domain.use_case.GetBookmarkedNewsUseCase
@@ -31,7 +32,7 @@ class BookmarkViewModel @Inject constructor(
     private fun getBookmarkNews() {
         _uiState.update {
             it.copy(
-                isLoading = false
+                isLoading = true
             )
         }
         viewModelScope.launch {
@@ -76,6 +77,11 @@ class BookmarkViewModel @Inject constructor(
                 unBookmarkNewsUseCase(
                         item.title
                 )
+            _uiState.update {
+                it.copy(
+                    bookmarkNewsList = it.bookmarkNewsList.filter { it -> it != item }
+                )
+            }
         }
     }
 }
