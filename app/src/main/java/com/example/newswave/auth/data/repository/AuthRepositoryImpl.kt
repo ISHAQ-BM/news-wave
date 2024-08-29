@@ -8,7 +8,6 @@ import com.example.newswave.core.util.Error
 import com.example.newswave.core.util.Result
 import com.google.android.gms.auth.api.identity.BeginSignInResult
 import com.google.firebase.auth.AuthCredential
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -16,8 +15,11 @@ class AuthRepositoryImpl @Inject constructor(
     private val authRemoteDataSource: AuthRemoteDataSource
 
 ) : AuthRepository {
-    override val currentUser: FirebaseUser?
-        get() = authRemoteDataSource.currentUser
+
+
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    override suspend fun getCurrentUser(): Flow<Result<Boolean, Error>> =
+        authRemoteDataSource.getCurrentUser()
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     override suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>> =

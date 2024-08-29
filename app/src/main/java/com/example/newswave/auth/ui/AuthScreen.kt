@@ -5,6 +5,14 @@ import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.IntentSenderRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.FastOutLinearInEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -27,8 +35,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -105,7 +117,7 @@ fun AuthScreen(
             uiState.generalMessage.asString(LocalContext.current), Toast.LENGTH_SHORT
         ).show()
 
-    if (uiState.isLoginSuccessful)
+    if (uiState.isLoginSuccessful == true)
         onLoginSuccess(uiState.isNewUser)
 
 
@@ -120,66 +132,107 @@ fun AuthScreen(
         ),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val infiniteTransition = rememberInfiniteTransition()
+        val rotation by infiniteTransition.animateFloat(
+            initialValue = 0f,
+            targetValue = 360f,
+            animationSpec = infiniteRepeatable(
+                animation = tween(
+                    durationMillis = 3000,
+                    easing = FastOutLinearInEasing,
+                ),
+            ),
+            label = ""
+        )
         Icon(
             painter = painterResource(id = R.drawable.logo_icon),
             contentDescription = null,
-            modifier = modifier.size(145.dp),
+            modifier = modifier
+                .size(145.dp)
+                .then(if (uiState.isLoginSuccessful == null) modifier.rotate(rotation) else modifier),
             tint = Color.White
         )
-        Text(
-            text = stringResource(id = R.string.app_name),
-            style = MaterialTheme.typography.titleLarge,
-            fontWeight = FontWeight.Bold,
-            color = Color.White
-        )
-        Text(
-            text = stringResource(id = R.string.make_it_easy),
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White,
-            textAlign = TextAlign.Center
-        )
-        Button(
-            onClick = { onGoogleLoginClick() },
-            modifier = modifier
-                .fillMaxWidth()
-                .height(60.dp),
-            colors = ButtonDefaults.buttonColors(Color.White),
-        ) {
-            if (uiState.isLoading)
-                CircularProgressIndicator(
-                    modifier = Modifier.size(28.dp)
-                )
-            else {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.padding(8.dp)
-                ) {
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .border(1.dp, Color.Gray, CircleShape),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_google),
-                            contentDescription = "Google Icon",
-                            tint = Color.Unspecified,
-                            modifier = Modifier.size(16.dp),
+        var visible by remember { mutableStateOf(false) }
+        if (uiState.isLoginSuccessful == false)
+            visible = true
 
+
+        AnimatedVisibility(
+            visible = visible,
+            enter = slideInVertically(
+                initialOffsetY = {
+                    it / 4
+                },
+            ),
+            exit = fadeOut()
+        ) {
+            Column(
+                verticalArrangement = Arrangement.spacedBy(
+                    space = 32.dp,
+                    alignment = Alignment.CenterVertically
+                ),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+
+
+                Text(
+                    text = stringResource(id = R.string.app_name),
+                    style = MaterialTheme.typography.titleLarge,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+                Text(
+                    text = stringResource(id = R.string.make_it_easy),
+                    style = MaterialTheme.typography.bodyLarge,
+                    color = Color.White,
+                    textAlign = TextAlign.Center
+                )
+                Button(
+                    onClick = { onGoogleLoginClick() },
+                    modifier = modifier
+                        .fillMaxWidth()
+                        .height(60.dp),
+                    colors = ButtonDefaults.buttonColors(Color.White),
+                ) {
+                    if (uiState.isLoading)
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(28.dp)
+                        )
+                    else {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.padding(8.dp)
+                        ) {
+                            Box(
+                                modifier = Modifier
+                                    .size(32.dp)
+                                    .border(1.dp, Color.Gray, CircleShape),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = R.drawable.ic_google),
+                                    contentDescription = "Google Icon",
+                                    tint = Color.Unspecified,
+                                    modifier = Modifier.size(16.dp),
+
+                                    )
+                            }
+                            Spacer(modifier = modifier.width(16.dp))
+                            Text(
+                                text = stringResource(id = R.string.sign_with_google),
+                                color = Color.DarkGray,
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium
                             )
+                        }
                     }
-                    Spacer(modifier = modifier.width(16.dp))
-                    Text(
-                        text = stringResource(id = R.string.sign_with_google),
-                        color = Color.DarkGray,
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Medium
-                    )
+
+
                 }
             }
 
-
         }
+
     }
 
 

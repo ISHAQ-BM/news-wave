@@ -40,6 +40,31 @@ class AuthRemoteDataSource @Inject constructor(
     val currentUser = auth.currentUser
 
     @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
+    suspend fun getCurrentUser(): Flow<Result<Boolean, Error>> {
+        return flow {
+            try {
+
+                val currentUser = auth.currentUser
+                if (currentUser != null) {
+                    emit(Result.Success(true))
+                } else {
+                    emit(Result.Success(false))
+                }
+            } catch (e: ApiException) {
+                emit(Result.Error(Error.Network.NO_INTERNET))
+
+            } catch (e: HttpException) {
+                emit(Result.Error(Error.Network.UNKNOWN))
+            } catch (e: IOException) {
+                emit(Result.Error(Error.Network.NO_INTERNET))
+            } catch (e: Exception) {
+                emit(Result.Error(Error.Network.UNKNOWN))
+            }
+        }
+
+    }
+
+    @RequiresExtension(extension = Build.VERSION_CODES.S, version = 7)
     suspend fun signUserWithOneTap(): Flow<Result<BeginSignInResult, Error>> {
         return flow {
             try {

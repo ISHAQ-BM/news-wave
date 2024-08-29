@@ -30,13 +30,26 @@ class AuthViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val currentUser = getCurrentUserUseCase()
-            if (currentUser != null) {
-                _uiState.update {
-                    it.copy(
-                        isLoginSuccessful = true,
-                    )
+            getCurrentUserUseCase().collect { result ->
+                when (result) {
+                    is Result.Error -> {
+                        _uiState.update {
+                            it.copy(
+                                generalMessage = result.error.asUiText(),
+                            )
+                        }
+                    }
+
+                    is Result.Success -> {
+                        _uiState.update {
+                            it.copy(
+                                isLoginSuccessful = result.data,
+                            )
+                        }
+
+                    }
                 }
+
             }
         }
     }
