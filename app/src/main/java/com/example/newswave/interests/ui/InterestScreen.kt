@@ -1,26 +1,34 @@
 package com.example.newswave.interests.ui
 
+import androidx.compose.animation.Crossfade
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyHorizontalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -35,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -96,36 +105,48 @@ fun InterestScreen(
         }
     ) {
         Column(
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
-                .padding(top = it.calculateTopPadding(), end = 16.dp, start = 16.dp, bottom = 16.dp)
+                .padding(top = it.calculateTopPadding())
                 .fillMaxSize()
         ) {
-            LazyColumn(
-                modifier = Modifier.weight(1f)
-            ) {
 
-                item {
+
                     Text(
                         text = stringResource(R.string.choose_your_interests),
                         style = MaterialTheme.typography.titleLarge,
-                        fontWeight = FontWeight.SemiBold
+                        fontWeight = FontWeight.SemiBold,
+                        textAlign = TextAlign.Center,
+                        modifier = modifier.padding(horizontal = 16.dp)
                     )
-                    Spacer(modifier = Modifier.height(12.dp))
+
                     Text(
                         text = stringResource(R.string.choose_which),
-                        style = MaterialTheme.typography.bodyMedium
+                        style = MaterialTheme.typography.bodyMedium,
+                        textAlign = TextAlign.Center,
+                        modifier = modifier.padding(horizontal = 16.dp)
                     )
-                }
 
 
+
+            LazyHorizontalGrid(
+                rows = GridCells.Fixed(3),
+                verticalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                modifier = modifier.height(200.dp),
+                contentPadding = PaddingValues(horizontal = 16.dp)
+
+            ) {
                 items(categories) { item ->
                     InterestItem(
                         label = item, isChecked = uiState.modifiedInterests.contains(item),
                         onToggle = onInterestToggled
                     )
                 }
-            }
+                }
             InterestButton(
+                modifier = modifier.padding(horizontal = 16.dp),
                 label = if (showSkipButton) stringResource(id = R.string.Continue) else stringResource(
                     id = R.string.save
                 ),
@@ -133,8 +154,6 @@ fun InterestScreen(
                 isLoading = uiState.isLoading && uiState.originalInterests != uiState.modifiedInterests,
                 onClick = onSaveInterests
             )
-
-
         }
     }
 }
@@ -210,7 +229,6 @@ fun InterestButton(
 
 }
 
-
 @Composable
 fun InterestItem(
     modifier: Modifier = Modifier,
@@ -219,31 +237,49 @@ fun InterestItem(
     onToggle: (String, Boolean) -> Unit
 ) {
     var checked by remember(key1 = isChecked) { mutableStateOf(isChecked) }
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 12.dp)
-
+    Card(
+        onClick = {
+            checked = !checked
+            onToggle(label, !checked)
+        }, shape = MaterialTheme.shapes.medium, modifier = modifier
+            .width(350.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        )
     ) {
-        Text(
-            text = label,
-            modifier
-                .weight(1f)
-                .padding(start = 8.dp)
-        )
-        Switch(
-            checked = checked,
-            onCheckedChange = {
-                checked = !checked
-                onToggle(label, checked)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp, horizontal = 20.dp)
+
+        ) {
+            Text(text = label, style = MaterialTheme.typography.titleMedium)
+            Crossfade(targetState = checked, label = "") {
+
+                if (it) {
+                    Icon(
+                        imageVector = Icons.Default.Check,
+                        contentDescription = "",
+                        modifier = modifier
+                            .background(
+                                MaterialTheme.colorScheme.outlineVariant,
+                                shape = MaterialTheme.shapes.extraLarge
+                            )
+                            .padding(8.dp)
+                    )
+                } else {
+                    Icon(
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "",
+                        modifier = modifier.padding(8.dp)
+                    )
+                }
             }
-
-        )
-
-
+        }
     }
+
 }
 
 
